@@ -74,20 +74,24 @@ export function AppShell() {
         </div>
 
         <nav className="flex-1 space-y-6 overflow-y-auto px-3 py-5">
-          {nav.map((entry, i) =>
-            "section" in entry ? (
-              <div key={i} className="space-y-1">
-                <div className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-                  {entry.section}
+          {nav.map((entry, i) => {
+            if ("section" in entry && entry.items) {
+              return (
+                <div key={i} className="space-y-1">
+                  <div className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+                    {entry.section}
+                  </div>
+                  {entry.items.map((it) => (
+                    <NavLink key={it.to} {...it} />
+                  ))}
                 </div>
-                {entry.items.map((it) => (
-                  <NavLink key={it.to} {...it} />
-                ))}
-              </div>
-            ) : (
-              <NavLink key={entry.to} {...entry} />
-            )
-          )}
+              );
+            }
+            if ("to" in entry && entry.to && entry.icon && entry.label) {
+              return <NavLink key={entry.to} to={entry.to} icon={entry.icon} label={entry.label} exact={entry.exact} />;
+            }
+            return null;
+          })}
         </nav>
 
         <div className="border-t border-sidebar-border p-4">
