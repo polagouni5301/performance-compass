@@ -3,6 +3,7 @@ import { PageHeader, SectionCard, StatCard } from "@/components/shared/page-prim
 import { CAPStatusBadge, CAPLevelBadge, StatusBadge } from "@/components/shared/status-badges";
 import { Button } from "@/components/ui/button";
 import { capCases } from "@/lib/mock-data";
+import { usePersona } from "@/lib/persona";
 import { ArrowLeft, FileText, Mail, Download, Check, X, ShieldAlert, Upload, Send } from "lucide-react";
 import { useState } from "react";
 
