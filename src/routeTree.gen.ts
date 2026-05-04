@@ -9,11 +9,24 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuditRouteImport } from './routes/audit'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PipIndexRouteImport } from './routes/pip/index'
+import { Route as CapIndexRouteImport } from './routes/cap/index'
 import { Route as PipCandidatesRouteImport } from './routes/pip/candidates'
+import { Route as PipApprovalsRouteImport } from './routes/pip/approvals'
+import { Route as CapNewRouteImport } from './routes/cap/new'
+import { Route as CapExceptionsRouteImport } from './routes/cap/exceptions'
 import { Route as PipCasesIndexRouteImport } from './routes/pip/cases.index'
+import { Route as CapCasesIndexRouteImport } from './routes/cap/cases.index'
+import { Route as PipCasesCaseIdRouteImport } from './routes/pip/cases.$caseId'
+import { Route as CapCasesCaseIdRouteImport } from './routes/cap/cases.$caseId'
 
+const AuditRoute = AuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -24,9 +37,29 @@ const PipIndexRoute = PipIndexRouteImport.update({
   path: '/pip/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CapIndexRoute = CapIndexRouteImport.update({
+  id: '/cap/',
+  path: '/cap/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PipCandidatesRoute = PipCandidatesRouteImport.update({
   id: '/pip/candidates',
   path: '/pip/candidates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PipApprovalsRoute = PipApprovalsRouteImport.update({
+  id: '/pip/approvals',
+  path: '/pip/approvals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CapNewRoute = CapNewRouteImport.update({
+  id: '/cap/new',
+  path: '/cap/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CapExceptionsRoute = CapExceptionsRouteImport.update({
+  id: '/cap/exceptions',
+  path: '/cap/exceptions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PipCasesIndexRoute = PipCasesIndexRouteImport.update({
@@ -34,43 +67,134 @@ const PipCasesIndexRoute = PipCasesIndexRouteImport.update({
   path: '/pip/cases/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CapCasesIndexRoute = CapCasesIndexRouteImport.update({
+  id: '/cap/cases/',
+  path: '/cap/cases/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PipCasesCaseIdRoute = PipCasesCaseIdRouteImport.update({
+  id: '/pip/cases/$caseId',
+  path: '/pip/cases/$caseId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CapCasesCaseIdRoute = CapCasesCaseIdRouteImport.update({
+  id: '/cap/cases/$caseId',
+  path: '/cap/cases/$caseId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/audit': typeof AuditRoute
+  '/cap/exceptions': typeof CapExceptionsRoute
+  '/cap/new': typeof CapNewRoute
+  '/pip/approvals': typeof PipApprovalsRoute
   '/pip/candidates': typeof PipCandidatesRoute
+  '/cap/': typeof CapIndexRoute
   '/pip/': typeof PipIndexRoute
+  '/cap/cases/$caseId': typeof CapCasesCaseIdRoute
+  '/pip/cases/$caseId': typeof PipCasesCaseIdRoute
+  '/cap/cases/': typeof CapCasesIndexRoute
   '/pip/cases/': typeof PipCasesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/audit': typeof AuditRoute
+  '/cap/exceptions': typeof CapExceptionsRoute
+  '/cap/new': typeof CapNewRoute
+  '/pip/approvals': typeof PipApprovalsRoute
   '/pip/candidates': typeof PipCandidatesRoute
+  '/cap': typeof CapIndexRoute
   '/pip': typeof PipIndexRoute
+  '/cap/cases/$caseId': typeof CapCasesCaseIdRoute
+  '/pip/cases/$caseId': typeof PipCasesCaseIdRoute
+  '/cap/cases': typeof CapCasesIndexRoute
   '/pip/cases': typeof PipCasesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/audit': typeof AuditRoute
+  '/cap/exceptions': typeof CapExceptionsRoute
+  '/cap/new': typeof CapNewRoute
+  '/pip/approvals': typeof PipApprovalsRoute
   '/pip/candidates': typeof PipCandidatesRoute
+  '/cap/': typeof CapIndexRoute
   '/pip/': typeof PipIndexRoute
+  '/cap/cases/$caseId': typeof CapCasesCaseIdRoute
+  '/pip/cases/$caseId': typeof PipCasesCaseIdRoute
+  '/cap/cases/': typeof CapCasesIndexRoute
   '/pip/cases/': typeof PipCasesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/pip/candidates' | '/pip/' | '/pip/cases/'
+  fullPaths:
+    | '/'
+    | '/audit'
+    | '/cap/exceptions'
+    | '/cap/new'
+    | '/pip/approvals'
+    | '/pip/candidates'
+    | '/cap/'
+    | '/pip/'
+    | '/cap/cases/$caseId'
+    | '/pip/cases/$caseId'
+    | '/cap/cases/'
+    | '/pip/cases/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/pip/candidates' | '/pip' | '/pip/cases'
-  id: '__root__' | '/' | '/pip/candidates' | '/pip/' | '/pip/cases/'
+  to:
+    | '/'
+    | '/audit'
+    | '/cap/exceptions'
+    | '/cap/new'
+    | '/pip/approvals'
+    | '/pip/candidates'
+    | '/cap'
+    | '/pip'
+    | '/cap/cases/$caseId'
+    | '/pip/cases/$caseId'
+    | '/cap/cases'
+    | '/pip/cases'
+  id:
+    | '__root__'
+    | '/'
+    | '/audit'
+    | '/cap/exceptions'
+    | '/cap/new'
+    | '/pip/approvals'
+    | '/pip/candidates'
+    | '/cap/'
+    | '/pip/'
+    | '/cap/cases/$caseId'
+    | '/pip/cases/$caseId'
+    | '/cap/cases/'
+    | '/pip/cases/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuditRoute: typeof AuditRoute
+  CapExceptionsRoute: typeof CapExceptionsRoute
+  CapNewRoute: typeof CapNewRoute
+  PipApprovalsRoute: typeof PipApprovalsRoute
   PipCandidatesRoute: typeof PipCandidatesRoute
+  CapIndexRoute: typeof CapIndexRoute
   PipIndexRoute: typeof PipIndexRoute
+  CapCasesCaseIdRoute: typeof CapCasesCaseIdRoute
+  PipCasesCaseIdRoute: typeof PipCasesCaseIdRoute
+  CapCasesIndexRoute: typeof CapCasesIndexRoute
   PipCasesIndexRoute: typeof PipCasesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/audit': {
+      id: '/audit'
+      path: '/audit'
+      fullPath: '/audit'
+      preLoaderRoute: typeof AuditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -85,11 +209,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PipIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cap/': {
+      id: '/cap/'
+      path: '/cap'
+      fullPath: '/cap/'
+      preLoaderRoute: typeof CapIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pip/candidates': {
       id: '/pip/candidates'
       path: '/pip/candidates'
       fullPath: '/pip/candidates'
       preLoaderRoute: typeof PipCandidatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pip/approvals': {
+      id: '/pip/approvals'
+      path: '/pip/approvals'
+      fullPath: '/pip/approvals'
+      preLoaderRoute: typeof PipApprovalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cap/new': {
+      id: '/cap/new'
+      path: '/cap/new'
+      fullPath: '/cap/new'
+      preLoaderRoute: typeof CapNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cap/exceptions': {
+      id: '/cap/exceptions'
+      path: '/cap/exceptions'
+      fullPath: '/cap/exceptions'
+      preLoaderRoute: typeof CapExceptionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pip/cases/': {
@@ -99,13 +251,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PipCasesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cap/cases/': {
+      id: '/cap/cases/'
+      path: '/cap/cases'
+      fullPath: '/cap/cases/'
+      preLoaderRoute: typeof CapCasesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pip/cases/$caseId': {
+      id: '/pip/cases/$caseId'
+      path: '/pip/cases/$caseId'
+      fullPath: '/pip/cases/$caseId'
+      preLoaderRoute: typeof PipCasesCaseIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cap/cases/$caseId': {
+      id: '/cap/cases/$caseId'
+      path: '/cap/cases/$caseId'
+      fullPath: '/cap/cases/$caseId'
+      preLoaderRoute: typeof CapCasesCaseIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuditRoute: AuditRoute,
+  CapExceptionsRoute: CapExceptionsRoute,
+  CapNewRoute: CapNewRoute,
+  PipApprovalsRoute: PipApprovalsRoute,
   PipCandidatesRoute: PipCandidatesRoute,
+  CapIndexRoute: CapIndexRoute,
   PipIndexRoute: PipIndexRoute,
+  CapCasesCaseIdRoute: CapCasesCaseIdRoute,
+  PipCasesCaseIdRoute: PipCasesCaseIdRoute,
+  CapCasesIndexRoute: CapCasesIndexRoute,
   PipCasesIndexRoute: PipCasesIndexRoute,
 }
 export const routeTree = rootRouteImport
