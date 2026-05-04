@@ -19,7 +19,6 @@ const homes: Record<string, string> = {
   "qa-compliance": "/qa",
   manager: "/manager",
   admin: "/admin",
-  auditor: "/audit",
 };
 
 function PersonaRedirect() {
