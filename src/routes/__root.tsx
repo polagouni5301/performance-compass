@@ -62,6 +62,8 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+import { AppShell } from "@/components/layout/app-shell";
+
 function RootComponent() {
-  return <Outlet />;
+  return <AppShell />;
 }
