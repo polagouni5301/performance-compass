@@ -5,8 +5,7 @@ export type Persona =
   | "agent"
   | "qa-compliance"
   | "manager"
-  | "admin"
-  | "auditor";
+  | "admin";
 
 export interface PersonaInfo {
   id: Persona;
