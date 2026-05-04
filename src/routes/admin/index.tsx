@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHeader, SectionCard, StatCard } from "@/components/shared/page-primitives";
 import { Button } from "@/components/ui/button";
-import { Settings, FileText, Mail, Users, ArrowRight } from "lucide-react";
+import { Settings, FileText, Mail, Users, ArrowRight, Briefcase, FileSearch } from "lucide-react";
 
 export const Route = createFileRoute("/admin/")({
   head: () => ({
@@ -18,6 +18,8 @@ const sections = [
   { to: "/admin/templates", icon: FileText, label: "Document templates", desc: "Word templates for Regular vs Apprentice employees." },
   { to: "/admin/email-templates", icon: Mail, label: "Email templates", desc: "Notifications for supervisor, agent, manager, HR." },
   { to: "/admin/roles", icon: Users, label: "Role access", desc: "Persona permissions across PIP and CAP modules." },
+  { to: "/admin/departments", icon: Briefcase, label: "Departments", desc: "Voice, Messaging and CDT departments across the org." },
+  { to: "/audit", icon: FileSearch, label: "Audit dashboard", desc: "Full lifecycle traceability across PIP and CAP cases." },
 ] as const;
 
 function AdminHome() {
@@ -27,9 +29,9 @@ function AdminHome() {
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <StatCard label="Trigger rules" value={5} hint="Active" />
-        <StatCard label="Doc templates" value={2} hint="Regular · Apprentice" />
+        <StatCard label="Departments" value={11} hint="Voice · Messaging · CDT" />
         <StatCard label="Email templates" value={9} />
-        <StatCard label="Roles" value={6} />
+        <StatCard label="Roles" value={5} />
       </div>
 
       <div className="mt-8 grid gap-4 md:grid-cols-2">
