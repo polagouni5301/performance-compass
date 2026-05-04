@@ -127,16 +127,13 @@ const personaNav: Record<Persona, { home: NavItem; sections: NavSection[] }> = {
           { label: "Document templates", to: "/admin/templates", icon: FileText },
           { label: "Email templates", to: "/admin/email-templates", icon: Mail },
           { label: "Role access", to: "/admin/roles", icon: Users },
+          { label: "Departments", to: "/admin/departments", icon: Briefcase },
         ],
       },
-    ],
-  },
-  auditor: {
-    home: { label: "Audit dashboard", to: "/audit", icon: LayoutDashboard, exact: true },
-    sections: [
       {
-        section: "Read-only",
+        section: "Audit & oversight",
         items: [
+          { label: "Audit dashboard", to: "/audit", icon: FileSearch, exact: true },
           { label: "PIP register", to: "/pip/cases", icon: TrendingUp },
           { label: "CAP register", to: "/cap/cases", icon: FileSearch },
         ],
