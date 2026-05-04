@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PipIndexRouteImport } from './routes/pip/index'
+import { Route as PipCandidatesRouteImport } from './routes/pip/candidates'
+import { Route as PipCasesIndexRouteImport } from './routes/pip/cases.index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PipIndexRoute = PipIndexRouteImport.update({
+  id: '/pip/',
+  path: '/pip/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PipCandidatesRoute = PipCandidatesRouteImport.update({
+  id: '/pip/candidates',
+  path: '/pip/candidates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PipCasesIndexRoute = PipCasesIndexRouteImport.update({
+  id: '/pip/cases/',
+  path: '/pip/cases/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/pip/candidates': typeof PipCandidatesRoute
+  '/pip/': typeof PipIndexRoute
+  '/pip/cases/': typeof PipCasesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/pip/candidates': typeof PipCandidatesRoute
+  '/pip': typeof PipIndexRoute
+  '/pip/cases': typeof PipCasesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/pip/candidates': typeof PipCandidatesRoute
+  '/pip/': typeof PipIndexRoute
+  '/pip/cases/': typeof PipCasesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/pip/candidates' | '/pip/' | '/pip/cases/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/pip/candidates' | '/pip' | '/pip/cases'
+  id: '__root__' | '/' | '/pip/candidates' | '/pip/' | '/pip/cases/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PipCandidatesRoute: typeof PipCandidatesRoute
+  PipIndexRoute: typeof PipIndexRoute
+  PipCasesIndexRoute: typeof PipCasesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pip/': {
+      id: '/pip/'
+      path: '/pip'
+      fullPath: '/pip/'
+      preLoaderRoute: typeof PipIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pip/candidates': {
+      id: '/pip/candidates'
+      path: '/pip/candidates'
+      fullPath: '/pip/candidates'
+      preLoaderRoute: typeof PipCandidatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pip/cases/': {
+      id: '/pip/cases/'
+      path: '/pip/cases'
+      fullPath: '/pip/cases/'
+      preLoaderRoute: typeof PipCasesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PipCandidatesRoute: PipCandidatesRoute,
+  PipIndexRoute: PipIndexRoute,
+  PipCasesIndexRoute: PipCasesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
