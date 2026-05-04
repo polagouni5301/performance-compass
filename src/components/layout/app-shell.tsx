@@ -265,7 +265,7 @@ function HeaderUser() {
 function ShellInner() {
   return (
     <div className="flex min-h-screen w-full bg-background">
-      <aside className="hidden w-72 shrink-0 border-r border-sidebar-border bg-sidebar lg:flex lg:flex-col">
+      <aside className="sticky top-0 hidden h-screen w-72 shrink-0 border-r border-sidebar-border bg-sidebar lg:flex lg:flex-col">
         <div className="flex h-16 items-center gap-3 border-b border-sidebar-border px-5">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-primary text-primary-foreground shadow-glow">
             <ShieldAlert className="h-5 w-5" />
