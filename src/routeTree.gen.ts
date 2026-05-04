@@ -12,22 +12,38 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuditRouteImport } from './routes/audit'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SupervisorIndexRouteImport } from './routes/supervisor/index'
+import { Route as QaIndexRouteImport } from './routes/qa/index'
 import { Route as PipIndexRouteImport } from './routes/pip/index'
+import { Route as ManagerIndexRouteImport } from './routes/manager/index'
 import { Route as CapIndexRouteImport } from './routes/cap/index'
+import { Route as AgentIndexRouteImport } from './routes/agent/index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as QaRecommendationRouteImport } from './routes/qa/recommendation'
+import { Route as QaDisputesRouteImport } from './routes/qa/disputes'
 import { Route as PipCandidatesRouteImport } from './routes/pip/candidates'
 import { Route as PipApprovalsRouteImport } from './routes/pip/approvals'
 import { Route as CapNewRouteImport } from './routes/cap/new'
 import { Route as CapExceptionsRouteImport } from './routes/cap/exceptions'
+import { Route as AdminTriggersRouteImport } from './routes/admin/triggers'
+import { Route as AdminTemplatesRouteImport } from './routes/admin/templates'
+import { Route as AdminRolesRouteImport } from './routes/admin/roles'
+import { Route as AdminEmailTemplatesRouteImport } from './routes/admin/email-templates'
 import { Route as PipCasesIndexRouteImport } from './routes/pip/cases.index'
 import { Route as CapCasesIndexRouteImport } from './routes/cap/cases.index'
+import { Route as AgentPipIndexRouteImport } from './routes/agent/pip.index'
+import { Route as AgentCapIndexRouteImport } from './routes/agent/cap.index'
 import { Route as SupervisorPipReviewRouteImport } from './routes/supervisor/pip.review'
 import { Route as SupervisorPipInitiateRouteImport } from './routes/supervisor/pip.initiate'
 import { Route as SupervisorPipFailureRouteImport } from './routes/supervisor/pip.failure'
 import { Route as SupervisorPipDocumentRouteImport } from './routes/supervisor/pip.document'
 import { Route as SupervisorPipClosureRouteImport } from './routes/supervisor/pip.closure'
 import { Route as SupervisorPipCandidatesRouteImport } from './routes/supervisor/pip.candidates'
+import { Route as SupervisorCapInboxRouteImport } from './routes/supervisor/cap.inbox'
+import { Route as SupervisorCapExceptionRouteImport } from './routes/supervisor/cap.exception'
 import { Route as PipCasesCaseIdRouteImport } from './routes/pip/cases.$caseId'
 import { Route as CapCasesCaseIdRouteImport } from './routes/cap/cases.$caseId'
+import { Route as AgentPipAcknowledgeRouteImport } from './routes/agent/pip.acknowledge'
+import { Route as AgentCapAcknowledgeRouteImport } from './routes/agent/cap.acknowledge'
 
 const AuditRoute = AuditRouteImport.update({
   id: '/audit',
@@ -44,14 +60,44 @@ const SupervisorIndexRoute = SupervisorIndexRouteImport.update({
   path: '/supervisor/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QaIndexRoute = QaIndexRouteImport.update({
+  id: '/qa/',
+  path: '/qa/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PipIndexRoute = PipIndexRouteImport.update({
   id: '/pip/',
   path: '/pip/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ManagerIndexRoute = ManagerIndexRouteImport.update({
+  id: '/manager/',
+  path: '/manager/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CapIndexRoute = CapIndexRouteImport.update({
   id: '/cap/',
   path: '/cap/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AgentIndexRoute = AgentIndexRouteImport.update({
+  id: '/agent/',
+  path: '/agent/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QaRecommendationRoute = QaRecommendationRouteImport.update({
+  id: '/qa/recommendation',
+  path: '/qa/recommendation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QaDisputesRoute = QaDisputesRouteImport.update({
+  id: '/qa/disputes',
+  path: '/qa/disputes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PipCandidatesRoute = PipCandidatesRouteImport.update({
@@ -74,6 +120,26 @@ const CapExceptionsRoute = CapExceptionsRouteImport.update({
   path: '/cap/exceptions',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminTriggersRoute = AdminTriggersRouteImport.update({
+  id: '/admin/triggers',
+  path: '/admin/triggers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminTemplatesRoute = AdminTemplatesRouteImport.update({
+  id: '/admin/templates',
+  path: '/admin/templates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRolesRoute = AdminRolesRouteImport.update({
+  id: '/admin/roles',
+  path: '/admin/roles',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminEmailTemplatesRoute = AdminEmailTemplatesRouteImport.update({
+  id: '/admin/email-templates',
+  path: '/admin/email-templates',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PipCasesIndexRoute = PipCasesIndexRouteImport.update({
   id: '/pip/cases/',
   path: '/pip/cases/',
@@ -82,6 +148,16 @@ const PipCasesIndexRoute = PipCasesIndexRouteImport.update({
 const CapCasesIndexRoute = CapCasesIndexRouteImport.update({
   id: '/cap/cases/',
   path: '/cap/cases/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AgentPipIndexRoute = AgentPipIndexRouteImport.update({
+  id: '/agent/pip/',
+  path: '/agent/pip/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AgentCapIndexRoute = AgentCapIndexRouteImport.update({
+  id: '/agent/cap/',
+  path: '/agent/cap/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SupervisorPipReviewRoute = SupervisorPipReviewRouteImport.update({
@@ -114,6 +190,16 @@ const SupervisorPipCandidatesRoute = SupervisorPipCandidatesRouteImport.update({
   path: '/supervisor/pip/candidates',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SupervisorCapInboxRoute = SupervisorCapInboxRouteImport.update({
+  id: '/supervisor/cap/inbox',
+  path: '/supervisor/cap/inbox',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupervisorCapExceptionRoute = SupervisorCapExceptionRouteImport.update({
+  id: '/supervisor/cap/exception',
+  path: '/supervisor/cap/exception',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PipCasesCaseIdRoute = PipCasesCaseIdRouteImport.update({
   id: '/pip/cases/$caseId',
   path: '/pip/cases/$caseId',
@@ -124,46 +210,88 @@ const CapCasesCaseIdRoute = CapCasesCaseIdRouteImport.update({
   path: '/cap/cases/$caseId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AgentPipAcknowledgeRoute = AgentPipAcknowledgeRouteImport.update({
+  id: '/agent/pip/acknowledge',
+  path: '/agent/pip/acknowledge',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AgentCapAcknowledgeRoute = AgentCapAcknowledgeRouteImport.update({
+  id: '/agent/cap/acknowledge',
+  path: '/agent/cap/acknowledge',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
+  '/admin/email-templates': typeof AdminEmailTemplatesRoute
+  '/admin/roles': typeof AdminRolesRoute
+  '/admin/templates': typeof AdminTemplatesRoute
+  '/admin/triggers': typeof AdminTriggersRoute
   '/cap/exceptions': typeof CapExceptionsRoute
   '/cap/new': typeof CapNewRoute
   '/pip/approvals': typeof PipApprovalsRoute
   '/pip/candidates': typeof PipCandidatesRoute
+  '/qa/disputes': typeof QaDisputesRoute
+  '/qa/recommendation': typeof QaRecommendationRoute
+  '/admin/': typeof AdminIndexRoute
+  '/agent/': typeof AgentIndexRoute
   '/cap/': typeof CapIndexRoute
+  '/manager/': typeof ManagerIndexRoute
   '/pip/': typeof PipIndexRoute
+  '/qa/': typeof QaIndexRoute
   '/supervisor/': typeof SupervisorIndexRoute
+  '/agent/cap/acknowledge': typeof AgentCapAcknowledgeRoute
+  '/agent/pip/acknowledge': typeof AgentPipAcknowledgeRoute
   '/cap/cases/$caseId': typeof CapCasesCaseIdRoute
   '/pip/cases/$caseId': typeof PipCasesCaseIdRoute
+  '/supervisor/cap/exception': typeof SupervisorCapExceptionRoute
+  '/supervisor/cap/inbox': typeof SupervisorCapInboxRoute
   '/supervisor/pip/candidates': typeof SupervisorPipCandidatesRoute
   '/supervisor/pip/closure': typeof SupervisorPipClosureRoute
   '/supervisor/pip/document': typeof SupervisorPipDocumentRoute
   '/supervisor/pip/failure': typeof SupervisorPipFailureRoute
   '/supervisor/pip/initiate': typeof SupervisorPipInitiateRoute
   '/supervisor/pip/review': typeof SupervisorPipReviewRoute
+  '/agent/cap/': typeof AgentCapIndexRoute
+  '/agent/pip/': typeof AgentPipIndexRoute
   '/cap/cases/': typeof CapCasesIndexRoute
   '/pip/cases/': typeof PipCasesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
+  '/admin/email-templates': typeof AdminEmailTemplatesRoute
+  '/admin/roles': typeof AdminRolesRoute
+  '/admin/templates': typeof AdminTemplatesRoute
+  '/admin/triggers': typeof AdminTriggersRoute
   '/cap/exceptions': typeof CapExceptionsRoute
   '/cap/new': typeof CapNewRoute
   '/pip/approvals': typeof PipApprovalsRoute
   '/pip/candidates': typeof PipCandidatesRoute
+  '/qa/disputes': typeof QaDisputesRoute
+  '/qa/recommendation': typeof QaRecommendationRoute
+  '/admin': typeof AdminIndexRoute
+  '/agent': typeof AgentIndexRoute
   '/cap': typeof CapIndexRoute
+  '/manager': typeof ManagerIndexRoute
   '/pip': typeof PipIndexRoute
+  '/qa': typeof QaIndexRoute
   '/supervisor': typeof SupervisorIndexRoute
+  '/agent/cap/acknowledge': typeof AgentCapAcknowledgeRoute
+  '/agent/pip/acknowledge': typeof AgentPipAcknowledgeRoute
   '/cap/cases/$caseId': typeof CapCasesCaseIdRoute
   '/pip/cases/$caseId': typeof PipCasesCaseIdRoute
+  '/supervisor/cap/exception': typeof SupervisorCapExceptionRoute
+  '/supervisor/cap/inbox': typeof SupervisorCapInboxRoute
   '/supervisor/pip/candidates': typeof SupervisorPipCandidatesRoute
   '/supervisor/pip/closure': typeof SupervisorPipClosureRoute
   '/supervisor/pip/document': typeof SupervisorPipDocumentRoute
   '/supervisor/pip/failure': typeof SupervisorPipFailureRoute
   '/supervisor/pip/initiate': typeof SupervisorPipInitiateRoute
   '/supervisor/pip/review': typeof SupervisorPipReviewRoute
+  '/agent/cap': typeof AgentCapIndexRoute
+  '/agent/pip': typeof AgentPipIndexRoute
   '/cap/cases': typeof CapCasesIndexRoute
   '/pip/cases': typeof PipCasesIndexRoute
 }
@@ -171,21 +299,37 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
+  '/admin/email-templates': typeof AdminEmailTemplatesRoute
+  '/admin/roles': typeof AdminRolesRoute
+  '/admin/templates': typeof AdminTemplatesRoute
+  '/admin/triggers': typeof AdminTriggersRoute
   '/cap/exceptions': typeof CapExceptionsRoute
   '/cap/new': typeof CapNewRoute
   '/pip/approvals': typeof PipApprovalsRoute
   '/pip/candidates': typeof PipCandidatesRoute
+  '/qa/disputes': typeof QaDisputesRoute
+  '/qa/recommendation': typeof QaRecommendationRoute
+  '/admin/': typeof AdminIndexRoute
+  '/agent/': typeof AgentIndexRoute
   '/cap/': typeof CapIndexRoute
+  '/manager/': typeof ManagerIndexRoute
   '/pip/': typeof PipIndexRoute
+  '/qa/': typeof QaIndexRoute
   '/supervisor/': typeof SupervisorIndexRoute
+  '/agent/cap/acknowledge': typeof AgentCapAcknowledgeRoute
+  '/agent/pip/acknowledge': typeof AgentPipAcknowledgeRoute
   '/cap/cases/$caseId': typeof CapCasesCaseIdRoute
   '/pip/cases/$caseId': typeof PipCasesCaseIdRoute
+  '/supervisor/cap/exception': typeof SupervisorCapExceptionRoute
+  '/supervisor/cap/inbox': typeof SupervisorCapInboxRoute
   '/supervisor/pip/candidates': typeof SupervisorPipCandidatesRoute
   '/supervisor/pip/closure': typeof SupervisorPipClosureRoute
   '/supervisor/pip/document': typeof SupervisorPipDocumentRoute
   '/supervisor/pip/failure': typeof SupervisorPipFailureRoute
   '/supervisor/pip/initiate': typeof SupervisorPipInitiateRoute
   '/supervisor/pip/review': typeof SupervisorPipReviewRoute
+  '/agent/cap/': typeof AgentCapIndexRoute
+  '/agent/pip/': typeof AgentPipIndexRoute
   '/cap/cases/': typeof CapCasesIndexRoute
   '/pip/cases/': typeof PipCasesIndexRoute
 }
@@ -194,63 +338,111 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/audit'
+    | '/admin/email-templates'
+    | '/admin/roles'
+    | '/admin/templates'
+    | '/admin/triggers'
     | '/cap/exceptions'
     | '/cap/new'
     | '/pip/approvals'
     | '/pip/candidates'
+    | '/qa/disputes'
+    | '/qa/recommendation'
+    | '/admin/'
+    | '/agent/'
     | '/cap/'
+    | '/manager/'
     | '/pip/'
+    | '/qa/'
     | '/supervisor/'
+    | '/agent/cap/acknowledge'
+    | '/agent/pip/acknowledge'
     | '/cap/cases/$caseId'
     | '/pip/cases/$caseId'
+    | '/supervisor/cap/exception'
+    | '/supervisor/cap/inbox'
     | '/supervisor/pip/candidates'
     | '/supervisor/pip/closure'
     | '/supervisor/pip/document'
     | '/supervisor/pip/failure'
     | '/supervisor/pip/initiate'
     | '/supervisor/pip/review'
+    | '/agent/cap/'
+    | '/agent/pip/'
     | '/cap/cases/'
     | '/pip/cases/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/audit'
+    | '/admin/email-templates'
+    | '/admin/roles'
+    | '/admin/templates'
+    | '/admin/triggers'
     | '/cap/exceptions'
     | '/cap/new'
     | '/pip/approvals'
     | '/pip/candidates'
+    | '/qa/disputes'
+    | '/qa/recommendation'
+    | '/admin'
+    | '/agent'
     | '/cap'
+    | '/manager'
     | '/pip'
+    | '/qa'
     | '/supervisor'
+    | '/agent/cap/acknowledge'
+    | '/agent/pip/acknowledge'
     | '/cap/cases/$caseId'
     | '/pip/cases/$caseId'
+    | '/supervisor/cap/exception'
+    | '/supervisor/cap/inbox'
     | '/supervisor/pip/candidates'
     | '/supervisor/pip/closure'
     | '/supervisor/pip/document'
     | '/supervisor/pip/failure'
     | '/supervisor/pip/initiate'
     | '/supervisor/pip/review'
+    | '/agent/cap'
+    | '/agent/pip'
     | '/cap/cases'
     | '/pip/cases'
   id:
     | '__root__'
     | '/'
     | '/audit'
+    | '/admin/email-templates'
+    | '/admin/roles'
+    | '/admin/templates'
+    | '/admin/triggers'
     | '/cap/exceptions'
     | '/cap/new'
     | '/pip/approvals'
     | '/pip/candidates'
+    | '/qa/disputes'
+    | '/qa/recommendation'
+    | '/admin/'
+    | '/agent/'
     | '/cap/'
+    | '/manager/'
     | '/pip/'
+    | '/qa/'
     | '/supervisor/'
+    | '/agent/cap/acknowledge'
+    | '/agent/pip/acknowledge'
     | '/cap/cases/$caseId'
     | '/pip/cases/$caseId'
+    | '/supervisor/cap/exception'
+    | '/supervisor/cap/inbox'
     | '/supervisor/pip/candidates'
     | '/supervisor/pip/closure'
     | '/supervisor/pip/document'
     | '/supervisor/pip/failure'
     | '/supervisor/pip/initiate'
     | '/supervisor/pip/review'
+    | '/agent/cap/'
+    | '/agent/pip/'
     | '/cap/cases/'
     | '/pip/cases/'
   fileRoutesById: FileRoutesById
@@ -258,21 +450,37 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuditRoute: typeof AuditRoute
+  AdminEmailTemplatesRoute: typeof AdminEmailTemplatesRoute
+  AdminRolesRoute: typeof AdminRolesRoute
+  AdminTemplatesRoute: typeof AdminTemplatesRoute
+  AdminTriggersRoute: typeof AdminTriggersRoute
   CapExceptionsRoute: typeof CapExceptionsRoute
   CapNewRoute: typeof CapNewRoute
   PipApprovalsRoute: typeof PipApprovalsRoute
   PipCandidatesRoute: typeof PipCandidatesRoute
+  QaDisputesRoute: typeof QaDisputesRoute
+  QaRecommendationRoute: typeof QaRecommendationRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  AgentIndexRoute: typeof AgentIndexRoute
   CapIndexRoute: typeof CapIndexRoute
+  ManagerIndexRoute: typeof ManagerIndexRoute
   PipIndexRoute: typeof PipIndexRoute
+  QaIndexRoute: typeof QaIndexRoute
   SupervisorIndexRoute: typeof SupervisorIndexRoute
+  AgentCapAcknowledgeRoute: typeof AgentCapAcknowledgeRoute
+  AgentPipAcknowledgeRoute: typeof AgentPipAcknowledgeRoute
   CapCasesCaseIdRoute: typeof CapCasesCaseIdRoute
   PipCasesCaseIdRoute: typeof PipCasesCaseIdRoute
+  SupervisorCapExceptionRoute: typeof SupervisorCapExceptionRoute
+  SupervisorCapInboxRoute: typeof SupervisorCapInboxRoute
   SupervisorPipCandidatesRoute: typeof SupervisorPipCandidatesRoute
   SupervisorPipClosureRoute: typeof SupervisorPipClosureRoute
   SupervisorPipDocumentRoute: typeof SupervisorPipDocumentRoute
   SupervisorPipFailureRoute: typeof SupervisorPipFailureRoute
   SupervisorPipInitiateRoute: typeof SupervisorPipInitiateRoute
   SupervisorPipReviewRoute: typeof SupervisorPipReviewRoute
+  AgentCapIndexRoute: typeof AgentCapIndexRoute
+  AgentPipIndexRoute: typeof AgentPipIndexRoute
   CapCasesIndexRoute: typeof CapCasesIndexRoute
   PipCasesIndexRoute: typeof PipCasesIndexRoute
 }
@@ -300,6 +508,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SupervisorIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/qa/': {
+      id: '/qa/'
+      path: '/qa'
+      fullPath: '/qa/'
+      preLoaderRoute: typeof QaIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pip/': {
       id: '/pip/'
       path: '/pip'
@@ -307,11 +522,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PipIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/manager/': {
+      id: '/manager/'
+      path: '/manager'
+      fullPath: '/manager/'
+      preLoaderRoute: typeof ManagerIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cap/': {
       id: '/cap/'
       path: '/cap'
       fullPath: '/cap/'
       preLoaderRoute: typeof CapIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/agent/': {
+      id: '/agent/'
+      path: '/agent'
+      fullPath: '/agent/'
+      preLoaderRoute: typeof AgentIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/qa/recommendation': {
+      id: '/qa/recommendation'
+      path: '/qa/recommendation'
+      fullPath: '/qa/recommendation'
+      preLoaderRoute: typeof QaRecommendationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/qa/disputes': {
+      id: '/qa/disputes'
+      path: '/qa/disputes'
+      fullPath: '/qa/disputes'
+      preLoaderRoute: typeof QaDisputesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pip/candidates': {
@@ -342,6 +592,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CapExceptionsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/triggers': {
+      id: '/admin/triggers'
+      path: '/admin/triggers'
+      fullPath: '/admin/triggers'
+      preLoaderRoute: typeof AdminTriggersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/templates': {
+      id: '/admin/templates'
+      path: '/admin/templates'
+      fullPath: '/admin/templates'
+      preLoaderRoute: typeof AdminTemplatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/roles': {
+      id: '/admin/roles'
+      path: '/admin/roles'
+      fullPath: '/admin/roles'
+      preLoaderRoute: typeof AdminRolesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/email-templates': {
+      id: '/admin/email-templates'
+      path: '/admin/email-templates'
+      fullPath: '/admin/email-templates'
+      preLoaderRoute: typeof AdminEmailTemplatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pip/cases/': {
       id: '/pip/cases/'
       path: '/pip/cases'
@@ -354,6 +632,20 @@ declare module '@tanstack/react-router' {
       path: '/cap/cases'
       fullPath: '/cap/cases/'
       preLoaderRoute: typeof CapCasesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/agent/pip/': {
+      id: '/agent/pip/'
+      path: '/agent/pip'
+      fullPath: '/agent/pip/'
+      preLoaderRoute: typeof AgentPipIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/agent/cap/': {
+      id: '/agent/cap/'
+      path: '/agent/cap'
+      fullPath: '/agent/cap/'
+      preLoaderRoute: typeof AgentCapIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/supervisor/pip/review': {
@@ -398,6 +690,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SupervisorPipCandidatesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/supervisor/cap/inbox': {
+      id: '/supervisor/cap/inbox'
+      path: '/supervisor/cap/inbox'
+      fullPath: '/supervisor/cap/inbox'
+      preLoaderRoute: typeof SupervisorCapInboxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/supervisor/cap/exception': {
+      id: '/supervisor/cap/exception'
+      path: '/supervisor/cap/exception'
+      fullPath: '/supervisor/cap/exception'
+      preLoaderRoute: typeof SupervisorCapExceptionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pip/cases/$caseId': {
       id: '/pip/cases/$caseId'
       path: '/pip/cases/$caseId'
@@ -412,27 +718,57 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CapCasesCaseIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/agent/pip/acknowledge': {
+      id: '/agent/pip/acknowledge'
+      path: '/agent/pip/acknowledge'
+      fullPath: '/agent/pip/acknowledge'
+      preLoaderRoute: typeof AgentPipAcknowledgeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/agent/cap/acknowledge': {
+      id: '/agent/cap/acknowledge'
+      path: '/agent/cap/acknowledge'
+      fullPath: '/agent/cap/acknowledge'
+      preLoaderRoute: typeof AgentCapAcknowledgeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuditRoute: AuditRoute,
+  AdminEmailTemplatesRoute: AdminEmailTemplatesRoute,
+  AdminRolesRoute: AdminRolesRoute,
+  AdminTemplatesRoute: AdminTemplatesRoute,
+  AdminTriggersRoute: AdminTriggersRoute,
   CapExceptionsRoute: CapExceptionsRoute,
   CapNewRoute: CapNewRoute,
   PipApprovalsRoute: PipApprovalsRoute,
   PipCandidatesRoute: PipCandidatesRoute,
+  QaDisputesRoute: QaDisputesRoute,
+  QaRecommendationRoute: QaRecommendationRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  AgentIndexRoute: AgentIndexRoute,
   CapIndexRoute: CapIndexRoute,
+  ManagerIndexRoute: ManagerIndexRoute,
   PipIndexRoute: PipIndexRoute,
+  QaIndexRoute: QaIndexRoute,
   SupervisorIndexRoute: SupervisorIndexRoute,
+  AgentCapAcknowledgeRoute: AgentCapAcknowledgeRoute,
+  AgentPipAcknowledgeRoute: AgentPipAcknowledgeRoute,
   CapCasesCaseIdRoute: CapCasesCaseIdRoute,
   PipCasesCaseIdRoute: PipCasesCaseIdRoute,
+  SupervisorCapExceptionRoute: SupervisorCapExceptionRoute,
+  SupervisorCapInboxRoute: SupervisorCapInboxRoute,
   SupervisorPipCandidatesRoute: SupervisorPipCandidatesRoute,
   SupervisorPipClosureRoute: SupervisorPipClosureRoute,
   SupervisorPipDocumentRoute: SupervisorPipDocumentRoute,
   SupervisorPipFailureRoute: SupervisorPipFailureRoute,
   SupervisorPipInitiateRoute: SupervisorPipInitiateRoute,
   SupervisorPipReviewRoute: SupervisorPipReviewRoute,
+  AgentCapIndexRoute: AgentCapIndexRoute,
+  AgentPipIndexRoute: AgentPipIndexRoute,
   CapCasesIndexRoute: CapCasesIndexRoute,
   PipCasesIndexRoute: PipCasesIndexRoute,
 }
