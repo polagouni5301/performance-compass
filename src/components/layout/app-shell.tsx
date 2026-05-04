@@ -66,15 +66,15 @@ const personaNav: Record<Persona, { home: NavItem; sections: NavSection[] }> = {
       {
         section: "PIP",
         items: [
-          { label: "My PIP", to: "/agent/pip", icon: TrendingUp },
-          { label: "Acknowledge PIP", to: "/agent/pip/acknowledge", icon: Mail },
+          { label: "My PIP", to: "/agent/pip", icon: TrendingUp, exact: true },
+          { label: "Acknowledge PIP", to: "/agent/pip/acknowledge", icon: Mail, exact: true },
         ],
       },
       {
         section: "CAP",
         items: [
-          { label: "My CAP / Warnings", to: "/agent/cap", icon: ShieldAlert },
-          { label: "Acknowledge CAP", to: "/agent/cap/acknowledge", icon: Mail },
+          { label: "My CAP / Warnings", to: "/agent/cap", icon: ShieldAlert, exact: true },
+          { label: "Acknowledge CAP", to: "/agent/cap/acknowledge", icon: Mail, exact: true },
         ],
       },
     ],
