@@ -113,6 +113,7 @@ const personaNav: Record<Persona, { home: NavItem; sections: NavSection[] }> = {
         items: [
           { label: "Team PIP cases", to: "/pip/cases", icon: TrendingUp },
           { label: "Team CAP cases", to: "/cap/cases", icon: FileSearch },
+          { label: "Departments", to: "/manager/departments", icon: Briefcase },
         ],
       },
     ],
