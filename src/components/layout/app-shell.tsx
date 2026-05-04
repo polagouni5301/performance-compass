@@ -149,7 +149,7 @@ const personaIcon: Record<Persona, any> = {
   "qa-compliance": ShieldCheck,
   manager: Scale,
   admin: Settings,
-  auditor: FileSearch,
+  
 };
 
 function NavLink({ to, icon: Icon, label, exact }: NavItem) {
