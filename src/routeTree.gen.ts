@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuditRouteImport } from './routes/audit'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SupervisorIndexRouteImport } from './routes/supervisor/index'
 import { Route as PipIndexRouteImport } from './routes/pip/index'
 import { Route as CapIndexRouteImport } from './routes/cap/index'
 import { Route as PipCandidatesRouteImport } from './routes/pip/candidates'
@@ -19,6 +20,12 @@ import { Route as CapNewRouteImport } from './routes/cap/new'
 import { Route as CapExceptionsRouteImport } from './routes/cap/exceptions'
 import { Route as PipCasesIndexRouteImport } from './routes/pip/cases.index'
 import { Route as CapCasesIndexRouteImport } from './routes/cap/cases.index'
+import { Route as SupervisorPipReviewRouteImport } from './routes/supervisor/pip.review'
+import { Route as SupervisorPipInitiateRouteImport } from './routes/supervisor/pip.initiate'
+import { Route as SupervisorPipFailureRouteImport } from './routes/supervisor/pip.failure'
+import { Route as SupervisorPipDocumentRouteImport } from './routes/supervisor/pip.document'
+import { Route as SupervisorPipClosureRouteImport } from './routes/supervisor/pip.closure'
+import { Route as SupervisorPipCandidatesRouteImport } from './routes/supervisor/pip.candidates'
 import { Route as PipCasesCaseIdRouteImport } from './routes/pip/cases.$caseId'
 import { Route as CapCasesCaseIdRouteImport } from './routes/cap/cases.$caseId'
 
@@ -30,6 +37,11 @@ const AuditRoute = AuditRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupervisorIndexRoute = SupervisorIndexRouteImport.update({
+  id: '/supervisor/',
+  path: '/supervisor/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PipIndexRoute = PipIndexRouteImport.update({
@@ -72,6 +84,36 @@ const CapCasesIndexRoute = CapCasesIndexRouteImport.update({
   path: '/cap/cases/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SupervisorPipReviewRoute = SupervisorPipReviewRouteImport.update({
+  id: '/supervisor/pip/review',
+  path: '/supervisor/pip/review',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupervisorPipInitiateRoute = SupervisorPipInitiateRouteImport.update({
+  id: '/supervisor/pip/initiate',
+  path: '/supervisor/pip/initiate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupervisorPipFailureRoute = SupervisorPipFailureRouteImport.update({
+  id: '/supervisor/pip/failure',
+  path: '/supervisor/pip/failure',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupervisorPipDocumentRoute = SupervisorPipDocumentRouteImport.update({
+  id: '/supervisor/pip/document',
+  path: '/supervisor/pip/document',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupervisorPipClosureRoute = SupervisorPipClosureRouteImport.update({
+  id: '/supervisor/pip/closure',
+  path: '/supervisor/pip/closure',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupervisorPipCandidatesRoute = SupervisorPipCandidatesRouteImport.update({
+  id: '/supervisor/pip/candidates',
+  path: '/supervisor/pip/candidates',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PipCasesCaseIdRoute = PipCasesCaseIdRouteImport.update({
   id: '/pip/cases/$caseId',
   path: '/pip/cases/$caseId',
@@ -92,8 +134,15 @@ export interface FileRoutesByFullPath {
   '/pip/candidates': typeof PipCandidatesRoute
   '/cap/': typeof CapIndexRoute
   '/pip/': typeof PipIndexRoute
+  '/supervisor/': typeof SupervisorIndexRoute
   '/cap/cases/$caseId': typeof CapCasesCaseIdRoute
   '/pip/cases/$caseId': typeof PipCasesCaseIdRoute
+  '/supervisor/pip/candidates': typeof SupervisorPipCandidatesRoute
+  '/supervisor/pip/closure': typeof SupervisorPipClosureRoute
+  '/supervisor/pip/document': typeof SupervisorPipDocumentRoute
+  '/supervisor/pip/failure': typeof SupervisorPipFailureRoute
+  '/supervisor/pip/initiate': typeof SupervisorPipInitiateRoute
+  '/supervisor/pip/review': typeof SupervisorPipReviewRoute
   '/cap/cases/': typeof CapCasesIndexRoute
   '/pip/cases/': typeof PipCasesIndexRoute
 }
@@ -106,8 +155,15 @@ export interface FileRoutesByTo {
   '/pip/candidates': typeof PipCandidatesRoute
   '/cap': typeof CapIndexRoute
   '/pip': typeof PipIndexRoute
+  '/supervisor': typeof SupervisorIndexRoute
   '/cap/cases/$caseId': typeof CapCasesCaseIdRoute
   '/pip/cases/$caseId': typeof PipCasesCaseIdRoute
+  '/supervisor/pip/candidates': typeof SupervisorPipCandidatesRoute
+  '/supervisor/pip/closure': typeof SupervisorPipClosureRoute
+  '/supervisor/pip/document': typeof SupervisorPipDocumentRoute
+  '/supervisor/pip/failure': typeof SupervisorPipFailureRoute
+  '/supervisor/pip/initiate': typeof SupervisorPipInitiateRoute
+  '/supervisor/pip/review': typeof SupervisorPipReviewRoute
   '/cap/cases': typeof CapCasesIndexRoute
   '/pip/cases': typeof PipCasesIndexRoute
 }
@@ -121,8 +177,15 @@ export interface FileRoutesById {
   '/pip/candidates': typeof PipCandidatesRoute
   '/cap/': typeof CapIndexRoute
   '/pip/': typeof PipIndexRoute
+  '/supervisor/': typeof SupervisorIndexRoute
   '/cap/cases/$caseId': typeof CapCasesCaseIdRoute
   '/pip/cases/$caseId': typeof PipCasesCaseIdRoute
+  '/supervisor/pip/candidates': typeof SupervisorPipCandidatesRoute
+  '/supervisor/pip/closure': typeof SupervisorPipClosureRoute
+  '/supervisor/pip/document': typeof SupervisorPipDocumentRoute
+  '/supervisor/pip/failure': typeof SupervisorPipFailureRoute
+  '/supervisor/pip/initiate': typeof SupervisorPipInitiateRoute
+  '/supervisor/pip/review': typeof SupervisorPipReviewRoute
   '/cap/cases/': typeof CapCasesIndexRoute
   '/pip/cases/': typeof PipCasesIndexRoute
 }
@@ -137,8 +200,15 @@ export interface FileRouteTypes {
     | '/pip/candidates'
     | '/cap/'
     | '/pip/'
+    | '/supervisor/'
     | '/cap/cases/$caseId'
     | '/pip/cases/$caseId'
+    | '/supervisor/pip/candidates'
+    | '/supervisor/pip/closure'
+    | '/supervisor/pip/document'
+    | '/supervisor/pip/failure'
+    | '/supervisor/pip/initiate'
+    | '/supervisor/pip/review'
     | '/cap/cases/'
     | '/pip/cases/'
   fileRoutesByTo: FileRoutesByTo
@@ -151,8 +221,15 @@ export interface FileRouteTypes {
     | '/pip/candidates'
     | '/cap'
     | '/pip'
+    | '/supervisor'
     | '/cap/cases/$caseId'
     | '/pip/cases/$caseId'
+    | '/supervisor/pip/candidates'
+    | '/supervisor/pip/closure'
+    | '/supervisor/pip/document'
+    | '/supervisor/pip/failure'
+    | '/supervisor/pip/initiate'
+    | '/supervisor/pip/review'
     | '/cap/cases'
     | '/pip/cases'
   id:
@@ -165,8 +242,15 @@ export interface FileRouteTypes {
     | '/pip/candidates'
     | '/cap/'
     | '/pip/'
+    | '/supervisor/'
     | '/cap/cases/$caseId'
     | '/pip/cases/$caseId'
+    | '/supervisor/pip/candidates'
+    | '/supervisor/pip/closure'
+    | '/supervisor/pip/document'
+    | '/supervisor/pip/failure'
+    | '/supervisor/pip/initiate'
+    | '/supervisor/pip/review'
     | '/cap/cases/'
     | '/pip/cases/'
   fileRoutesById: FileRoutesById
@@ -180,8 +264,15 @@ export interface RootRouteChildren {
   PipCandidatesRoute: typeof PipCandidatesRoute
   CapIndexRoute: typeof CapIndexRoute
   PipIndexRoute: typeof PipIndexRoute
+  SupervisorIndexRoute: typeof SupervisorIndexRoute
   CapCasesCaseIdRoute: typeof CapCasesCaseIdRoute
   PipCasesCaseIdRoute: typeof PipCasesCaseIdRoute
+  SupervisorPipCandidatesRoute: typeof SupervisorPipCandidatesRoute
+  SupervisorPipClosureRoute: typeof SupervisorPipClosureRoute
+  SupervisorPipDocumentRoute: typeof SupervisorPipDocumentRoute
+  SupervisorPipFailureRoute: typeof SupervisorPipFailureRoute
+  SupervisorPipInitiateRoute: typeof SupervisorPipInitiateRoute
+  SupervisorPipReviewRoute: typeof SupervisorPipReviewRoute
   CapCasesIndexRoute: typeof CapCasesIndexRoute
   PipCasesIndexRoute: typeof PipCasesIndexRoute
 }
@@ -200,6 +291,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/supervisor/': {
+      id: '/supervisor/'
+      path: '/supervisor'
+      fullPath: '/supervisor/'
+      preLoaderRoute: typeof SupervisorIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pip/': {
@@ -258,6 +356,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CapCasesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/supervisor/pip/review': {
+      id: '/supervisor/pip/review'
+      path: '/supervisor/pip/review'
+      fullPath: '/supervisor/pip/review'
+      preLoaderRoute: typeof SupervisorPipReviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/supervisor/pip/initiate': {
+      id: '/supervisor/pip/initiate'
+      path: '/supervisor/pip/initiate'
+      fullPath: '/supervisor/pip/initiate'
+      preLoaderRoute: typeof SupervisorPipInitiateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/supervisor/pip/failure': {
+      id: '/supervisor/pip/failure'
+      path: '/supervisor/pip/failure'
+      fullPath: '/supervisor/pip/failure'
+      preLoaderRoute: typeof SupervisorPipFailureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/supervisor/pip/document': {
+      id: '/supervisor/pip/document'
+      path: '/supervisor/pip/document'
+      fullPath: '/supervisor/pip/document'
+      preLoaderRoute: typeof SupervisorPipDocumentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/supervisor/pip/closure': {
+      id: '/supervisor/pip/closure'
+      path: '/supervisor/pip/closure'
+      fullPath: '/supervisor/pip/closure'
+      preLoaderRoute: typeof SupervisorPipClosureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/supervisor/pip/candidates': {
+      id: '/supervisor/pip/candidates'
+      path: '/supervisor/pip/candidates'
+      fullPath: '/supervisor/pip/candidates'
+      preLoaderRoute: typeof SupervisorPipCandidatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pip/cases/$caseId': {
       id: '/pip/cases/$caseId'
       path: '/pip/cases/$caseId'
@@ -284,8 +424,15 @@ const rootRouteChildren: RootRouteChildren = {
   PipCandidatesRoute: PipCandidatesRoute,
   CapIndexRoute: CapIndexRoute,
   PipIndexRoute: PipIndexRoute,
+  SupervisorIndexRoute: SupervisorIndexRoute,
   CapCasesCaseIdRoute: CapCasesCaseIdRoute,
   PipCasesCaseIdRoute: PipCasesCaseIdRoute,
+  SupervisorPipCandidatesRoute: SupervisorPipCandidatesRoute,
+  SupervisorPipClosureRoute: SupervisorPipClosureRoute,
+  SupervisorPipDocumentRoute: SupervisorPipDocumentRoute,
+  SupervisorPipFailureRoute: SupervisorPipFailureRoute,
+  SupervisorPipInitiateRoute: SupervisorPipInitiateRoute,
+  SupervisorPipReviewRoute: SupervisorPipReviewRoute,
   CapCasesIndexRoute: CapCasesIndexRoute,
   PipCasesIndexRoute: PipCasesIndexRoute,
 }
