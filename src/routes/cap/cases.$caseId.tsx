@@ -3,6 +3,7 @@ import { PageHeader, SectionCard, StatCard } from "@/components/shared/page-prim
 import { CAPStatusBadge, CAPLevelBadge, StatusBadge } from "@/components/shared/status-badges";
 import { Button } from "@/components/ui/button";
 import { capCases } from "@/lib/mock-data";
+import { usePersona } from "@/lib/persona";
 import { ArrowLeft, FileText, Mail, Download, Check, X, ShieldAlert, Upload, Send } from "lucide-react";
 import { useState } from "react";
 
@@ -20,15 +21,18 @@ function CAPDetail() {
   const { caseId } = useParams({ from: "/cap/cases/$caseId" });
   const c = capCases.find((x) => x.id === caseId);
   const [showException, setShowException] = useState(false);
+  const { persona } = usePersona();
 
   if (!c) return <div className="rounded-2xl border p-10 text-center">Case not found.</div>;
 
   const disputeRemaining = 2 - c.disputeAttempts;
+  const backTo = persona === "agent" ? "/agent/cap" : "/cap/cases";
+  const backLabel = persona === "agent" ? "My CAP / Warnings" : "All CAP cases";
 
   return (
     <div>
-      <Link to="/cap/cases" className="mb-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
-        <ArrowLeft className="h-3.5 w-3.5" /> All CAP cases
+      <Link to={backTo} className="mb-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+        <ArrowLeft className="h-3.5 w-3.5" /> {backLabel}
       </Link>
 
       <PageHeader

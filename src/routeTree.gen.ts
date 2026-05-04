@@ -22,12 +22,14 @@ import { Route as QaRecommendationRouteImport } from './routes/qa/recommendation
 import { Route as QaDisputesRouteImport } from './routes/qa/disputes'
 import { Route as PipCandidatesRouteImport } from './routes/pip/candidates'
 import { Route as PipApprovalsRouteImport } from './routes/pip/approvals'
+import { Route as ManagerDepartmentsRouteImport } from './routes/manager/departments'
 import { Route as CapNewRouteImport } from './routes/cap/new'
 import { Route as CapExceptionsRouteImport } from './routes/cap/exceptions'
 import { Route as AdminTriggersRouteImport } from './routes/admin/triggers'
 import { Route as AdminTemplatesRouteImport } from './routes/admin/templates'
 import { Route as AdminRolesRouteImport } from './routes/admin/roles'
 import { Route as AdminEmailTemplatesRouteImport } from './routes/admin/email-templates'
+import { Route as AdminDepartmentsRouteImport } from './routes/admin/departments'
 import { Route as PipCasesIndexRouteImport } from './routes/pip/cases.index'
 import { Route as CapCasesIndexRouteImport } from './routes/cap/cases.index'
 import { Route as AgentPipIndexRouteImport } from './routes/agent/pip.index'
@@ -110,6 +112,11 @@ const PipApprovalsRoute = PipApprovalsRouteImport.update({
   path: '/pip/approvals',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ManagerDepartmentsRoute = ManagerDepartmentsRouteImport.update({
+  id: '/manager/departments',
+  path: '/manager/departments',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CapNewRoute = CapNewRouteImport.update({
   id: '/cap/new',
   path: '/cap/new',
@@ -138,6 +145,11 @@ const AdminRolesRoute = AdminRolesRouteImport.update({
 const AdminEmailTemplatesRoute = AdminEmailTemplatesRouteImport.update({
   id: '/admin/email-templates',
   path: '/admin/email-templates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminDepartmentsRoute = AdminDepartmentsRouteImport.update({
+  id: '/admin/departments',
+  path: '/admin/departments',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PipCasesIndexRoute = PipCasesIndexRouteImport.update({
@@ -224,12 +236,14 @@ const AgentCapAcknowledgeRoute = AgentCapAcknowledgeRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
+  '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/email-templates': typeof AdminEmailTemplatesRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/templates': typeof AdminTemplatesRoute
   '/admin/triggers': typeof AdminTriggersRoute
   '/cap/exceptions': typeof CapExceptionsRoute
   '/cap/new': typeof CapNewRoute
+  '/manager/departments': typeof ManagerDepartmentsRoute
   '/pip/approvals': typeof PipApprovalsRoute
   '/pip/candidates': typeof PipCandidatesRoute
   '/qa/disputes': typeof QaDisputesRoute
@@ -261,12 +275,14 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
+  '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/email-templates': typeof AdminEmailTemplatesRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/templates': typeof AdminTemplatesRoute
   '/admin/triggers': typeof AdminTriggersRoute
   '/cap/exceptions': typeof CapExceptionsRoute
   '/cap/new': typeof CapNewRoute
+  '/manager/departments': typeof ManagerDepartmentsRoute
   '/pip/approvals': typeof PipApprovalsRoute
   '/pip/candidates': typeof PipCandidatesRoute
   '/qa/disputes': typeof QaDisputesRoute
@@ -299,12 +315,14 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
+  '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/email-templates': typeof AdminEmailTemplatesRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/templates': typeof AdminTemplatesRoute
   '/admin/triggers': typeof AdminTriggersRoute
   '/cap/exceptions': typeof CapExceptionsRoute
   '/cap/new': typeof CapNewRoute
+  '/manager/departments': typeof ManagerDepartmentsRoute
   '/pip/approvals': typeof PipApprovalsRoute
   '/pip/candidates': typeof PipCandidatesRoute
   '/qa/disputes': typeof QaDisputesRoute
@@ -338,12 +356,14 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/audit'
+    | '/admin/departments'
     | '/admin/email-templates'
     | '/admin/roles'
     | '/admin/templates'
     | '/admin/triggers'
     | '/cap/exceptions'
     | '/cap/new'
+    | '/manager/departments'
     | '/pip/approvals'
     | '/pip/candidates'
     | '/qa/disputes'
@@ -375,12 +395,14 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/audit'
+    | '/admin/departments'
     | '/admin/email-templates'
     | '/admin/roles'
     | '/admin/templates'
     | '/admin/triggers'
     | '/cap/exceptions'
     | '/cap/new'
+    | '/manager/departments'
     | '/pip/approvals'
     | '/pip/candidates'
     | '/qa/disputes'
@@ -412,12 +434,14 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/audit'
+    | '/admin/departments'
     | '/admin/email-templates'
     | '/admin/roles'
     | '/admin/templates'
     | '/admin/triggers'
     | '/cap/exceptions'
     | '/cap/new'
+    | '/manager/departments'
     | '/pip/approvals'
     | '/pip/candidates'
     | '/qa/disputes'
@@ -450,12 +474,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuditRoute: typeof AuditRoute
+  AdminDepartmentsRoute: typeof AdminDepartmentsRoute
   AdminEmailTemplatesRoute: typeof AdminEmailTemplatesRoute
   AdminRolesRoute: typeof AdminRolesRoute
   AdminTemplatesRoute: typeof AdminTemplatesRoute
   AdminTriggersRoute: typeof AdminTriggersRoute
   CapExceptionsRoute: typeof CapExceptionsRoute
   CapNewRoute: typeof CapNewRoute
+  ManagerDepartmentsRoute: typeof ManagerDepartmentsRoute
   PipApprovalsRoute: typeof PipApprovalsRoute
   PipCandidatesRoute: typeof PipCandidatesRoute
   QaDisputesRoute: typeof QaDisputesRoute
@@ -578,6 +604,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PipApprovalsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/manager/departments': {
+      id: '/manager/departments'
+      path: '/manager/departments'
+      fullPath: '/manager/departments'
+      preLoaderRoute: typeof ManagerDepartmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cap/new': {
       id: '/cap/new'
       path: '/cap/new'
@@ -618,6 +651,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/email-templates'
       fullPath: '/admin/email-templates'
       preLoaderRoute: typeof AdminEmailTemplatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/departments': {
+      id: '/admin/departments'
+      path: '/admin/departments'
+      fullPath: '/admin/departments'
+      preLoaderRoute: typeof AdminDepartmentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pip/cases/': {
@@ -738,12 +778,14 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuditRoute: AuditRoute,
+  AdminDepartmentsRoute: AdminDepartmentsRoute,
   AdminEmailTemplatesRoute: AdminEmailTemplatesRoute,
   AdminRolesRoute: AdminRolesRoute,
   AdminTemplatesRoute: AdminTemplatesRoute,
   AdminTriggersRoute: AdminTriggersRoute,
   CapExceptionsRoute: CapExceptionsRoute,
   CapNewRoute: CapNewRoute,
+  ManagerDepartmentsRoute: ManagerDepartmentsRoute,
   PipApprovalsRoute: PipApprovalsRoute,
   PipCandidatesRoute: PipCandidatesRoute,
   QaDisputesRoute: QaDisputesRoute,

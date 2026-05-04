@@ -66,15 +66,15 @@ const personaNav: Record<Persona, { home: NavItem; sections: NavSection[] }> = {
       {
         section: "PIP",
         items: [
-          { label: "My PIP", to: "/agent/pip", icon: TrendingUp },
-          { label: "Acknowledge PIP", to: "/agent/pip/acknowledge", icon: Mail },
+          { label: "My PIP", to: "/agent/pip", icon: TrendingUp, exact: true },
+          { label: "Acknowledge PIP", to: "/agent/pip/acknowledge", icon: Mail, exact: true },
         ],
       },
       {
         section: "CAP",
         items: [
-          { label: "My CAP / Warnings", to: "/agent/cap", icon: ShieldAlert },
-          { label: "Acknowledge CAP", to: "/agent/cap/acknowledge", icon: Mail },
+          { label: "My CAP / Warnings", to: "/agent/cap", icon: ShieldAlert, exact: true },
+          { label: "Acknowledge CAP", to: "/agent/cap/acknowledge", icon: Mail, exact: true },
         ],
       },
     ],
@@ -113,6 +113,7 @@ const personaNav: Record<Persona, { home: NavItem; sections: NavSection[] }> = {
         items: [
           { label: "Team PIP cases", to: "/pip/cases", icon: TrendingUp },
           { label: "Team CAP cases", to: "/cap/cases", icon: FileSearch },
+          { label: "Departments", to: "/manager/departments", icon: Briefcase },
         ],
       },
     ],
@@ -127,16 +128,13 @@ const personaNav: Record<Persona, { home: NavItem; sections: NavSection[] }> = {
           { label: "Document templates", to: "/admin/templates", icon: FileText },
           { label: "Email templates", to: "/admin/email-templates", icon: Mail },
           { label: "Role access", to: "/admin/roles", icon: Users },
+          { label: "Departments", to: "/admin/departments", icon: Briefcase },
         ],
       },
-    ],
-  },
-  auditor: {
-    home: { label: "Audit dashboard", to: "/audit", icon: LayoutDashboard, exact: true },
-    sections: [
       {
-        section: "Read-only",
+        section: "Audit & oversight",
         items: [
+          { label: "Audit dashboard", to: "/audit", icon: FileSearch, exact: true },
           { label: "PIP register", to: "/pip/cases", icon: TrendingUp },
           { label: "CAP register", to: "/cap/cases", icon: FileSearch },
         ],
@@ -151,7 +149,7 @@ const personaIcon: Record<Persona, any> = {
   "qa-compliance": ShieldCheck,
   manager: Scale,
   admin: Settings,
-  auditor: FileSearch,
+  
 };
 
 function NavLink({ to, icon: Icon, label, exact }: NavItem) {
@@ -265,7 +263,7 @@ function HeaderUser() {
 function ShellInner() {
   return (
     <div className="flex min-h-screen w-full bg-background">
-      <aside className="hidden w-72 shrink-0 border-r border-sidebar-border bg-sidebar lg:flex lg:flex-col">
+      <aside className="sticky top-0 hidden h-screen w-72 shrink-0 border-r border-sidebar-border bg-sidebar lg:flex lg:flex-col">
         <div className="flex h-16 items-center gap-3 border-b border-sidebar-border px-5">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-primary text-primary-foreground shadow-glow">
             <ShieldAlert className="h-5 w-5" />

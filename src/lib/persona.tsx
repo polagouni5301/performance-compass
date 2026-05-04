@@ -5,8 +5,7 @@ export type Persona =
   | "agent"
   | "qa-compliance"
   | "manager"
-  | "admin"
-  | "auditor";
+  | "admin";
 
 export interface PersonaInfo {
   id: Persona;
@@ -23,8 +22,7 @@ export const personas: Record<Persona, PersonaInfo> = {
   agent: { id: "agent", label: "Agent", role: "Senior Associate", initials: "MB", name: "Marcus Bennett", team: "Underwriting", accent: "from-info to-primary" },
   "qa-compliance": { id: "qa-compliance", label: "QA / Compliance", role: "Quality Auditor", initials: "NA", name: "Nikhil Anand", team: "QA Team", accent: "from-warning to-primary" },
   manager: { id: "manager", label: "Manager", role: "Operations Manager", initials: "RI", name: "Rohan Iyer", team: "Claims Ops", accent: "from-success to-primary" },
-  admin: { id: "admin", label: "Admin", role: "System Administrator", initials: "AD", name: "Asha Devi", team: "Platform Ops", accent: "from-destructive to-primary" },
-  auditor: { id: "auditor", label: "Auditor", role: "Read-only · Governance", initials: "HP", name: "Helena Park", team: "Risk & Audit", accent: "from-muted to-primary" },
+  admin: { id: "admin", label: "Admin & Audit", role: "System Admin · Governance", initials: "AD", name: "Asha Devi", team: "Platform Ops", accent: "from-destructive to-primary" },
 };
 
 const KEY = "active-persona-v1";

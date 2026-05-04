@@ -314,3 +314,34 @@ export function recommendCAPLevel(ohrId: string, breachType: string): CAPLevel {
   if (past.length >= 2) return "CAP 2";
   return "CAP 1";
 }
+
+export type DepartmentChannel = "voice" | "messaging" | "cdt";
+
+export interface Department {
+  name: string;
+  channel: DepartmentChannel;
+  headcount: number;
+  activePIP: number;
+  openCAP: number;
+  manager: string;
+}
+
+export const departments: Department[] = [
+  { name: "C3 Support", channel: "voice", headcount: 142, activePIP: 6, openCAP: 9, manager: "Rohan Iyer" },
+  { name: "Website Security Support", channel: "voice", headcount: 88, activePIP: 3, openCAP: 5, manager: "Helena Park" },
+  { name: "The Ranch", channel: "voice", headcount: 64, activePIP: 2, openCAP: 4, manager: "Marcia Lin" },
+  { name: "Messaging - India General", channel: "messaging", headcount: 120, activePIP: 5, openCAP: 7, manager: "Rohan Iyer" },
+  { name: "Messaging - RoW General", channel: "messaging", headcount: 96, activePIP: 4, openCAP: 6, manager: "Rohan Iyer" },
+  { name: "Messaging - General", channel: "messaging", headcount: 78, activePIP: 2, openCAP: 3, manager: "Helena Park" },
+  { name: "Messaging - Hosting", channel: "messaging", headcount: 54, activePIP: 1, openCAP: 2, manager: "Helena Park" },
+  { name: "Messaging - Sales", channel: "messaging", headcount: 70, activePIP: 3, openCAP: 4, manager: "Helena Park" },
+  { name: "Messaging - Email Support", channel: "messaging", headcount: 62, activePIP: 2, openCAP: 3, manager: "Marcia Lin" },
+  { name: "Messaging - Account Support", channel: "messaging", headcount: 58, activePIP: 1, openCAP: 2, manager: "Marcia Lin" },
+  { name: "Customer Development Team", channel: "cdt", headcount: 110, activePIP: 4, openCAP: 5, manager: "Rohan Iyer" },
+];
+
+export const channelLabel: Record<DepartmentChannel, string> = {
+  voice: "Voice",
+  messaging: "Messaging",
+  cdt: "CDT",
+};
