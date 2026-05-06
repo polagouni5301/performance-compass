@@ -67,7 +67,19 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 import { AppShell } from "@/components/layout/app-shell";
+import { useRouterState } from "@tanstack/react-router";
+import { PersonaProvider } from "@/lib/persona";
+
+const STANDALONE = ["/landing", "/hub"];
 
 function RootComponent() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  if (STANDALONE.some((p) => pathname === p || pathname.startsWith(p + "/"))) {
+    return (
+      <PersonaProvider>
+        <Outlet />
+      </PersonaProvider>
+    );
+  }
   return <AppShell />;
 }
