@@ -186,41 +186,52 @@ function HubPage() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-[1400px] px-6 py-10">
-        {/* HERO — welcome back */}
-        <section className="relative mb-10 overflow-hidden rounded-3xl border border-border p-8 shadow-soft md:p-12"
-          style={{ background: "linear-gradient(135deg, var(--primary-soft), var(--card) 55%, oklch(0.95 0.06 305))" }}>
-          <div
-            className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full opacity-40 blur-3xl"
-            style={{ background: "var(--primary)" }}
-          />
-          <div
-            className="pointer-events-none absolute inset-0 opacity-[0.05]"
-            style={{
-              backgroundImage:
-                "linear-gradient(var(--foreground) 1px, transparent 1px), linear-gradient(90deg, var(--foreground) 1px, transparent 1px)",
-              backgroundSize: "44px 44px",
-            }}
-          />
-          <div className="relative">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-3 py-1.5 text-[11px] font-medium text-foreground/80 shadow-soft backdrop-blur">
+      <div className="mx-auto max-w-[1400px] px-6 py-12">
+        {/* HERO — no card, clean editorial layout */}
+        <section className="mb-12 grid items-end gap-8 md:grid-cols-[1.4fr_1fr]">
+          <div>
+            <div className="mb-3 flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
               <IconSpark className="h-3.5 w-3.5 text-primary" />
-              {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+              <span>{new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}</span>
+              <span className="h-1 w-1 rounded-full bg-border" />
+              <span className="text-success">All systems green</span>
             </div>
-            <h1 className="text-3xl font-bold tracking-tight md:text-5xl">
-              Welcome back,{" "}
+            <h1 className="text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
+              Welcome back,
+              <br />
               <span
                 className="bg-clip-text text-transparent"
                 style={{ backgroundImage: "linear-gradient(120deg, var(--primary), oklch(0.55 0.22 305))" }}
               >
                 Alex Johnson
               </span>
-              .
+              <span className="text-foreground">.</span>
             </h1>
-            <p className="mt-3 max-w-2xl text-sm text-muted-foreground md:text-base">
-              Pick up where you left off. Five engines are running quietly in the background — jump into any
-              workspace below to drive the next decision.
+            <p className="mt-4 max-w-xl text-base text-muted-foreground">
+              Pick up where you left off — five engines are running quietly in the background.
+              Choose a workspace below to drive the next decision.
             </p>
+          </div>
+
+          {/* right side — vertical accent meta */}
+          <div className="hidden md:block">
+            <div className="border-l-2 border-primary/40 pl-5">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">Today at a glance</div>
+              <div className="mt-3 space-y-2.5 text-sm">
+                <div className="flex items-baseline justify-between gap-4">
+                  <span className="text-muted-foreground">Cases on your desk</span>
+                  <span className="text-lg font-bold tracking-tight">12</span>
+                </div>
+                <div className="flex items-baseline justify-between gap-4">
+                  <span className="text-muted-foreground">Coaching scheduled</span>
+                  <span className="text-lg font-bold tracking-tight">4</span>
+                </div>
+                <div className="flex items-baseline justify-between gap-4">
+                  <span className="text-muted-foreground">Active personas</span>
+                  <span className="text-lg font-bold tracking-tight">Supervisor</span>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
