@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LandingRouteImport } from './routes/landing'
+import { Route as HubRouteImport } from './routes/hub'
 import { Route as AuditRouteImport } from './routes/audit'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SupervisorIndexRouteImport } from './routes/supervisor/index'
@@ -51,6 +52,11 @@ import { Route as AgentCapAcknowledgeRouteImport } from './routes/agent/cap.ackn
 const LandingRoute = LandingRouteImport.update({
   id: '/landing',
   path: '/landing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HubRoute = HubRouteImport.update({
+  id: '/hub',
+  path: '/hub',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuditRoute = AuditRouteImport.update({
@@ -242,6 +248,7 @@ const AgentCapAcknowledgeRoute = AgentCapAcknowledgeRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
+  '/hub': typeof HubRoute
   '/landing': typeof LandingRoute
   '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/email-templates': typeof AdminEmailTemplatesRoute
@@ -282,6 +289,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
+  '/hub': typeof HubRoute
   '/landing': typeof LandingRoute
   '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/email-templates': typeof AdminEmailTemplatesRoute
@@ -323,6 +331,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/audit': typeof AuditRoute
+  '/hub': typeof HubRoute
   '/landing': typeof LandingRoute
   '/admin/departments': typeof AdminDepartmentsRoute
   '/admin/email-templates': typeof AdminEmailTemplatesRoute
@@ -365,6 +374,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/audit'
+    | '/hub'
     | '/landing'
     | '/admin/departments'
     | '/admin/email-templates'
@@ -405,6 +415,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/audit'
+    | '/hub'
     | '/landing'
     | '/admin/departments'
     | '/admin/email-templates'
@@ -445,6 +456,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/audit'
+    | '/hub'
     | '/landing'
     | '/admin/departments'
     | '/admin/email-templates'
@@ -486,6 +498,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuditRoute: typeof AuditRoute
+  HubRoute: typeof HubRoute
   LandingRoute: typeof LandingRoute
   AdminDepartmentsRoute: typeof AdminDepartmentsRoute
   AdminEmailTemplatesRoute: typeof AdminEmailTemplatesRoute
@@ -531,6 +544,13 @@ declare module '@tanstack/react-router' {
       path: '/landing'
       fullPath: '/landing'
       preLoaderRoute: typeof LandingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hub': {
+      id: '/hub'
+      path: '/hub'
+      fullPath: '/hub'
+      preLoaderRoute: typeof HubRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/audit': {
@@ -798,6 +818,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuditRoute: AuditRoute,
+  HubRoute: HubRoute,
   LandingRoute: LandingRoute,
   AdminDepartmentsRoute: AdminDepartmentsRoute,
   AdminEmailTemplatesRoute: AdminEmailTemplatesRoute,
