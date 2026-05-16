@@ -1,18 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-
-export const Route = createFileRoute("/landing")({
-  head: () => ({
-    meta: [
-      { title: "Virtual Supervisor — Intelligent Workforce Optimization" },
-      {
-        name: "description",
-        content:
-          "Virtual Supervisor unifies allocation, scheduling, KPI intelligence, coaching automation and CAP/PIP governance with Okta SSO and role-based access.",
-      },
-    ],
-  }),
-  component: LandingPage,
-});
+import { Link } from "react-router-dom";
 
 /* ── inline icons ─────────────────────────────────────────────── */
 const I = ({ d, className = "h-5 w-5" }) => (
@@ -61,7 +47,7 @@ const OktaBadge = () => (
   </span>
 );
 
-function LandingPage() {
+export default function LandingPage() {
   return (
     <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
       {/* ── top nav ───────────────────────────────────────── */}

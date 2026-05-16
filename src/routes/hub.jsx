@@ -1,14 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-
-export const Route = createFileRoute("/hub")({
-  head: () => ({
-    meta: [
-      { title: "Workspace · Virtual Supervisor" },
-      { name: "description", content: "Access and manage all operational systems from a unified Virtual Supervisor workspace." },
-    ],
-  }),
-  component: HubPage,
-});
+import { Link } from "react-router-dom";
 
 const I = ({ d, className = "h-5 w-5" }) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -62,7 +52,7 @@ const statusStyles = {
   "Needs Setup": "bg-warning/15 text-warning-foreground border-warning/30",
 };
 
-function HubPage() {
+export default function HubPage() {
   const tools = [
     {
       title: "Target Allocation System",
