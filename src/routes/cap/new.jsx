@@ -3,7 +3,7 @@ import { PageHeader, SectionCard } from "@/components/shared/page-primitives";
 import { Button } from "@/components/ui/button";
 import { CAPLevelBadge, CAPStatusBadge, StatusBadge } from "@/components/shared/status-badges";
 import { findEmployee, getCAPHistoryForEmployee, recommendCAPLevel } from "@/lib/mock-data";
-import { Search, Upload, AlertTriangle, ShieldAlert, Send, UserCheck, UserCog, Briefcase, History, ChevronDown } from "lucide-react";
+import { Search, Upload, ShieldAlert, History, ChevronDown } from "lucide-react";
 import { useMemo, useState, useRef, useEffect } from "react";
 
 const breachTypesQA = [
@@ -87,9 +87,10 @@ export default function NewCAP() {
 
   const formatMonthYear = (dateStr) => {
     if (!dateStr) return "N/A";
-    const d = new Date(dateStr);
+    const normalized = dateStr.length === 7 ? `${dateStr}-01` : dateStr;
+    const d = new Date(normalized);
     const month = d.toLocaleString("en-US", { month: "long" });
-    return `${month}${d.getFullYear()}`;
+    return `${month} ${d.getFullYear()}`;
   };
 
   function lookup() {
@@ -188,45 +189,28 @@ export default function NewCAP() {
                     </div>
                     <div>
                       <h4 className="text-base font-bold text-foreground leading-tight">{employee.name}</h4>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="text-[11px] font-mono text-muted-foreground bg-secondary/50 px-2 py-0.5 rounded-md border border-border">
-                          {employee.ohrId}
+                      <div className="mt-2 flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-2.5 py-0.5 text-[11px] transition-colors hover:bg-secondary">
+                          <span className="font-bold text-muted-foreground uppercase tracking-wider text-[9px]">OHR</span>
+                          <span className="font-mono font-medium text-foreground">{employee.ohrId}</span>
+                        </span>
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-2.5 py-0.5 text-[11px] transition-colors hover:bg-secondary">
+                          <span className="font-bold text-muted-foreground uppercase tracking-wider text-[9px]">Supervisor</span>
+                          <span className="font-medium text-foreground">{employee.supervisor}</span>
+                        </span>
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-2.5 py-0.5 text-[11px] transition-colors hover:bg-secondary">
+                          <span className="font-bold text-muted-foreground uppercase tracking-wider text-[9px]">Manager</span>
+                          <span className="font-medium text-foreground">{employee.manager}</span>
+                        </span>
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-2.5 py-0.5 text-[11px] transition-colors hover:bg-secondary">
+                          <span className="font-bold text-muted-foreground uppercase tracking-wider text-[9px]">Department</span>
+                          <span className="font-medium text-foreground">{employee.team}</span>
                         </span>
                       </div>
                     </div>
                   </div>
                 </div>
                 
-                {/* Details Grid */}
-                <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 bg-secondary/10 border-b border-border">
-                  <div className="flex items-center gap-2 text-sm">
-                    <span className="font-semibold text-muted-foreground w-32 shrink-0">Name:</span>
-                    <span className="text-foreground font-medium">{employee.name}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <span className="font-semibold text-muted-foreground w-32 shrink-0">OHR:</span>
-                    <span className="text-foreground font-mono">{employee.ohrId}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <span className="font-semibold text-muted-foreground w-32 shrink-0 flex items-center gap-1.5">
-                      <UserCheck className="h-3.5 w-3.5" /> supervisor name:
-                    </span>
-                    <span className="text-foreground font-medium">{employee.supervisor}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <span className="font-semibold text-muted-foreground w-32 shrink-0 flex items-center gap-1.5">
-                      <UserCog className="h-3.5 w-3.5" /> Manager name:
-                    </span>
-                    <span className="text-foreground font-medium">{employee.manager}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <span className="font-semibold text-muted-foreground w-32 shrink-0 flex items-center gap-1.5">
-                      <Briefcase className="h-3.5 w-3.5" /> Department:
-                    </span>
-                    <span className="text-foreground font-medium">{employee.team}</span>
-                  </div>
-                </div>
-
                 {/* Breach History Section */}
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4">
@@ -255,13 +239,18 @@ export default function NewCAP() {
                                    </h6>
                                 </div>
                                 <div className="flex flex-wrap items-center gap-2">
-                                   <CAPStatusBadge status={h.status} />
-                                   <StatusBadge variant="info" dot={false} className="text-[10px] font-bold h-5 px-2">
-                                     ISSUED: {formatMonthYear(h.raisedAt)}
-                                   </StatusBadge>
-                                   <StatusBadge variant={h.status === 'closed' ? 'neutral' : 'warning'} className="text-[10px] font-bold h-5 px-2">
-                                     {h.status === 'closed' ? 'CLOSED' : 'ACTIVE'}
-                                   </StatusBadge>
+                                   <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-100 dark:border-blue-900/50 bg-blue-50/50 dark:bg-blue-900/20 px-2 py-0.5 text-[10px]">
+                                     <span className="font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider text-[8px]">Breach month</span>
+                                     <span className="font-medium text-blue-900 dark:text-blue-100">{formatMonthYear(h.auditMonth)}</span>
+                                   </span>
+                                   <span className="inline-flex items-center gap-1.5 rounded-full border border-purple-100 dark:border-purple-900/50 bg-purple-50/50 dark:bg-purple-900/20 px-2 py-0.5 text-[10px]">
+                                     <span className="font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider text-[8px]">Issued date</span>
+                                     <span className="font-medium text-purple-900 dark:text-purple-100">{h.raisedAt}</span>
+                                   </span>
+                                   <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-2 py-0.5 text-[10px]">
+                                     <span className="font-bold text-muted-foreground uppercase tracking-wider text-[8px]">Status</span>
+                                     <CAPStatusBadge status={h.status} />
+                                   </span>
                                 </div>
                              </div>
                              <div className="shrink-0">

@@ -251,34 +251,6 @@ export default function CAPDetail() {
             </div>
           </SectionCard>
 
-          <SectionCard title="Notification recipients">
-            <ul className="space-y-2 text-sm">
-              <li className="flex justify-between">
-                <span className="text-muted-foreground">From</span>
-                <span className="font-medium">{c.raisedBy}</span>
-              </li>
-              <li className="flex justify-between">
-                <span className="text-muted-foreground">To</span>
-                <span className="font-medium">{c.employee.supervisor}</span>
-              </li>
-              <li className="flex justify-between">
-                <span className="text-muted-foreground">CC (Agent Manager)</span>
-                <span className="font-medium">{c.employee.manager}</span>
-              </li>
-              <li className="flex justify-between">
-                <span className="text-muted-foreground">CC (Compliance Manager)</span>
-                <span className="font-medium">Sarah Williams</span>
-              </li>
-              <li className="flex justify-between">
-                <span className="text-muted-foreground">CC (Supervisor)</span>
-                <span className="font-medium">{c.employee.supervisor}</span>
-              </li>
-              <li className="flex justify-between">
-                <span className="text-muted-foreground">CC (You)</span>
-                <span className="font-medium">{c.raisedBy}</span>
-              </li>
-            </ul>
-          </SectionCard>
 
           <SectionCard title="Acknowledgement">
             {c.acknowledgedAt ? (

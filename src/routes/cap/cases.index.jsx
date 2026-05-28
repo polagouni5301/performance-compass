@@ -3,8 +3,8 @@ import { PageHeader, SectionCard } from "@/components/shared/page-primitives";
 import { Button } from "@/components/ui/button";
 import { CAPLevelBadge, CAPStatusBadge, StatusBadge } from "@/components/shared/status-badges";
 import { capCases } from "@/lib/mock-data";
-import { useState, useMemo, useRef } from "react";
-import { Calendar, Download, Filter } from "lucide-react";
+import { useState, useMemo } from "react";
+import { Download, Calendar } from "lucide-react";
 
 const filters = [
   "all",
@@ -21,9 +21,14 @@ export default function CAPList() {
   const [team, setTeam] = useState("all");
   const [dept, setDept] = useState("all");
   const [q, setQ] = useState("");
-  const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
+  
+  const today = new Date();
+  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
-  const monthInputRef = useRef(null); // Ref for the hidden month input
+  const [startDate, setStartDate] = useState(firstDayOfMonth.toISOString().slice(0, 10));
+  const [endDate, setEndDate] = useState(lastDayOfMonth.toISOString().slice(0, 10));
+
   const allCases = capCases; // Now using the consolidated capCases from mock-data.js
 
   // Get unique departments for the filter
@@ -36,9 +41,13 @@ export default function CAPList() {
     if (filter !== "all" && c.status !== filter) return false;
     if (team !== "all" && c.raisedByTeam !== team) return false;
     if (dept !== "all" && c.employee.team !== dept) return false;
-    if (selectedMonth) {
-      const auditMatch = c.auditMonth === selectedMonth;
-      if (!auditMatch) return false;
+    if (startDate && c.raisedAt) {
+      // Compare dates as YYYY-MM-DD strings for simplicity and to avoid timezone issues
+      if (c.raisedAt < startDate) return false;
+    }
+    if (endDate && c.raisedAt) {
+      // Compare dates as YYYY-MM-DD strings for simplicity and to avoid timezone issues
+      if (c.raisedAt > endDate) return false;
     }
     if (
       q &&
@@ -48,40 +57,35 @@ export default function CAPList() {
     )
       return false;
     return true;
-  }), [allCases, filter, team, dept, selectedMonth, q]);
-
-  const displayMonth = useMemo(() => {
-    if (!selectedMonth) return "All Months";
-    // type="month" returns YYYY-MM. We add -01 to create a valid date object.
-    const date = new Date(selectedMonth + "-01");
-    return date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
-  }, [selectedMonth]);
+  }), [allCases, filter, team, dept, startDate, endDate, q]);
 
   return (
     <div>
       <PageHeader
         eyebrow="CAP Module"
-        title="All CAP cases"
+        title="All Cases"
         description="Full lifecycle traceability across QA & Compliance breaches."
         actions={
           <div className="flex items-center gap-2">
-            <div className="relative">
-              <input 
-                ref={monthInputRef}
-                type="month"
-                value={selectedMonth}
-                onChange={(e) => setSelectedMonth(e.target.value)}
-                className="absolute inset-0 h-full w-full opacity-0 pointer-events-none"
-              />
-              <Button
-                variant="outline" 
-                className="h-9 text-xs font-semibold"
-                type="button"
-                onClick={() => monthInputRef.current?.showPicker ? monthInputRef.current.showPicker() : monthInputRef.current?.focus()}
-              >
-                <Calendar className="mr-2 h-3.5 w-3.5" />
-                {displayMonth}
-              </Button>
+            <div className="flex items-center gap-2 rounded-lg border border-input bg-background px-3 h-9">
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+              <div className="flex items-center gap-1">
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="bg-transparent text-xs outline-none focus:ring-0"
+                  title="Start Date"
+                />
+                <span className="text-muted-foreground text-xs">to</span>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="bg-transparent text-xs outline-none focus:ring-0"
+                  title="End Date"
+                />
+              </div>
             </div>
             <Button className="h-9 text-xs font-semibold">
               <Download className="mr-2 h-3.5 w-3.5" />
@@ -100,7 +104,7 @@ export default function CAPList() {
               onChange={(e) => setTeam(e.target.value)}
               className="rounded-lg border border-input bg-background px-3 py-1.5 text-sm"
             >
-              <option value="all">All teams</option>
+              <option value="all">Select Audit Team</option>
               <option value="QA">QA</option>
               <option value="Compliance">Compliance</option>
             </select>

@@ -90,7 +90,7 @@ const personaNav = {
         section: "Tracker",
         items: [
           { label: "Disputes & Exceptions", to: "/qa/disputes", icon: Inbox },
-          { label: "All CAP cases", to: "/cap/cases", icon: FileSearch },
+          { label: "All Cases", to: "/cap/cases", icon: FileSearch },
         ],
       },
     ],

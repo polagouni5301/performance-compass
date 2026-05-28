@@ -28,7 +28,7 @@ export default function QAHome() {
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
         <StatCard label="Pending CAPs" value={open} icon={ClipboardList} tone="primary" />
         <StatCard label="Active disputes" value={disputed} icon={Inbox} tone="warning" />
-        <StatCard label="Warning letter" value={warningCount} icon={Scale} />
+        <StatCard label="Pending Warning letter" value={warningCount} icon={Scale} />
       </div>
 
       <SectionCard

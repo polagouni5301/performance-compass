@@ -13,7 +13,7 @@ export default function Disputes() {
 
   // Extended dummy data for better demonstration as requested
   const allCases = capCases; // Now using the consolidated capCases from mock-data.js
-  const disputes = allCases.filter((c) => c.status === "disputed");
+  const disputes = allCases.filter((c) => c.status === "disputed" || c.status === "rejected");
   const exceptions = allCases.filter((c) => c.status === "exception-pending");
 
   const list = activeTab === "disputes" ? disputes : exceptions;
@@ -89,7 +89,9 @@ export default function Disputes() {
                       activeTab === 'disputes' ? (
                         <StatusBadge variant="warning">Attempt {c.disputeAttempts} / 2</StatusBadge>
                       ) : (
-                        <StatusBadge variant="info">Pending {c.exceptionApprover}</StatusBadge>
+                        <StatusBadge variant={c.status === 'exception-rejected' ? 'danger' : 'info'}>
+                          {c.status === 'exception-rejected' ? 'Rejected by Manager' : 'Awaiting Approval'}
+                        </StatusBadge>
                       )
                     )}
                   </div>
@@ -119,52 +121,64 @@ export default function Disputes() {
                           </div>
                         ))}
                       </div>
-                  </div>
+                    </div>
 
                   <div>
-                      <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5 mb-2">
-                      Discussion notes
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5 mb-2">
+                      {activeTab === 'disputes' ? 'Discussion notes' : 'QA/Compliance notes'}
                     </div>
                     <textarea
                       rows={3}
                         disabled={!!isProcessed}
-                      placeholder="Log outcome of offline discussion…"
+                      placeholder={activeTab === 'disputes' ? "Log outcome of offline discussion…" : "Internal notes for exception monitoring…"}
                       className="mt-1.5 w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm focus:border-ring focus:outline-none"
                     />
-                    </div>
                   </div>
+
+                  {/* Manager Rejection Comments - Visible for Exceptions */}
+                  {(activeTab === 'exceptions' && (isProcessed === 'rejected' || c.status === 'exception-rejected')) && (
+                    <div className="mt-2 border-t border-border pt-4">
+                      <div className="text-[10px] font-bold uppercase tracking-widest text-destructive flex items-center gap-1.5 mb-2">
+                        <MessageSquare className="h-3 w-3" /> Manager / SDL Rejection Comments
+                      </div>
+                      <p className="rounded-xl bg-destructive/5 p-4 text-sm leading-relaxed border border-destructive/20 text-destructive font-medium italic">
+                        {c.managerComment || "Rejection: The justification provided does not meet the criteria for a policy exception. Agent must adhere to the standard documentation process regardless of volume."}
+                      </p>
+                    </div>
+                  )}
 
                   <div className="flex flex-col gap-2">
                     {!isProcessed ? (
-                      <>
-                        <div className="flex flex-row items-center gap-3 pt-4 border-t border-border">
-                           <Button 
-                             variant="secondary" 
-                             size="sm" 
-                             className="shrink-0 text-xs border border-border shadow-sm hover:bg-secondary/80" 
-                             asChild
-                           >
-                              <Link to={`/cap/cases/${c.id}`}>
-                                View full case details
-                              </Link>
-                           </Button>
-                           <Button 
-                             className="flex-1 shadow-glow" 
-                             onClick={() => handleAction(c.id, 'accepted')}
-                           >
-                             <Check className="mr-2 h-4 w-4" /> 
-                             {activeTab === 'disputes' ? 'Accept dispute' : 'Accept exception'}
-                           </Button>
-                           <Button 
-                             variant="secondary" 
-                             className="flex-1" 
-                             onClick={() => handleAction(c.id, 'rejected')}
-                           >
-                             <X className="mr-2 h-4 w-4" /> 
-                             {activeTab === 'disputes' ? 'Reject dispute' : 'Reject exception'}
-                           </Button>
-                        </div>
-                      </>
+                      <div className="flex flex-row items-center gap-3 pt-4 border-t border-border">
+                         <Button 
+                           variant="secondary" 
+                           size="sm" 
+                           className={cn("text-xs border border-border shadow-sm hover:bg-secondary/80", activeTab === 'exceptions' ? "w-full" : "shrink-0")} 
+                           asChild
+                         >
+                            <Link to={`/cap/cases/${c.id}`}>
+                              View full case details
+                            </Link>
+                         </Button>
+
+                         {activeTab === 'disputes' && (
+                           <>
+                             <Button 
+                               className="flex-1 shadow-glow" 
+                               onClick={() => handleAction(c.id, 'accepted')}
+                             >
+                               <Check className="mr-2 h-4 w-4" /> Accept dispute
+                             </Button>
+                             <Button 
+                               variant="secondary" 
+                               className="flex-1" 
+                               onClick={() => handleAction(c.id, 'rejected')}
+                             >
+                               <X className="mr-2 h-4 w-4" /> Reject dispute
+                             </Button>
+                           </>
+                         )}
+                      </div>
                     ) : (
                       <div className="rounded-xl border border-dashed border-border p-6 text-center space-y-2 bg-secondary/10">
                         <div className={cn(
@@ -179,6 +193,7 @@ export default function Disputes() {
                     )}
                   </div>
                 </div>
+              </div>
               </SectionCard>
             );
           })}
