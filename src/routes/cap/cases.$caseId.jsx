@@ -6,14 +6,14 @@ import { capCases } from "@/lib/mock-data";
 import { usePersona } from "@/lib/persona";
 import {
   ArrowLeft,
-  FileText,
-  Mail,
   Download,
   Check,
   X,
   ShieldAlert,
   Upload,
   Send,
+  FileText,
+  Mail,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -31,24 +31,45 @@ export default function CAPDetail() {
 
   return (
     <div>
-      <Link
-        to={backTo}
-        className="mb-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+      <Button
+        variant="ghost"
+        size="sm"
+        className="mb-6 -ml-2 h-9 gap-2 font-medium text-muted-foreground transition-all hover:bg-secondary hover:text-foreground"
+        asChild
       >
-        <ArrowLeft className="h-3.5 w-3.5" /> {backLabel}
-      </Link>
+        <Link to={backTo}>
+          <ArrowLeft className="h-4 w-4" />
+          {backLabel}
+        </Link>
+      </Button>
 
       <PageHeader
         eyebrow={`Case · ${c.id}`}
         title={c.employee.name}
-        description={`${c.employee.team} · ${c.employee.type === "apprentice" ? "Apprentice" : "Regular"} · Raised by ${c.raisedBy} (${c.raisedByTeam})`}
+        description={
+          <span className="mt-3 flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-2.5 py-0.5 text-[11px] transition-colors hover:bg-secondary">
+              <span className="font-bold text-muted-foreground uppercase tracking-wider text-[9px]">OHR</span>
+              <span className="font-mono font-medium text-foreground">{c.employee.ohrId}</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-2.5 py-0.5 text-[11px] transition-colors hover:bg-secondary">
+              <span className="font-bold text-muted-foreground uppercase tracking-wider text-[9px]">Supervisor</span>
+              <span className="font-medium text-foreground">{c.employee.supervisor}</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-2.5 py-0.5 text-[11px] transition-colors hover:bg-secondary">
+              <span className="font-bold text-muted-foreground uppercase tracking-wider text-[9px]">Manager</span>
+              <span className="font-medium text-foreground">{c.employee.manager}</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-2.5 py-0.5 text-[11px] transition-colors hover:bg-secondary">
+              <span className="font-bold text-muted-foreground uppercase tracking-wider text-[9px]">Department</span>
+              <span className="font-medium text-foreground">{c.employee.team}</span>
+            </span>
+          </span>
+        }
         actions={
           <>
             <CAPLevelBadge level={c.level} />
             <CAPStatusBadge status={c.status} />
-            <Button variant="outline">
-              <Download className="mr-2 h-4 w-4" /> CAP letter
-            </Button>
           </>
         }
       />
@@ -95,8 +116,8 @@ export default function CAPDetail() {
           </SectionCard>
 
           <SectionCard
-            title="Supervisor action"
-            description="Supervisor reviews via email link and updates status."
+            title="Pending action"
+            description="Review current case status and perform required follow-up actions."
           >
             {c.status === "logged" && (
               <div className="flex flex-wrap gap-2">
@@ -189,13 +210,15 @@ export default function CAPDetail() {
           </SectionCard>
 
           <SectionCard title="Activity & history">
-            <ol className="relative space-y-3 border-l-2 border-border pl-5">
-              {c.history.map((h, i) => (
+            <ol className="relative space-y-4 border-l-2 border-border pl-5">
+              {[...c.history].reverse().map((h, i) => (
                 <li key={i} className="relative">
                   <span className="absolute -left-[23px] top-1.5 h-2.5 w-2.5 rounded-full bg-primary" />
-                  <div className="text-sm">{h.event}</div>
+                  <div className="flex flex-col">
+                    <div className="text-sm font-semibold">{h.event}</div>
                   <div className="text-xs text-muted-foreground">
-                    {h.date} · {h.actor}
+                    {h.date} · <span className="font-medium text-foreground">{h.actor}</span>
+                  </div>
                   </div>
                 </li>
               ))}
@@ -239,11 +262,19 @@ export default function CAPDetail() {
                 <span className="font-medium">{c.employee.supervisor}</span>
               </li>
               <li className="flex justify-between">
-                <span className="text-muted-foreground">CC</span>
+                <span className="text-muted-foreground">CC (Agent Manager)</span>
                 <span className="font-medium">{c.employee.manager}</span>
               </li>
               <li className="flex justify-between">
-                <span className="text-muted-foreground">CC</span>
+                <span className="text-muted-foreground">CC (Compliance Manager)</span>
+                <span className="font-medium">Sarah Williams</span>
+              </li>
+              <li className="flex justify-between">
+                <span className="text-muted-foreground">CC (Supervisor)</span>
+                <span className="font-medium">{c.employee.supervisor}</span>
+              </li>
+              <li className="flex justify-between">
+                <span className="text-muted-foreground">CC (You)</span>
                 <span className="font-medium">{c.raisedBy}</span>
               </li>
             </ul>

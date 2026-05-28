@@ -3,20 +3,51 @@ import { PageHeader, SectionCard } from "@/components/shared/page-primitives";
 import { Button } from "@/components/ui/button";
 import { CAPLevelBadge, CAPStatusBadge, StatusBadge } from "@/components/shared/status-badges";
 import { findEmployee, getCAPHistoryForEmployee, recommendCAPLevel } from "@/lib/mock-data";
-import { Search, Upload, AlertTriangle, ShieldAlert, Send } from "lucide-react";
-import { useMemo, useState } from "react";
+import { Search, Upload, AlertTriangle, ShieldAlert, Send, UserCheck, UserCog, Briefcase, History, ChevronDown } from "lucide-react";
+import { useMemo, useState, useRef, useEffect } from "react";
 
 const breachTypesQA = [
-  "Quality — Documentation",
-  "Quality — Process Adherence",
-  "Quality — Customer Handling",
-  "Data Handling",
+  "HIGH-Legal/Procedural -Standard MGR codes not used",
+  "HIGH-Legal/Procedural -Did not used Promo code from the Sales tab in CRM",
+  "HIGH-Legal/Procedural -Third Party Code used",
+  "HIGH-Legal/Procedural -Refund policy not adhered - Incorrect refund duration",
+  "HIGH-Legal/Procedural -Refund policy not adhered - Excess/Less amount refunded",
+  "HIGH-Legal/Procedural - Refund not applicable however processed",
+  "HIGH-Legal/Procedural -Agent did not qualify the customer using article number 5630",
+  "HIGH-Legal/Procedural -Did not reach out to PHS requesting for approval",
+  "HIGH-Legal/Procedural -PHS did not notate the acount",
+  "HIGH-Legal/Procedural - Deactivate payment methods",
+  "HIGH-Legal/Procedural - Process an order without the customers permission.",
+  "HIGH-Legal/Procedural - Cancel refund and repurchase a product that is eligible for a credit move",
+  "HIGH-Legal/Procedural - Incorrect disposition",
+  "HIGH-Legal/Procedural - Agent did not adhere to 9PM/AM barrier(Called the customer post 9PM).",
+  "HIGH-Legal/Procedural - unauthorized access such as processing payments from customers account taking the 3/4-digit CVV number/ATM Pin/OTP of the customer.",
+  "HIGH-Legal/Procedural - Agent informed the customer to change the currency/Address in the account to avoid service tax.",
+  "HIGH-Legal/Procedural - Agent did not validate the account however resolution was provided.",
+  "HIGH-Legal/Procedural -Any Personal Calls through CISCO/Login to phone controls/WEBCRM with other's ID's.",
+  "LOW-Legal/Procedural - Product Cancelation Disclosure: read full disclaimer/confirm products being canceled/obtain permission.",
+  "LOW-Legal/Procedural - Call Disclosure - Outbound or new person joining the call must be informed the call may be Recorded and Retained for Quality and Training purposes",
+  "LOW-Legal/Procedural - Legal Agreements - Accept any legal agreement through purchase/product setup/etc. without notifying the customer that you are accepting the agreement on their behalf",
+  "LOW-Legal/Procedural - Auto Renewal Disclosure was not read when new products were purchased",
+  "LOW-Legal/Procedural - Change domain contact (WHOIS) information",
+  "LOW-Legal/Procedural - Initiate or accept a Change of Account for a domain name",
 ];
+
 const breachTypesCompliance = [
-  "Compliance — Process Deviation",
-  "Compliance — Disclosure",
-  "Compliance — Regulatory",
-  "Repeat Misconduct",
+  "Call Disconnections",
+  "Long Holds",
+  "Disc Coupon Usage",
+  "Email Audits",
+  "Misc Fee Usage",
+  "Refunds",
+  "Calls NPS",
+  "RONA",
+  "Chat NPS",
+  "No Dials",
+  "NULL Cases",
+  "Repeat Dials",
+  "Zero Cart",
+  "Receipt Moves",
 ];
 
 export default function NewCAP() {
@@ -28,17 +59,38 @@ export default function NewCAP() {
   const [description, setDescription] = useState("");
   const [recommended, setRecommended] = useState(null);
   const [chosen, setChosen] = useState(null);
+  const [actionType, setActionType] = useState("");
   const [files, setFiles] = useState([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const types = team === "QA" ? breachTypesQA : breachTypesCompliance;
 
-  const history = useMemo(
-    () => (employee ? getCAPHistoryForEmployee(employee.ohrId) : []),
-    [employee],
-  );
+  const history = useMemo(() => {
+    if (!employee) return [];
+    return getCAPHistoryForEmployee(employee.ohrId);
+  }, [employee]);
+
   const activeCount = history.filter(
     (c) => c.status !== "closed" && c.status !== "hr-escalation",
   ).length;
+
+  const formatMonthYear = (dateStr) => {
+    if (!dateStr) return "N/A";
+    const d = new Date(dateStr);
+    const month = d.toLocaleString("en-US", { month: "long" });
+    return `${month}${d.getFullYear()}`;
+  };
 
   function lookup() {
     setLookupErr("");
@@ -49,12 +101,28 @@ export default function NewCAP() {
       return;
     }
     setEmployee(found);
+    setRecommended(null);
+    setActionType("");
   }
 
-  function compute() {
-    if (!employee || !breachType) return;
-    setRecommended(recommendCAPLevel(employee.ohrId, breachType));
-  }
+  const recommendation = useMemo(() => {
+    if (!employee || !breachType) return null;
+    const sameBreachHistory = history.filter((h) => h.breachType === breachType);
+    const latest = sameBreachHistory[0];
+
+    if (latest) {
+      const nextLevelMap = {
+        Warning: "CAP 1",
+        "CAP 1": "CAP 2",
+        "CAP 2": "CAP 3",
+        "CAP 3": "HR Escalation",
+      };
+      return `Employee was previously issued ${latest.level} for this breach in ${formatMonthYear(latest.raisedAt)}. Based on history, we recommend moving to ${nextLevelMap[latest.level] || "CAP 1"}.`;
+    }
+
+    const isHigh = breachType.startsWith("HIGH");
+    return isHigh ? "First-time High breach detected. Recommend CAP 1." : "First-time Low breach detected. Recommend Warning letter.";
+  }, [employee, breachType, history]);
 
   return (
     <div>
@@ -64,7 +132,7 @@ export default function NewCAP() {
         description="Choose your team, look up the employee, describe the breach. The system recommends a CAP level."
       />
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 ">
         <div className="lg:col-span-2 space-y-6">
           <SectionCard title="1 · Submitter team">
             <div className="grid gap-3 md:grid-cols-2">
@@ -111,75 +179,168 @@ export default function NewCAP() {
             {lookupErr && <p className="mt-2 text-xs text-destructive">{lookupErr}</p>}
 
             {employee && (
-              <div className="mt-4 rounded-xl border border-border bg-secondary/40 p-4">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <div className="text-base font-semibold">{employee.name}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {employee.ohrId} · {employee.team} ·{" "}
-                      {employee.type === "apprentice" ? "Apprentice" : "Regular"} · Supervisor{" "}
-                      {employee.supervisor}
+              <div className="mt-6 overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
+                {/* Profile Header */}
+                <div className="bg-secondary/30 px-6 py-5 border-b border-border flex flex-wrap items-center justify-between gap-4">
+                  <div className="flex items-center gap-4">
+                    <div className="h-12 w-12 rounded-2xl bg-primary shadow-lg shadow-primary/20 flex items-center justify-center text-primary-foreground text-xl font-bold">
+                      {employee.name.charAt(0)}
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <StatusBadge variant={activeCount > 0 ? "warning" : "neutral"}>
-                      {activeCount} active CAP{activeCount !== 1 ? "s" : ""}
-                    </StatusBadge>
-                    <StatusBadge variant="neutral">{history.length} total</StatusBadge>
+                    <div>
+                      <h4 className="text-base font-bold text-foreground leading-tight">{employee.name}</h4>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-[11px] font-mono text-muted-foreground bg-secondary/50 px-2 py-0.5 rounded-md border border-border">
+                          {employee.ohrId}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                {history.length > 0 && (
-                  <div className="mt-4">
-                    <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                      Past warnings & breaches
-                    </div>
-                    <ul className="mt-2 space-y-1.5">
-                      {history.map((h) => (
-                        <li key={h.id} className="flex items-center justify-between text-xs">
-                          <span>
-                            <span className="font-mono">{h.id}</span> — {h.breachType}
-                          </span>
-                          <span className="flex items-center gap-2">
-                            <CAPLevelBadge level={h.level} />
-                            <CAPStatusBadge status={h.status} />
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
+                
+                {/* Details Grid */}
+                <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 bg-secondary/10 border-b border-border">
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="font-semibold text-muted-foreground w-32 shrink-0">Name:</span>
+                    <span className="text-foreground font-medium">{employee.name}</span>
                   </div>
-                )}
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="font-semibold text-muted-foreground w-32 shrink-0">OHR:</span>
+                    <span className="text-foreground font-mono">{employee.ohrId}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="font-semibold text-muted-foreground w-32 shrink-0 flex items-center gap-1.5">
+                      <UserCheck className="h-3.5 w-3.5" /> supervisor name:
+                    </span>
+                    <span className="text-foreground font-medium">{employee.supervisor}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="font-semibold text-muted-foreground w-32 shrink-0 flex items-center gap-1.5">
+                      <UserCog className="h-3.5 w-3.5" /> Manager name:
+                    </span>
+                    <span className="text-foreground font-medium">{employee.manager}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="font-semibold text-muted-foreground w-32 shrink-0 flex items-center gap-1.5">
+                      <Briefcase className="h-3.5 w-3.5" /> Department:
+                    </span>
+                    <span className="text-foreground font-medium">{employee.team}</span>
+                  </div>
+                </div>
+
+                {/* Breach History Section */}
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h5 className="text-xs font-bold uppercase tracking-[0.15em] text-muted-foreground flex items-center gap-2">
+                      <History className="h-3.5 w-3.5" /> Last 5 breaches
+                    </h5>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    {history.length === 0 ? (
+                      <div className="text-sm text-muted-foreground italic p-8 rounded-2xl border-2 border-dashed border-border bg-secondary/5 text-center">
+                        No previous breach history found for this record.
+                      </div>
+                    ) : (
+                      history.slice(0, 5).map((h) => (
+                        <div key={h.id} className="relative group overflow-hidden rounded-xl border border-border bg-card p-4 hover:border-primary/20 transition-all shadow-sm">
+                          <div className={`absolute inset-y-0 left-0 w-1 ${h.status === 'closed' ? 'bg-muted' : 'bg-warning'} group-hover:bg-primary transition-colors`} />
+                          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                             <div className="space-y-2.5">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                   <span className="font-mono text-[10px] font-bold bg-secondary px-1.5 py-0.5 rounded border border-border">
+                                     {h.id}
+                                   </span>
+                                   <h6 className="text-sm font-bold text-foreground leading-tight">
+                                     {h.breachType}
+                                   </h6>
+                                </div>
+                                <div className="flex flex-wrap items-center gap-2">
+                                   <CAPStatusBadge status={h.status} />
+                                   <StatusBadge variant="info" dot={false} className="text-[10px] font-bold h-5 px-2">
+                                     ISSUED: {formatMonthYear(h.raisedAt)}
+                                   </StatusBadge>
+                                   <StatusBadge variant={h.status === 'closed' ? 'neutral' : 'warning'} className="text-[10px] font-bold h-5 px-2">
+                                     {h.status === 'closed' ? 'CLOSED' : 'ACTIVE'}
+                                   </StatusBadge>
+                                </div>
+                             </div>
+                             <div className="shrink-0">
+                               {h.level === "Warning" ? (
+                                 <StatusBadge variant="neutral" dot={false} className="font-bold border-dashed text-xs">
+                                   Warning Letter
+                                 </StatusBadge>
+                               ) : (
+                                 <CAPLevelBadge level={h.level} />
+                               )}
+                             </div>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
               </div>
             )}
           </SectionCard>
 
           <SectionCard title="3 · Breach details">
             <div className="grid gap-4 md:grid-cols-2">
-              <label className="block">
+              <div className="block" ref={dropdownRef}>
                 <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Breach type
                 </span>
-                <select
-                  value={breachType}
-                  onChange={(e) => {
-                    setBreachType(e.target.value);
-                    setRecommended(null);
-                  }}
-                  className="mt-1.5 w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm outline-none focus:border-ring"
-                >
-                  <option value="">Select…</option>
-                  {types.map((t) => (
-                    <option key={t} value={t}>
-                      {t}
-                    </option>
-                  ))}
-                </select>
-              </label>
+                <div className="relative mt-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className="flex min-h-[42px] w-full items-center justify-between rounded-xl border border-input bg-background px-3 py-2 text-sm text-left outline-none focus:border-ring transition-all hover:bg-secondary/20"
+                  >
+                    <span className={breachType ? "text-foreground whitespace-normal leading-snug py-1" : "text-muted-foreground"}>
+                      {breachType || "Select breach type…"}
+                    </span>
+                    <ChevronDown className={`ml-2 h-4 w-4 shrink-0 opacity-50 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  
+                  {isDropdownOpen && (
+                    <div className="absolute left-0 top-full z-50 mt-1 w-full overflow-hidden rounded-xl border border-border bg-card shadow-xl animate-in fade-in zoom-in duration-200">
+                      <div className="max-h-80 overflow-y-auto py-1 scrollbar-thin scrollbar-thumb-muted">
+                        <div className="sticky top-0 z-10 bg-secondary px-3 py-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground border-b border-border">
+                          {team === "QA" ? "Quality Team breaches" : "Compliance Audit Categories"}
+                        </div>
+                        {team === "QA" && (
+                          <div className="px-3 py-1.5 text-[10px] font-bold text-primary/70 bg-primary-soft/10 border-b border-border/40">
+                            Business Risk Identifiers - Legal / Procedural
+                          </div>
+                        )}
+                        {types.map((t) => (
+                          <button
+                            key={t}
+                            type="button"
+                            onClick={() => {
+                              setBreachType(t);
+                              setRecommended(null);
+                              setIsDropdownOpen(false);
+                            }}
+                            className={`flex w-full px-4 py-2.5 text-sm text-left hover:bg-secondary transition-colors whitespace-normal leading-snug border-b border-border/20 last:border-0 ${
+                              breachType === t 
+                                ? "bg-primary-soft/40 text-primary font-semibold" 
+                                : "text-foreground/90"
+                            }`}
+                          >
+                            {t}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
               <label className="block">
                 <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  Date of breach
+                  Month of breach
                 </span>
                 <input
-                  type="date"
+                  type="month"
                   className="mt-1.5 w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm outline-none focus:border-ring"
                 />
               </label>
@@ -195,6 +356,32 @@ export default function NewCAP() {
                 placeholder="Describe the breach, evidence collected, and observed impact…"
                 className="mt-1.5 w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm outline-none focus:border-ring"
               />
+            </label>
+
+            <label className="mt-4 block">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Type of action
+              </span>
+              <select
+                value={actionType}
+                onChange={(e) => setActionType(e.target.value)}
+                className="mt-1.5 w-full rounded-xl border border-input bg-background px-3 py-2.5 text-sm outline-none focus:border-ring"
+              >
+                <option value="">Select action…</option>
+                <option value="warning">Warning</option>
+                <option value="cap1">CAP 1</option>
+                <option value="cap2">CAP 2</option>
+                <option value="cap3">CAP 3</option>
+              </select>
+              {recommendation && (
+                <div className="mt-3 rounded-lg bg-primary-soft/20 border border-primary/20 p-3 flex items-start gap-2.5">
+                  <ShieldAlert className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <div className="text-xs leading-relaxed">
+                    <span className="font-bold text-primary">System Recommendation:</span>
+                    <p className="text-muted-foreground mt-0.5">{recommendation}</p>
+                  </div>
+                </div>
+              )}
             </label>
 
             <div className="mt-4">
@@ -220,79 +407,21 @@ export default function NewCAP() {
             </div>
           </SectionCard>
 
-          <SectionCard title="4 · CAP level recommendation">
-            <Button onClick={compute} disabled={!employee || !breachType} variant="outline">
-              <ShieldAlert className="mr-2 h-4 w-4" /> Compute recommendation
-            </Button>
-
-            {recommended && (
-              <div className="mt-4 rounded-2xl border border-primary/30 bg-primary-soft/40 p-5">
-                <div className="text-xs font-semibold uppercase tracking-wider text-primary">
-                  System recommends
-                </div>
-                <div className="mt-2 flex items-center gap-3">
-                  <CAPLevelBadge level={recommended} />
-                  <span className="text-sm text-muted-foreground">
-                    {recommended === "CAP 1" && "First-time / minor — Warning. Valid 90 days."}
-                    {recommended === "CAP 2" && "Repeat — Strong warning. Valid 90 days."}
-                    {recommended === "CAP 3" && "Serious / repeated — HR escalation."}
-                  </span>
-                </div>
-                <div className="mt-4">
-                  <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    Override (with justification)
-                  </div>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {["CAP 1", "CAP 2", "CAP 3"].map((l) => (
-                      <button
-                        key={l}
-                        onClick={() => setChosen(l)}
-                        className={`rounded-full border px-3 py-1 text-xs font-medium ${
-                          (chosen ?? recommended) === l
-                            ? "border-primary bg-primary text-primary-foreground"
-                            : "border-border bg-card hover:border-primary/40"
-                        }`}
-                      >
-                        {l}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-          </SectionCard>
+          
         </div>
-
-        <aside className="space-y-6">
-          <SectionCard title="On submission">
-            <ul className="space-y-3 text-sm">
-              <li className="flex gap-2">
-                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-primary" /> CAP letter
-                generated using {employee?.type === "apprentice" ? "apprentice" : "regular"}{" "}
-                template
-              </li>
-              <li className="flex gap-2">
-                <Send className="mt-0.5 h-4 w-4 shrink-0 text-primary" /> Email sent to supervisor;
-                CC managers + you
-              </li>
-              <li className="flex gap-2">
-                <Send className="mt-0.5 h-4 w-4 shrink-0 text-primary" /> Supervisor can accept or
-                dispute (max 2 disputes)
-              </li>
-              <li className="flex gap-2">
-                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-primary" /> Agent receives
-                letter for acknowledgement
-              </li>
-            </ul>
-          </SectionCard>
-
-          <Button className="w-full" size="lg" disabled={!employee || !breachType || !description}>
+            <Button className="w-full" size="lg" disabled={!employee || !breachType || !description}>
             Submit CAP
           </Button>
           <Button variant="outline" className="w-full" asChild>
             <Link to="/cap">Cancel</Link>
           </Button>
-        </aside>
+     
+         
+
+          
+      
+      
+      
       </div>
     </div>
   );

@@ -1,15 +1,21 @@
 import { Link } from "react-router-dom";
 import { PageHeader, StatCard, SectionCard } from "@/components/shared/page-primitives";
-import { CAPStatusBadge, CAPLevelBadge } from "@/components/shared/status-badges";
+import { CAPStatusBadge, CAPLevelBadge, StatusBadge } from "@/components/shared/status-badges";
 import { Button } from "@/components/ui/button";
 import { capCases } from "@/lib/mock-data";
 import { ShieldAlert, ClipboardList, AlertTriangle, FileSearch, Plus } from "lucide-react";
+import { useMemo } from "react";
 
 export default function CAPDashboard() {
-  const open = capCases.filter((c) => c.status !== "closed" && c.status !== "hr-escalation").length;
-  const disputed = capCases.filter((c) => c.status === "disputed").length;
-  const exceptions = capCases.filter((c) => c.status === "exception-pending").length;
-  const escalated = capCases.filter((c) => c.status === "hr-escalation").length;
+  // Get combined data including warning letters for table context
+  const allCases = useMemo(() => {
+    return capCases; // Now using the consolidated capCases from mock-data.js
+  }, []);
+
+  const open = allCases.filter((c) => c.status !== "closed" && c.status !== "hr-escalation").length;
+  const disputed = allCases.filter((c) => c.status === "disputed").length;
+  const exceptions = allCases.filter((c) => c.status === "exception-pending").length;
+  const escalated = allCases.filter((c) => c.status === "hr-escalation").length;
 
   return (
     <div>
@@ -133,7 +139,7 @@ export default function CAPDashboard() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {capCases.map((c) => (
+              {allCases.map((c) => (
                 <tr key={c.id} className="hover:bg-secondary/40">
                   <td className="py-3 pr-3 font-mono text-xs">{c.id}</td>
                   <td className="py-3 pr-3">
@@ -143,7 +149,13 @@ export default function CAPDashboard() {
                   <td className="py-3 pr-3">{c.breachType}</td>
                   <td className="py-3 pr-3 text-muted-foreground">{c.raisedByTeam}</td>
                   <td className="py-3 pr-3">
-                    <CAPLevelBadge level={c.level} />
+                    {c.level === "Warning" ? (
+                      <StatusBadge variant="neutral" dot={false} className="font-bold border-dashed text-[10px] h-5">
+                        Warning Letter
+                      </StatusBadge>
+                    ) : (
+                      <CAPLevelBadge level={c.level} />
+                    )}
                   </td>
                   <td className="py-3 pr-3">
                     <CAPStatusBadge status={c.status} />

@@ -83,13 +83,13 @@ const personaNav = {
         section: "Breach intake",
         items: [
           { label: "Log new breach", to: "/cap/new", icon: ClipboardList },
-          { label: "Recommendation panel", to: "/qa/recommendation", icon: Scale },
+          
         ],
       },
       {
         section: "Tracker",
         items: [
-          { label: "Dispute resolution", to: "/qa/disputes", icon: Inbox },
+          { label: "Disputes & Exceptions", to: "/qa/disputes", icon: Inbox },
           { label: "All CAP cases", to: "/cap/cases", icon: FileSearch },
         ],
       },
@@ -247,12 +247,7 @@ function SidebarBody() {
           ))}
         </div>
       ))}
-      <div className="space-y-1">
-        <div className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-          Governance
-        </div>
-        <NavLink label="Audit dashboard" to="/audit" icon={FileSearch} />
-      </div>
+     
     </nav>
   );
 }
@@ -298,14 +293,7 @@ function ShellInner() {
 
         <SidebarBody />
 
-        <div className="border-t border-sidebar-border p-4">
-          <div className="rounded-2xl bg-gradient-warm p-4 shadow-soft">
-            <div className="text-xs font-semibold">Audit-ready</div>
-            <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
-              Every persona action is logged with full lifecycle traceability.
-            </p>
-          </div>
-        </div>
+        
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">

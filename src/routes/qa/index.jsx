@@ -1,39 +1,34 @@
 import { Link } from "react-router-dom";
 import { PageHeader, StatCard, SectionCard } from "@/components/shared/page-primitives";
 import { Button } from "@/components/ui/button";
-import { CAPLevelBadge, CAPStatusBadge } from "@/components/shared/status-badges";
+import { CAPLevelBadge, CAPStatusBadge, StatusBadge } from "@/components/shared/status-badges";
 import { capCases } from "@/lib/mock-data";
 import { ClipboardList, Scale, Inbox, ArrowRight } from "lucide-react";
+import { useMemo } from "react";
 
 export default function QAHome() {
-  const open = capCases.filter((c) => c.status !== "closed" && c.status !== "hr-escalation").length;
-  const disputed = capCases.filter((c) => c.status === "disputed").length;
+  // Combined data for lists
+  const allCases = useMemo(() => {
+    return [...capCases].sort((a, b) => new Date(b.raisedAt) - new Date(a.raisedAt));
+  }, []);
+
+  const open = allCases.filter((c) => c.status !== "closed" && c.status !== "hr-escalation").length;
+  const disputed = allCases.filter((c) => c.status === "disputed").length;
+  const warningCount = allCases.filter(c => c.level === "Warning").length;
+
   return (
     <div>
       <PageHeader
         eyebrow="QA / Compliance"
         title="Breach intake & tracker"
         description="Log breaches, view CAP recommendations, resolve disputes."
-        actions={
-          <>
-            <Button asChild>
-              <Link to="/cap/new">
-                <ClipboardList className="mr-2 h-4 w-4" /> Log breach
-              </Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link to="/qa/disputes">
-                <Inbox className="mr-2 h-4 w-4" /> Disputes
-              </Link>
-            </Button>
-          </>
-        }
+        
       />
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-        <StatCard label="Open CAPs" value={open} icon={ClipboardList} tone="primary" />
+        <StatCard label="Pending CAPs" value={open} icon={ClipboardList} tone="primary" />
         <StatCard label="Active disputes" value={disputed} icon={Inbox} tone="warning" />
-        <StatCard label="Recent recommendations" value={3} icon={Scale} />
+        <StatCard label="Warning letter" value={warningCount} icon={Scale} />
       </div>
 
       <SectionCard
@@ -48,7 +43,7 @@ export default function QAHome() {
         }
       >
         <ul className="divide-y divide-border">
-          {capCases.slice(0, 5).map((c) => (
+          {allCases.slice(0, 5).map((c) => (
             <li key={c.id} className="flex items-center justify-between py-3 first:pt-0 last:pb-0">
               <div>
                 <Link to={`/cap/cases/${c.id}`}
@@ -61,7 +56,13 @@ export default function QAHome() {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <CAPLevelBadge level={c.level} />
+                {c.level === "Warning" ? (
+                  <StatusBadge variant="neutral" dot={false} className="font-bold border-dashed text-[10px] h-5">
+                    Warning Letter
+                  </StatusBadge>
+                ) : (
+                  <CAPLevelBadge level={c.level} />
+                )}
                 <CAPStatusBadge status={c.status} />
               </div>
             </li>
