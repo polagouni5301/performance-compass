@@ -82,7 +82,7 @@ export default function Disputes() {
                     {isProcessed ? (
                       <StatusBadge variant={isProcessed === 'accepted' ? 'success' : 'danger'}>
                         {activeTab === 'disputes' 
-                          ? (isProcessed === 'accepted' ? 'Disputed & Closed' : 'Rejected') 
+                          ? (isProcessed === 'accepted' ? 'Dispute Accepted & Closed' : 'Dispute Rejected') 
                           : (isProcessed === 'accepted' ? 'Exception Approved & Closed' : 'Rejected')}
                       </StatusBadge>
                     ) : (
@@ -90,7 +90,7 @@ export default function Disputes() {
                         <StatusBadge variant="warning">Attempt {c.disputeAttempts} / 2</StatusBadge>
                       ) : (
                         <StatusBadge variant={c.status === 'exception-rejected' ? 'danger' : 'info'}>
-                          {c.status === 'exception-rejected' ? 'Rejected by Manager' : 'Awaiting Approval'}
+                          {c.status === 'exception-rejected' ? 'Rejected by Manager' : 'Exception Pending'}
                         </StatusBadge>
                       )
                     )}
@@ -122,6 +122,20 @@ export default function Disputes() {
                         ))}
                       </div>
                     </div>
+
+                    {/* Exception Approval Status - Visible for Exceptions */}
+                    {(activeTab === 'exceptions' && c.status === 'exception-pending') && (
+                      <div className="mt-2 border-t border-border pt-4">
+                        <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5 mb-2">
+                          <ShieldAlert className="h-3 w-3" /> Exception Approval Status
+                        </div>
+                        <p className="rounded-xl bg-info/5 p-4 text-sm leading-relaxed border border-info/20 text-info font-medium italic">
+                          This exception request is currently awaiting approval from <span className="font-semibold">{c.exceptionApprover}</span>.
+                          Once reviewed, the manager/SDL will either approve or reject the request, and their comments will be visible here.
+                        </p>
+                      </div>
+                    )}
+
 
                   <div>
                     <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5 mb-2">
