@@ -1,6 +1,6 @@
 // Mock data for the CAP & PIP Consequence Management System
 
-const employees = [
+export const employees = [
   {
     ohrId: "OHR-204871",
     name: "Aarav Mehta",
@@ -199,7 +199,7 @@ export const pipCases = [
   {
     id: "PIP-2025-0150",
     employee: employees[1],
-    status: "pending-approval",
+    status: "active",
     startDate: "2026-04-01",
     endDate: "2026-06-30",
     duration: 60,
@@ -211,9 +211,9 @@ export const pipCases = [
     targets: ["QA ≥ 88%", "AHT ≤ 7:30"],
     reviews: [ // Assuming these are numbers, not dates
       { number: 1, date: "2026-04-10", status: "not-met", kpiScore: 82 },
-      { number: 2, date: "2026-04-25", status: "not-met", kpiScore: 85 },
-      { number: 3, date: "2026-05-10", status: "not-met", kpiScore: 84 },
-      { number: 4, date: "2026-05-25", status: "not-met", kpiScore: 86 },
+      { number: 2, date: "2026-04-25", status: "scheduled" },
+      { number: 3, date: "2026-05-10", status: "pending" },
+      { number: 4, date: "2026-05-25", status: "pending" },
     ],
     documentVersion: 4,
     extended: false,
@@ -223,7 +223,7 @@ export const pipCases = [
   {
     id: "PIP-2025-0121",
     employee: employees[6],
-    status: "closed-success",
+    status: "active",
     startDate: "2026-01-10",
     endDate: "2026-03-11",
     duration: 60,
@@ -236,8 +236,8 @@ export const pipCases = [
     reviews: [ // Assuming these are numbers, not dates
       { number: 1, date: "2026-01-20", status: "met", kpiScore: 92 },
       { number: 2, date: "2026-02-05", status: "met", kpiScore: 93 },
-      { number: 3, date: "2026-02-20", status: "not-met", kpiScore: 88 },
-      { number: 4, date: "2026-03-11", status: "met", kpiScore: 94 },
+      { number: 3, date: "2026-02-20", status: "scheduled" },
+      { number: 4, date: "2026-03-11", status: "pending" },
     ],
     documentVersion: 4,
     extended: false,
@@ -373,6 +373,7 @@ export const capCases = [
     id: "WL-2026-010",
     employee: employees[0], // Aarav Mehta
     breachType: "LOW-Legal/Procedural - Product Cancelation Disclosure",
+    breachDescription: "Agent failed to read the full product cancelation disclaimer before processing the request.",
     raisedByTeam: "Compliance",
     raisedAt: "2026-01-10",
     auditMonth: "2026-01",
@@ -395,6 +396,7 @@ export const capCases = [
     id: "WL-2026-012",
     employee: employees[7], // Marcus Wright
     breachType: "Quality — Call Disclosure",
+    breachDescription: "Failed to inform the customer that the call is being recorded upon transfer.",
     raisedByTeam: "Compliance",
     raisedAt: "2026-05-15",
     auditMonth: "2026-05",
@@ -409,6 +411,7 @@ export const capCases = [
     id: "WL-2026-015",
     employee: employees[8], // Grace Harper
     breachType: "Misc Fee Usage",
+    breachDescription: "Incorrectly applied miscellaneous fee during account setup.",
     raisedByTeam: "QA",
     raisedAt: "2026-05-20",
     auditMonth: "2026-05",
@@ -424,6 +427,7 @@ export const capCases = [
     id: "CAP-2026-01",
     employee: employees[0], // Aarav Mehta
     breachType: "HIGH-Legal/Procedural - Standard MGR codes not used",
+    breachDescription: "Agent bypassed standard manager approval codes for a high-value transaction.",
     level: "CAP 1",
     status: "closed",
     raisedAt: "2026-05-01",
@@ -437,6 +441,7 @@ export const capCases = [
     id: "CAP-2026-03",
     employee: employees[0], // Aarav Mehta
     breachType: "Compliance — Call Disconnections",
+    breachDescription: "Disconnected the call before customer query was fully resolved.",
     level: "CAP 2",
     status: "accepted",
     raisedAt: "2026-03-15",
@@ -450,6 +455,7 @@ export const capCases = [
     id: "CAP-2026-11",
     employee: employees[0], // Aarav Mehta
     breachType: "Compliance — RONA",
+    breachDescription: "Agent went into RONA status for 15 minutes during peak call volume.",
     level: "CAP 1",
     status: "closed",
     raisedAt: "2026-11-22",
@@ -463,6 +469,7 @@ export const capCases = [
     id: "WL-2026-088",
     employee: employees[0], // Aarav Mehta
     breachType: "HIGH-Legal/Procedural - Refund not applicable however processed", // This is a QA breach type
+    breachDescription: "Processed a refund for a non-refundable digital service.",
     level: "Warning",
     status: "accepted",
     raisedAt: "2026-10-05",
@@ -521,6 +528,71 @@ export const capCases = [
     supervisorComment: "CRM force-closed due to API errors at the customer end.",
     history: [{ date: "2026-05-01", event: "CAP logged", actor: "Sarah Miller" }],
   },
+  // New Simulation Cases for Rejection/Approval Flows
+  {
+    id: "CAP-2026-101",
+    employee: employees[1], // Sneha
+    breachType: "Quality — Call Disclosure",
+    breachDescription: "Agent failed to provide the mandatory call recording disclosure at the start of the interaction.",
+    raisedByTeam: "QA",
+    level: "CAP 1",
+    status: "logged", // Reverted to logged
+    disputeRejected: true,
+    qaComment: "Dispute rejected. Agent clearly failed to disclose recording on the call. Please proceed with CAP.",
+    raisedAt: "2026-05-18",
+    auditMonth: "2026-05",
+    validUntil: "2026-08-18",
+    disputeAttempts: 1,
+    exceptionRequested: false,
+    history: [
+      { date: "2026-05-20", event: "Dispute Rejected by QA", actor: "QA Team" },
+      { date: "2026-05-19", event: "Dispute Raised by Supervisor", actor: "Priya Shah" },
+      { date: "2026-05-18", event: "CAP logged", actor: "QA Team" },
+    ],
+  },
+  {
+    id: "CAP-2026-102",
+    employee: employees[4], // Devansh
+    breachType: "Compliance — RONA",
+    breachDescription: "Agent placed in RONA state multiple times leading to missed routing.",
+    raisedByTeam: "Compliance",
+    level: "CAP 2",
+    status: "logged", // Reverted to logged
+    exceptionRejected: true,
+    managerComment: "Exception denied. System issues were resolved before this shift. Proceed with standard CAP.",
+    raisedAt: "2026-05-15",
+    auditMonth: "2026-05",
+    validUntil: "2026-08-15",
+    disputeAttempts: 0,
+    exceptionRequested: true,
+    history: [
+      { date: "2026-05-17", event: "Exception Rejected by Manager", actor: "Rohan Iyer" },
+      { date: "2026-05-16", event: "Exception Raised by Supervisor", actor: "Priya Shah" },
+      { date: "2026-05-15", event: "CAP logged", actor: "Compliance Team" },
+    ],
+  },
+  {
+    id: "CAP-2026-103",
+    employee: employees[5], // Olivia
+    breachType: "Compliance — Long Holds",
+    breachDescription: "Customer placed on hold for over 8 minutes without check-ins.",
+    raisedByTeam: "Compliance",
+    level: "CAP 1",
+    status: "closed",
+    exceptionApproved: true,
+    managerComment: "Approved. Verified widespread internet outage during this period.",
+    qaComment: "Exception approved, case closed with no action.",
+    raisedAt: "2026-05-10",
+    auditMonth: "2026-05",
+    validUntil: "2026-08-10",
+    disputeAttempts: 0,
+    exceptionRequested: true,
+    history: [
+      { date: "2026-05-12", event: "Exception Approved & Closed", actor: "QA/Compliance Team" },
+      { date: "2026-05-11", event: "Exception Raised by Supervisor", actor: "Marcia Lin" },
+      { date: "2026-05-10", event: "CAP logged", actor: "Compliance Team" },
+    ],
+  }
 ];
 
 export function findEmployee(ohrId) {

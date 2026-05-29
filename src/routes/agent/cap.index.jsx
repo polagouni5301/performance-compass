@@ -31,9 +31,7 @@ export default function MyCAP() {
             <p className="text-sm text-muted-foreground">{c.breachDescription}</p>
             <div className="mt-3 flex gap-2">
               <Button size="sm" variant="outline" asChild>
-                <Link to={`/cap/cases/${c.id}`}>
-                  View letter
-                </Link>
+                <Link to={`/cap/cases/${c.id}`}>View letter</Link>
               </Button>
               {!c.acknowledgedAt && (
                 <Button size="sm" asChild>

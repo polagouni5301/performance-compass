@@ -39,19 +39,14 @@ const personaNav = {
       {
         section: "PIP — Performance",
         items: [
-          { label: "Candidate review", to: "/supervisor/pip/candidates", icon: Users },
+          { label: "Performance Action Items", to: "/supervisor/pip/candidates", icon: Users },
           { label: "Initiate PIP", to: "/supervisor/pip/initiate", icon: ClipboardList },
           { label: "Active cases", to: "/pip/cases", icon: TrendingUp },
-          { label: "Review cycle (15-day)", to: "/supervisor/pip/review", icon: CalendarCheck },
-          { label: "Closure / Extension", to: "/supervisor/pip/closure", icon: CheckCircle2 },
-          { label: "Failure escalation", to: "/supervisor/pip/failure", icon: XCircle },
         ],
       },
       {
         section: "CAP — Compliance",
         items: [
-          { label: "Inbox · Accept / Dispute", to: "/supervisor/cap/inbox", icon: Inbox },
-          { label: "Exception request", to: "/supervisor/cap/exception", icon: ShieldAlert },
           { label: "All CAP cases", to: "/cap/cases", icon: FileSearch },
         ],
       },
@@ -81,10 +76,7 @@ const personaNav = {
     sections: [
       {
         section: "Breach intake",
-        items: [
-          { label: "Log new breach", to: "/cap/new", icon: ClipboardList },
-          
-        ],
+        items: [{ label: "Log new breach", to: "/cap/new", icon: ClipboardList }],
       },
       {
         section: "Tracker",
@@ -247,7 +239,6 @@ function SidebarBody() {
           ))}
         </div>
       ))}
-     
     </nav>
   );
 }
@@ -256,7 +247,7 @@ function HeaderUser() {
   const { persona } = usePersona();
   const p = personas[persona];
   return (
-    <div className="flex items-center gap-2 rounded-xl border border-border bg-secondary/50 px-2 py-1.5">
+    <div className="flex items-center gap-2 rounded-xl border border-border bg-secondary/50 px-2 py-1.5 ml-80">
       <div
         className={cn(
           "flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br text-xs font-semibold text-primary-foreground",
@@ -282,8 +273,10 @@ function ShellInner() {
             <ShieldAlert className="h-5 w-5" />
           </div>
           <div className="leading-tight">
-            <div className="text-sm font-semibold tracking-tight">Consequence Mgmt</div>
-            <div className="text-[11px] text-muted-foreground">CAP & PIP Module</div>
+            <div className="text-sm font-semibold tracking-tight text-foreground">
+              Performance Compass
+            </div>
+            <div className="text-[11px] text-muted-foreground">CAP & PIP Consequence Mgmt</div>
           </div>
         </div>
 
@@ -292,8 +285,6 @@ function ShellInner() {
         </div>
 
         <SidebarBody />
-
-        
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -307,9 +298,7 @@ function ShellInner() {
             />
           </div>
           <div className="flex flex-1 md:flex-none" />
-          <Button variant="ghost" size="icon" className="rounded-xl">
-            <Bell className="h-4 w-4" />
-          </Button>
+
           <HeaderUser />
         </header>
 

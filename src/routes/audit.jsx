@@ -106,9 +106,7 @@ export default function Audit() {
                       </td>
                       <td className="py-3 pr-3 text-right">
                         <Button size="sm" variant="ghost" asChild>
-                          <Link to={`/pip/cases/${c.id}`}>
-                            View
-                          </Link>
+                          <Link to={`/pip/cases/${c.id}`}>View</Link>
                         </Button>
                       </td>
                     </tr>
@@ -156,9 +154,7 @@ export default function Audit() {
                     </td>
                     <td className="py-3 pr-3 text-right">
                       <Button size="sm" variant="ghost" asChild>
-                        <Link to={`/cap/cases/${c.id}`}>
-                          View
-                        </Link>
+                        <Link to={`/cap/cases/${c.id}`}>View</Link>
                       </Button>
                     </td>
                   </tr>

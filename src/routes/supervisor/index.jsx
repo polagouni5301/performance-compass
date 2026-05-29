@@ -14,29 +14,11 @@ export default function SupervisorHome() {
 
   return (
     <div>
-      <PageHeader
-        eyebrow="Supervisor"
-        title="Welcome back, Priya"
-        description="Confirm PIP candidates, run 15-day reviews, accept or dispute CAPs sent by QA / Compliance."
-        actions={
-          <>
-            <Button variant="outline" asChild>
-              <Link to="/supervisor/pip/candidates">
-                <Users className="mr-2 h-4 w-4" /> Candidates
-              </Link>
-            </Button>
-            <Button asChild>
-              <Link to="/supervisor/cap/inbox">
-                <Inbox className="mr-2 h-4 w-4" /> CAP inbox
-              </Link>
-            </Button>
-          </>
-        }
-      />
+      <PageHeader eyebrow="Supervisor" title="Welcome back, Priya" />
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <StatCard
-          label="Candidates to confirm"
+          label="Pending Acknowledgments"
           value={candidatesPending}
           icon={Users}
           tone="warning"
@@ -47,22 +29,17 @@ export default function SupervisorHome() {
           icon={TrendingUp}
           tone="primary"
         />
-        <StatCard label="Reviews scheduled" value={upcoming.length} icon={CalendarCheck} />
-        <StatCard
-          label="CAPs awaiting action"
-          value={capInbox.length}
-          icon={ShieldAlert}
-          tone="danger"
-        />
+        <StatCard label="Active Caps" value={upcoming.length} icon={CalendarCheck} />
+        <StatCard label="Pending Caps" value={capInbox.length} icon={ShieldAlert} tone="danger" />
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
         <SectionCard
-          title="Upcoming 15-day reviews"
+          title="Upcoming PIP reviews"
           actions={
             <Button size="sm" variant="ghost" asChild>
-              <Link to="/supervisor/pip/review">
-                Open review cycle <ArrowRight className="ml-1 h-3 w-3" />
+              <Link to="/pip/cases">
+                View all cases <ArrowRight className="ml-1 h-3 w-3" />
               </Link>
             </Button>
           }
@@ -77,8 +54,9 @@ export default function SupervisorHome() {
                   className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
                 >
                   <div>
-                    <Link to={`/pip/cases/${c.id}`}
-                      className="font-medium hover:underline"
+                    <Link
+                      to={`/supervisor/pip/review?caseId=${c.id}`}
+                      className="font-medium hover:underline text-foreground"
                     >
                       {c.employee.name}
                     </Link>
@@ -94,11 +72,11 @@ export default function SupervisorHome() {
         </SectionCard>
 
         <SectionCard
-          title="CAP inbox"
+          title="CAP's Awaiting Action"
           description="Breaches awaiting your accept / dispute"
           actions={
             <Button size="sm" variant="ghost" asChild>
-              <Link to="/supervisor/cap/inbox">
+              <Link to="/cap/cases">
                 Open <ArrowRight className="ml-1 h-3 w-3" />
               </Link>
             </Button>

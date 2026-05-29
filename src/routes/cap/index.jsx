@@ -150,7 +150,11 @@ export default function CAPDashboard() {
                   <td className="py-3 pr-3 text-muted-foreground">{c.raisedByTeam}</td>
                   <td className="py-3 pr-3">
                     {c.level === "Warning" ? (
-                      <StatusBadge variant="neutral" dot={false} className="font-bold border-dashed text-[10px] h-5">
+                      <StatusBadge
+                        variant="neutral"
+                        dot={false}
+                        className="font-bold border-dashed text-[10px] h-5"
+                      >
                         Warning Letter
                       </StatusBadge>
                     ) : (
@@ -162,9 +166,7 @@ export default function CAPDashboard() {
                   </td>
                   <td className="py-3 pr-3 text-right">
                     <Button size="sm" variant="ghost" asChild>
-                      <Link to={`/cap/cases/${c.id}`}>
-                        Open
-                      </Link>
+                      <Link to={`/cap/cases/${c.id}`}>Open</Link>
                     </Button>
                   </td>
                 </tr>

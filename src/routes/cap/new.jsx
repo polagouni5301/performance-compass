@@ -122,7 +122,9 @@ export default function NewCAP() {
     }
 
     const isHigh = breachType.startsWith("HIGH");
-    return isHigh ? "First-time High breach detected. Recommend CAP 1." : "First-time Low breach detected. Recommend Warning letter.";
+    return isHigh
+      ? "First-time High breach detected. Recommend CAP 1."
+      : "First-time Low breach detected. Recommend Warning letter.";
   }, [employee, breachType, history]);
 
   return (
@@ -188,29 +190,41 @@ export default function NewCAP() {
                       {employee.name.charAt(0)}
                     </div>
                     <div>
-                      <h4 className="text-base font-bold text-foreground leading-tight">{employee.name}</h4>
+                      <h4 className="text-base font-bold text-foreground leading-tight">
+                        {employee.name}
+                      </h4>
                       <div className="mt-2 flex flex-wrap items-center gap-2">
                         <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-2.5 py-0.5 text-[11px] transition-colors hover:bg-secondary">
-                          <span className="font-bold text-muted-foreground uppercase tracking-wider text-[9px]">OHR</span>
-                          <span className="font-mono font-medium text-foreground">{employee.ohrId}</span>
+                          <span className="font-bold text-muted-foreground uppercase tracking-wider text-[9px]">
+                            OHR
+                          </span>
+                          <span className="font-mono font-medium text-foreground">
+                            {employee.ohrId}
+                          </span>
                         </span>
                         <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-2.5 py-0.5 text-[11px] transition-colors hover:bg-secondary">
-                          <span className="font-bold text-muted-foreground uppercase tracking-wider text-[9px]">Supervisor</span>
+                          <span className="font-bold text-muted-foreground uppercase tracking-wider text-[9px]">
+                            Supervisor
+                          </span>
                           <span className="font-medium text-foreground">{employee.supervisor}</span>
                         </span>
                         <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-2.5 py-0.5 text-[11px] transition-colors hover:bg-secondary">
-                          <span className="font-bold text-muted-foreground uppercase tracking-wider text-[9px]">Manager</span>
+                          <span className="font-bold text-muted-foreground uppercase tracking-wider text-[9px]">
+                            Manager
+                          </span>
                           <span className="font-medium text-foreground">{employee.manager}</span>
                         </span>
                         <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-2.5 py-0.5 text-[11px] transition-colors hover:bg-secondary">
-                          <span className="font-bold text-muted-foreground uppercase tracking-wider text-[9px]">Department</span>
+                          <span className="font-bold text-muted-foreground uppercase tracking-wider text-[9px]">
+                            Department
+                          </span>
                           <span className="font-medium text-foreground">{employee.team}</span>
                         </span>
                       </div>
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Breach History Section */}
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4">
@@ -218,7 +232,7 @@ export default function NewCAP() {
                       <History className="h-3.5 w-3.5" /> Last 5 breaches
                     </h5>
                   </div>
-                  
+
                   <div className="space-y-3">
                     {history.length === 0 ? (
                       <div className="text-sm text-muted-foreground italic p-8 rounded-2xl border-2 border-dashed border-border bg-secondary/5 text-center">
@@ -226,42 +240,61 @@ export default function NewCAP() {
                       </div>
                     ) : (
                       history.slice(0, 5).map((h) => (
-                        <div key={h.id} className="relative group overflow-hidden rounded-xl border border-border bg-card p-4 hover:border-primary/20 transition-all shadow-sm">
-                          <div className={`absolute inset-y-0 left-0 w-1 ${h.status === 'closed' ? 'bg-muted' : 'bg-warning'} group-hover:bg-primary transition-colors`} />
+                        <div
+                          key={h.id}
+                          className="relative group overflow-hidden rounded-xl border border-border bg-card p-4 hover:border-primary/20 transition-all shadow-sm"
+                        >
+                          <div
+                            className={`absolute inset-y-0 left-0 w-1 ${h.status === "closed" ? "bg-muted" : "bg-warning"} group-hover:bg-primary transition-colors`}
+                          />
                           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-                             <div className="space-y-2.5">
-                                <div className="flex items-center gap-2 flex-wrap">
-                                   <span className="font-mono text-[10px] font-bold bg-secondary px-1.5 py-0.5 rounded border border-border">
-                                     {h.id}
-                                   </span>
-                                   <h6 className="text-sm font-bold text-foreground leading-tight">
-                                     {h.breachType}
-                                   </h6>
-                                </div>
-                                <div className="flex flex-wrap items-center gap-2">
-                                   <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-100 dark:border-blue-900/50 bg-blue-50/50 dark:bg-blue-900/20 px-2 py-0.5 text-[10px]">
-                                     <span className="font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider text-[8px]">Breach month</span>
-                                     <span className="font-medium text-blue-900 dark:text-blue-100">{formatMonthYear(h.auditMonth)}</span>
-                                   </span>
-                                   <span className="inline-flex items-center gap-1.5 rounded-full border border-purple-100 dark:border-purple-900/50 bg-purple-50/50 dark:bg-purple-900/20 px-2 py-0.5 text-[10px]">
-                                     <span className="font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider text-[8px]">Issued date</span>
-                                     <span className="font-medium text-purple-900 dark:text-purple-100">{h.raisedAt}</span>
-                                   </span>
-                                   <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-2 py-0.5 text-[10px]">
-                                     <span className="font-bold text-muted-foreground uppercase tracking-wider text-[8px]">Status</span>
-                                     <CAPStatusBadge status={h.status} />
-                                   </span>
-                                </div>
-                             </div>
-                             <div className="shrink-0">
-                               {h.level === "Warning" ? (
-                                 <StatusBadge variant="neutral" dot={false} className="font-bold border-dashed text-xs">
-                                   Warning Letter
-                                 </StatusBadge>
-                               ) : (
-                                 <CAPLevelBadge level={h.level} />
-                               )}
-                             </div>
+                            <div className="space-y-2.5">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="font-mono text-[10px] font-bold bg-secondary px-1.5 py-0.5 rounded border border-border">
+                                  {h.id}
+                                </span>
+                                <h6 className="text-sm font-bold text-foreground leading-tight">
+                                  {h.breachType}
+                                </h6>
+                              </div>
+                              <div className="flex flex-wrap items-center gap-2">
+                                <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-100 dark:border-blue-900/50 bg-blue-50/50 dark:bg-blue-900/20 px-2 py-0.5 text-[10px]">
+                                  <span className="font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider text-[8px]">
+                                    Breach month
+                                  </span>
+                                  <span className="font-medium text-blue-900 dark:text-blue-100">
+                                    {formatMonthYear(h.auditMonth)}
+                                  </span>
+                                </span>
+                                <span className="inline-flex items-center gap-1.5 rounded-full border border-purple-100 dark:border-purple-900/50 bg-purple-50/50 dark:bg-purple-900/20 px-2 py-0.5 text-[10px]">
+                                  <span className="font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider text-[8px]">
+                                    Issued date
+                                  </span>
+                                  <span className="font-medium text-purple-900 dark:text-purple-100">
+                                    {h.raisedAt}
+                                  </span>
+                                </span>
+                                <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-2 py-0.5 text-[10px]">
+                                  <span className="font-bold text-muted-foreground uppercase tracking-wider text-[8px]">
+                                    Status
+                                  </span>
+                                  <CAPStatusBadge status={h.status} />
+                                </span>
+                              </div>
+                            </div>
+                            <div className="shrink-0">
+                              {h.level === "Warning" ? (
+                                <StatusBadge
+                                  variant="neutral"
+                                  dot={false}
+                                  className="font-bold border-dashed text-xs"
+                                >
+                                  Warning Letter
+                                </StatusBadge>
+                              ) : (
+                                <CAPLevelBadge level={h.level} />
+                              )}
+                            </div>
                           </div>
                         </div>
                       ))
@@ -284,12 +317,20 @@ export default function NewCAP() {
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     className="flex min-h-[42px] w-full items-center justify-between rounded-xl border border-input bg-background px-3 py-2 text-sm text-left outline-none focus:border-ring transition-all hover:bg-secondary/20"
                   >
-                    <span className={breachType ? "text-foreground whitespace-normal leading-snug py-1" : "text-muted-foreground"}>
+                    <span
+                      className={
+                        breachType
+                          ? "text-foreground whitespace-normal leading-snug py-1"
+                          : "text-muted-foreground"
+                      }
+                    >
                       {breachType || "Select breach type…"}
                     </span>
-                    <ChevronDown className={`ml-2 h-4 w-4 shrink-0 opacity-50 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown
+                      className={`ml-2 h-4 w-4 shrink-0 opacity-50 transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""}`}
+                    />
                   </button>
-                  
+
                   {isDropdownOpen && (
                     <div className="absolute left-0 top-full z-50 mt-1 w-full overflow-hidden rounded-xl border border-border bg-card shadow-xl animate-in fade-in zoom-in duration-200">
                       <div className="max-h-80 overflow-y-auto py-1 scrollbar-thin scrollbar-thumb-muted">
@@ -311,8 +352,8 @@ export default function NewCAP() {
                               setIsDropdownOpen(false);
                             }}
                             className={`flex w-full px-4 py-2.5 text-sm text-left hover:bg-secondary transition-colors whitespace-normal leading-snug border-b border-border/20 last:border-0 ${
-                              breachType === t 
-                                ? "bg-primary-soft/40 text-primary font-semibold" 
+                              breachType === t
+                                ? "bg-primary-soft/40 text-primary font-semibold"
                                 : "text-foreground/90"
                             }`}
                           >
@@ -395,22 +436,13 @@ export default function NewCAP() {
               )}
             </div>
           </SectionCard>
-
-          
         </div>
-            <Button className="w-full" size="lg" disabled={!employee || !breachType || !description}>
-            Submit CAP
-          </Button>
-          <Button variant="outline" className="w-full" asChild>
-            <Link to="/cap">Cancel</Link>
-          </Button>
-     
-         
-
-          
-      
-      
-      
+        <Button className="w-full" size="lg" disabled={!employee || !breachType || !description}>
+          Submit CAP
+        </Button>
+        <Button variant="outline" className="w-full" asChild>
+          <Link to="/cap">Cancel</Link>
+        </Button>
       </div>
     </div>
   );

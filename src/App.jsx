@@ -7,10 +7,7 @@ import SupervisorHome from "./routes/supervisor/index";
 import PIPCandidates from "./routes/supervisor/pip.candidates";
 import PIPInitiate from "./routes/supervisor/pip.initiate";
 import PIPReview from "./routes/supervisor/pip.review";
-import PIPClosure from "./routes/supervisor/pip.closure";
-import PIPFailure from "./routes/supervisor/pip.failure";
-import CAPInbox from "./routes/supervisor/cap.inbox";
-import CAPException from "./routes/supervisor/cap.exception";
+import CandidateDataView from "./routes/supervisor/pip.candidate-data";
 import AgentHome from "./routes/agent/index";
 import AgentPIP from "./routes/agent/pip.index";
 import AgentPIPAcknowledge from "./routes/agent/pip.acknowledge";
@@ -32,8 +29,8 @@ import PIPDashboard from "./routes/pip/index";
 import AllPIPCases from "./routes/pip/cases.index";
 import PIPDetail from "./routes/pip/cases.$caseId";
 import CAPDashboard from "./routes/cap/index";
-import AllCAPCases from "./routes/cap/cases.index";
-import CAPDetail from "./routes/cap/cases.$caseId";
+import AllCAPCases from "./routes/supervisor/cases.index";
+import CAPDetail from "./routes/supervisor/cases.$caseId";
 import CAPNew from "./routes/cap/new";
 import CAPExceptions from "./routes/cap/exceptions";
 import PIPApprovals from "./routes/pip/approvals";
@@ -51,12 +48,9 @@ export default function App() {
           <Route path="supervisor">
             <Route index element={<SupervisorHome />} />
             <Route path="pip/candidates" element={<PIPCandidates />} />
+            <Route path="pip/candidate-data/:ohrId" element={<CandidateDataView />} />
             <Route path="pip/initiate" element={<PIPInitiate />} />
             <Route path="pip/review" element={<PIPReview />} />
-            <Route path="pip/closure" element={<PIPClosure />} />
-            <Route path="pip/failure" element={<PIPFailure />} />
-            <Route path="cap/inbox" element={<CAPInbox />} />
-            <Route path="cap/exception" element={<CAPException />} />
           </Route>
 
           <Route path="agent">

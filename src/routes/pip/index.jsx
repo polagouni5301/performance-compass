@@ -96,9 +96,7 @@ export default function PIPDashboard() {
                       R{r.number}
                     </div>
                     <div className="min-w-0">
-                      <Link to={`/pip/cases/${c.id}`}
-                        className="font-medium hover:underline"
-                      >
+                      <Link to={`/pip/cases/${c.id}`} className="font-medium hover:underline">
                         {c.employee.name}
                       </Link>
                       <div className="truncate text-xs text-muted-foreground">
@@ -175,9 +173,7 @@ export default function PIPDashboard() {
                     </td>
                     <td className="py-3 pr-3 text-right">
                       <Button size="sm" variant="ghost" asChild>
-                        <Link to={`/pip/cases/${c.id}`}>
-                          Open
-                        </Link>
+                        <Link to={`/pip/cases/${c.id}`}>Open</Link>
                       </Button>
                     </td>
                   </tr>

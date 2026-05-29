@@ -12,11 +12,7 @@ export default function CandidateReview() {
 
   return (
     <div>
-      <PageHeader
-        eyebrow="Supervisor · PIP"
-        title="PIP candidate review"
-        description="Populated from Auto Scheduler warnings, AES, and SQL KPIs. Confirm to initiate, or reject with reason."
-      />
+      <PageHeader eyebrow="Supervisor · PIP" title="PIP candidate review" />
 
       <div className="mb-6 rounded-2xl border border-warning/30 bg-warning/10 p-4">
         <div className="flex items-start gap-3">
@@ -31,14 +27,28 @@ export default function CandidateReview() {
         </div>
       </div>
 
-      <SectionCard title="Identified candidates">
+      <SectionCard title="PIP Recommendations on Table">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border text-left text-[11px] uppercase tracking-wider text-muted-foreground">
                 <th className="py-2 pr-3">Agent</th>
-                <th className="py-2 pr-3">Warnings (3w / 8w)</th>
-                <th className="py-2 pr-3">NI (1m / 6m)</th>
+                <th className="py-2 pr-3">
+                  <div className="flex flex-col gap-0.5">
+                    <span>Warnings</span>
+                    <span className="text-[9px] tracking-normal normal-case opacity-70">
+                      (3 wks / 8 wks)
+                    </span>
+                  </div>
+                </th>
+                <th className="py-2 pr-3">
+                  <div className="flex flex-col gap-0.5">
+                    <span>NI Rating</span>
+                    <span className="text-[9px] tracking-normal normal-case opacity-70">
+                      (1 mo / 6 mos)
+                    </span>
+                  </div>
+                </th>
                 <th className="py-2 pr-3">Trigger reason</th>
                 <th className="py-2 pr-3">Status</th>
                 <th />
@@ -53,13 +63,19 @@ export default function CandidateReview() {
                       {c.employee.ohrId} · {c.employee.team}
                     </div>
                   </td>
-                  <td className="py-3 pr-3 font-semibold">
-                    {c.consecutiveWarnings}{" "}
-                    <span className="text-muted-foreground">/ {c.warningsLast8Weeks}</span>
+                  <td className="py-3 pr-3">
+                    <div className="flex items-center gap-1.5 text-sm">
+                      <span className="font-semibold text-foreground">{c.consecutiveWarnings}</span>
+                      <span className="text-muted-foreground text-xs">/</span>
+                      <span className="font-semibold text-foreground">{c.warningsLast8Weeks}</span>
+                    </div>
                   </td>
-                  <td className="py-3 pr-3 font-semibold">
-                    {c.niLastMonth}{" "}
-                    <span className="text-muted-foreground">/ {c.niLast6Months}</span>
+                  <td className="py-3 pr-3">
+                    <div className="flex items-center gap-1.5 text-sm">
+                      <span className="font-semibold text-foreground">{c.niLastMonth}</span>
+                      <span className="text-muted-foreground text-xs">/</span>
+                      <span className="font-semibold text-foreground">{c.niLast6Months}</span>
+                    </div>
                   </td>
                   <td className="py-3 pr-3 text-xs text-muted-foreground">
                     Auto Scheduler + AES rating
@@ -73,8 +89,10 @@ export default function CandidateReview() {
                   </td>
                   <td className="py-3 pr-3 text-right">
                     <div className="flex justify-end gap-1.5">
-                      <Button size="sm" variant="ghost">
-                        <Eye className="mr-1 h-3.5 w-3.5" /> View data
+                      <Button size="sm" variant="ghost" asChild>
+                        <Link to={`/supervisor/pip/candidate-data/${c.employee.ohrId}`}>
+                          <Eye className="mr-1 h-3.5 w-3.5" /> View data
+                        </Link>
                       </Button>
                       <Button size="sm" variant="outline">
                         <X className="mr-1 h-3.5 w-3.5" /> Reject
