@@ -29,22 +29,27 @@ export default function CAPDetail() {
   const [updateTrigger, setUpdateTrigger] = useState(0);
   const forceUpdate = () => setUpdateTrigger((prev) => prev + 1);
 
+  // Determine initial state based on whether the case is already accepted/discussion closed
+  const isInitiallyAccepted = c && c.status === "accepted";
+  const isInitiallyDisputed = c && c.status === "disputed";
+  const isInitiallyException = c && c.status === "exception-pending";
+
   const [state, setState] = useState({
-    selectedAction: null,
-    isDiscussionClosed: false,
-    discussionComments: "",
-    discussionDate: "",
-    discussionClosedAt: null,
+    selectedAction: isInitiallyAccepted ? "accept" : isInitiallyDisputed ? "dispute" : isInitiallyException ? "exception" : null,
+    isDiscussionClosed: isInitiallyAccepted,
+    discussionComments: isInitiallyAccepted ? (c.discussionComments || "Discussed the breach details and corrective actions with the guide. Guide understands the expectations and compliance requirements.") : "",
+    discussionDate: isInitiallyAccepted ? (c.discussionDate || "2026-05-16") : "",
+    discussionClosedAt: isInitiallyAccepted ? (c.discussionClosedAt || "5/16/2026") : null,
     uploadedAckFile: "",
     isFlowCompleted: false,
 
-    disputeComments: "",
-    disputeFile: "",
-    isDisputeSubmitted: false,
+    disputeComments: isInitiallyDisputed ? (c.supervisorComment || "Agent was managing double the usual volume during this hour. CRM performance was also degraded.") : "",
+    disputeFile: isInitiallyDisputed ? (c.documents?.[0] || "workload_report.pdf") : "",
+    isDisputeSubmitted: isInitiallyDisputed,
 
-    exceptionComments: "",
-    exceptionFile: "",
-    isExceptionSubmitted: false,
+    exceptionComments: isInitiallyException ? (c.supervisorComment || "Regional outage reported. Documented by IT department and SDL was informed.") : "",
+    exceptionFile: isInitiallyException ? (c.documents?.[0] || "internet_outage_ticket.pdf") : "",
+    isExceptionSubmitted: isInitiallyException,
     managerStatus: "pending",
     qaStatus: "pending",
   });
@@ -256,20 +261,24 @@ export default function CAPDetail() {
                     >
                       <Check className="h-4 w-4" /> Accept
                     </Button>
-                    <Button
-                      variant="outline"
-                      className="border-destructive text-destructive hover:bg-destructive/10 font-semibold flex items-center gap-1.5 rounded-xl px-5"
-                      onClick={() => updateState({ selectedAction: "dispute" })}
-                    >
-                      <X className="h-4 w-4" /> Dispute
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      className="text-amber-500 hover:bg-amber-500/10 font-semibold flex items-center gap-1.5 rounded-xl px-5"
-                      onClick={() => updateState({ selectedAction: "exception" })}
-                    >
-                      <ShieldAlert className="h-4 w-4" /> Raise Exception
-                    </Button>
+                    {!c.disputeRejected && !c.exceptionRejected && (
+                      <>
+                        <Button
+                          variant="outline"
+                          className="border-destructive text-destructive hover:bg-destructive/10 font-semibold flex items-center gap-1.5 rounded-xl px-5"
+                          onClick={() => updateState({ selectedAction: "dispute" })}
+                        >
+                          <X className="h-4 w-4" /> Dispute
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          className="text-amber-500 hover:bg-amber-500/10 font-semibold flex items-center gap-1.5 rounded-xl px-5"
+                          onClick={() => updateState({ selectedAction: "exception" })}
+                        >
+                          <ShieldAlert className="h-4 w-4" /> Raise Exception
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </div>
               )}
@@ -309,6 +318,11 @@ export default function CAPDetail() {
                       <label className="text-xs font-bold text-muted-foreground uppercase">
                         Discussion Notes / Comment Box
                       </label>
+                    {state.isDiscussionClosed ? (
+                      <div className="w-full rounded-xl border border-emerald-500/20 bg-emerald-50/50 dark:bg-emerald-950/20 p-4 text-sm text-emerald-950 dark:text-emerald-100 font-medium leading-relaxed">
+                        {state.discussionComments}
+                      </div>
+                    ) : (
                       <textarea
                         rows={3}
                         value={state.discussionComments}
@@ -317,8 +331,8 @@ export default function CAPDetail() {
                         }
                         placeholder="Detail the discussion points with the guide…"
                         className="w-full rounded-xl border border-input bg-background p-3 text-sm text-foreground dark:bg-zinc-900 focus:outline-none focus:border-ring"
-                        disabled={state.isDiscussionClosed}
                       />
+                    )}
                     </div>
 
                     <div className="grid gap-3 sm:grid-cols-2 items-end">
@@ -326,6 +340,11 @@ export default function CAPDetail() {
                         <span className="text-xs font-bold text-muted-foreground uppercase flex items-center gap-1.5">
                           <Calendar className="h-4 w-4" /> Discussion Closed Date
                         </span>
+                      {state.isDiscussionClosed ? (
+                        <div className="w-full rounded-xl border border-border bg-secondary/50 p-2.5 text-sm font-medium text-foreground">
+                          {state.discussionDate || (state.discussionClosedAt ? new Date(state.discussionClosedAt).toISOString().slice(0, 10) : "2026-05-16")}
+                        </div>
+                      ) : (
                         <input
                           type="date"
                           value={state.discussionDate}
@@ -333,10 +352,11 @@ export default function CAPDetail() {
                             updateState({ discussionDate: e.target.value })
                           }
                           className="w-full rounded-xl border border-input bg-background p-2.5 text-sm text-foreground dark:bg-zinc-900 focus:outline-none focus:border-ring"
-                          disabled={state.isDiscussionClosed}
                         />
+                      )}
                       </label>
 
+                    {!state.isDiscussionClosed && (
                       <Button
                         onClick={() => {
                           if (!state.discussionDate) {
@@ -353,11 +373,11 @@ export default function CAPDetail() {
                             "Discussion closed. CAP document generated and sent to guide to acknowledge."
                           );
                         }}
-                        disabled={state.isDiscussionClosed}
                         className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold h-[42px]"
                       >
                         Discussion Closed
                       </Button>
+                    )}
                     </div>
                   </div>
                 </SectionCard>
@@ -453,16 +473,21 @@ export default function CAPDetail() {
                       <label className="text-xs font-bold text-muted-foreground uppercase">
                         Dispute Comments / Justification
                       </label>
-                      <textarea
-                        rows={3}
-                        value={state.disputeComments}
-                        onChange={(e) =>
-                          updateState({ disputeComments: e.target.value })
-                        }
-                        placeholder="State the reason you are disputing this breach…"
-                        className="w-full rounded-xl border border-input bg-background p-3 text-sm text-foreground dark:bg-zinc-900 focus:outline-none focus:border-ring"
-                        disabled={state.isDisputeSubmitted || c.status === "disputed"}
-                      />
+                      {state.isDisputeSubmitted ? (
+                        <div className="w-full rounded-xl border border-red-500/20 bg-red-50/50 dark:bg-red-950/20 p-4 text-sm text-red-900 dark:text-red-100 font-medium leading-relaxed">
+                          {state.disputeComments}
+                        </div>
+                      ) : (
+                        <textarea
+                          rows={3}
+                          value={state.disputeComments}
+                          onChange={(e) =>
+                            updateState({ disputeComments: e.target.value })
+                          }
+                          placeholder="State the reason you are disputing this breach…"
+                          className="w-full rounded-xl border border-input bg-background p-3 text-sm text-foreground dark:bg-zinc-900 focus:outline-none focus:border-ring"
+                        />
+                      )}
                     </div>
 
                     <div className="space-y-1.5">
@@ -476,57 +501,61 @@ export default function CAPDetail() {
                             ? state.disputeFile
                             : "Upload dispute evidence document"}
                         </div>
-                        <input
-                          type="file"
-                          id={`dispute-upload-${c.id}`}
-                          className="hidden"
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              updateState({ disputeFile: file.name });
-                            }
-                          }}
-                        />
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="mt-3"
-                          disabled={state.isDisputeSubmitted || c.status === "disputed"}
-                          onClick={() =>
-                            document.getElementById(`dispute-upload-${c.id}`)?.click()
-                          }
-                        >
-                          Upload Evidence
-                        </Button>
+                        {!state.isDisputeSubmitted && (
+                          <>
+                            <input
+                              type="file"
+                              id={`dispute-upload-${c.id}`}
+                              className="hidden"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  updateState({ disputeFile: file.name });
+                                }
+                              }}
+                            />
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="mt-3"
+                              onClick={() =>
+                                document.getElementById(`dispute-upload-${c.id}`)?.click()
+                              }
+                            >
+                              Upload Evidence
+                            </Button>
+                          </>
+                        )}
                       </div>
                     </div>
 
-                    <Button
-                      className="w-full bg-destructive text-white font-semibold hover:bg-destructive/90"
-                      onClick={() => {
-                        if (!state.disputeComments.trim()) {
-                          alert("Please enter dispute comments.");
-                          return;
-                        }
-                        c.status = "disputed";
-                        c.history.push({
-                          date: new Date().toLocaleDateString(),
-                          event: "Dispute Raised by Supervisor",
-                          actor: "Supervisor Priya Shah",
-                        });
+                    {!state.isDisputeSubmitted && (
+                      <Button
+                        className="w-full bg-destructive text-white font-semibold hover:bg-destructive/90"
+                        onClick={() => {
+                          if (!state.disputeComments.trim()) {
+                            alert("Please enter dispute comments.");
+                            return;
+                          }
+                          c.status = "disputed";
+                          c.history.push({
+                            date: new Date().toLocaleDateString(),
+                            event: "Dispute Raised by Supervisor",
+                            actor: "Supervisor Priya Shah",
+                          });
 
-                        updateState({
-                          isDisputeSubmitted: true,
-                        });
-                        forceUpdate();
-                        alert(
-                          "Dispute submitted successfully! Sent to QA/Compliance for review. CAP status moved to Disputed."
-                        );
-                      }}
-                      disabled={state.isDisputeSubmitted || c.status === "disputed"}
-                    >
-                      Submit Dispute
-                    </Button>
+                          updateState({
+                            isDisputeSubmitted: true,
+                          });
+                          forceUpdate();
+                          alert(
+                            "Dispute submitted successfully! Sent to QA/Compliance for review. CAP status moved to Disputed."
+                          );
+                        }}
+                      >
+                        Submit Dispute
+                      </Button>
+                    )}
                   </div>
                 </SectionCard>
 
@@ -563,16 +592,21 @@ export default function CAPDetail() {
                       <label className="text-xs font-bold text-muted-foreground uppercase">
                         Exception Comment / Justification
                       </label>
-                      <textarea
-                        rows={3}
-                        value={state.exceptionComments}
-                        onChange={(e) =>
-                          updateState({ exceptionComments: e.target.value })
-                        }
-                        placeholder="Provide justification why exception is needed…"
-                        className="w-full rounded-xl border border-input bg-background p-3 text-sm text-foreground dark:bg-zinc-900 focus:outline-none focus:border-ring"
-                        disabled={state.isExceptionSubmitted || c.status === "exception-pending"}
-                      />
+                      {state.isExceptionSubmitted ? (
+                        <div className="w-full rounded-xl border border-amber-500/20 bg-amber-50/50 dark:bg-amber-950/20 p-4 text-sm text-amber-900 dark:text-amber-100 font-medium leading-relaxed">
+                          {state.exceptionComments}
+                        </div>
+                      ) : (
+                        <textarea
+                          rows={3}
+                          value={state.exceptionComments}
+                          onChange={(e) =>
+                            updateState({ exceptionComments: e.target.value })
+                          }
+                          placeholder="Provide justification why exception is needed…"
+                          className="w-full rounded-xl border border-input bg-background p-3 text-sm text-foreground dark:bg-zinc-900 focus:outline-none focus:border-ring"
+                        />
+                      )}
                     </div>
 
                     <div className="space-y-1.5">
@@ -586,55 +620,59 @@ export default function CAPDetail() {
                             ? state.exceptionFile
                             : "Upload exception evidence document"}
                         </div>
-                        <input
-                          type="file"
-                          id={`exception-upload-${c.id}`}
-                          className="hidden"
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              updateState({ exceptionFile: file.name });
-                            }
-                          }}
-                        />
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="mt-3"
-                          disabled={state.isExceptionSubmitted || c.status === "exception-pending"}
-                          onClick={() =>
-                            document.getElementById(`exception-upload-${c.id}`)?.click()
-                          }
-                        >
-                          Upload Evidence
-                        </Button>
+                        {!state.isExceptionSubmitted && (
+                          <>
+                            <input
+                              type="file"
+                              id={`exception-upload-${c.id}`}
+                              className="hidden"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  updateState({ exceptionFile: file.name });
+                                }
+                              }}
+                            />
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="mt-3"
+                              onClick={() =>
+                                document.getElementById(`exception-upload-${c.id}`)?.click()
+                              }
+                            >
+                              Upload Evidence
+                            </Button>
+                          </>
+                        )}
                       </div>
                     </div>
 
-                    <Button
-                      className="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold"
-                      onClick={() => {
-                        if (!state.exceptionComments.trim()) {
-                          alert("Please enter exception justification.");
-                          return;
-                        }
-                        c.status = "exception-pending";
-                        c.history.push({
-                          date: new Date().toLocaleDateString(),
-                          event: "Exception Raised by Supervisor",
-                          actor: "Supervisor Priya Shah",
-                        });
+                    {!state.isExceptionSubmitted && (
+                      <Button
+                        className="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold"
+                        onClick={() => {
+                          if (!state.exceptionComments.trim()) {
+                            alert("Please enter exception justification.");
+                            return;
+                          }
+                          c.status = "exception-pending";
+                          c.history.push({
+                            date: new Date().toLocaleDateString(),
+                            event: "Exception Raised by Supervisor",
+                            actor: "Supervisor Priya Shah",
+                          });
 
-                        updateState({
-                          isExceptionSubmitted: true,
-                        });
-                        forceUpdate();
-                        alert("Exception Raised successfully! Pending Manager Approval.");
-                      }}
-                      disabled={state.isExceptionSubmitted || c.status === "exception-pending"}
-                    >
-                      Submit Exception Request
-                    </Button>
+                          updateState({
+                            isExceptionSubmitted: true,
+                          });
+                          forceUpdate();
+                          alert("Exception Raised successfully! Pending Manager Approval.");
+                        }}
+                      >
+                        Submit Exception Request
+                      </Button>
+                    )}
                   </div>
                 </SectionCard>
 
@@ -651,7 +689,7 @@ export default function CAPDetail() {
 
             {/* FLOW COMPLETED / CLOSED DISPLAY CARD */}
             {c.status === "closed" && (
-              <SectionCard title="CAP Actions Successfully Completed">
+              <div className="mt-8 space-y-6">
                 <div className="mb-6 rounded-xl border border-success/30 bg-success/10 p-4">
                   <div className="flex items-center gap-3">
                     <CheckCircle2 className="h-5 w-5 text-success" />
@@ -661,66 +699,147 @@ export default function CAPDetail() {
                   </div>
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-2">
-                  {c.exceptionApproved ? (
-                    <>
-                      <div className="md:col-span-2">
-                        <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Justification</div>
-                        <div className="mt-1 text-sm font-medium text-foreground">{state.exceptionComments || c.supervisorComment || "Internet outage verification."}</div>
+                {c.exceptionApproved ? (
+                  <div className="space-y-6 border-l-2 border-emerald-500 pl-4">
+                    <h4 className="text-sm font-bold text-emerald-600">Exception Actions Flow (Completed)</h4>
+                    <SectionCard title="Exception Raise Card">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-muted-foreground uppercase">Exception Comment / Justification</label>
+                        <div className="w-full rounded-xl border border-border bg-secondary/30 p-4 text-sm font-medium leading-relaxed text-foreground">
+                          {state.exceptionComments || c.supervisorComment || "Internet outage verification."}
+                        </div>
                       </div>
+                    </SectionCard>
+                    <SectionCard title="Exception Approvals">
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div>
+                          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Manager Review</div>
+                          <div className="mt-1 text-sm font-semibold text-success flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4" /> {c.managerComment || "Approved"}</div>
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">QA/Compliance Review</div>
+                          <div className="mt-1 text-sm font-semibold text-success flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4" /> {c.qaComment || "Approved"}</div>
+                        </div>
+                      </div>
+                    </SectionCard>
+                    <SectionCard title="CAP Actions Successfully Completed">
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="md:col-span-2">
+                          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Justification</div>
+                          <div className="mt-1 text-sm font-medium text-foreground">{state.exceptionComments || c.supervisorComment || "Internet outage verification."}</div>
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Manager Review</div>
+                          <div className="mt-1 text-sm font-semibold text-success flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4" /> {c.managerComment || "Approved"}</div>
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">QA/Compliance Review</div>
+                          <div className="mt-1 text-sm font-semibold text-success flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4" /> {c.qaComment || "Approved"}</div>
+                        </div>
+                        <div className="md:col-span-2 border-t border-border pt-4">
+                          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Final Outcome</div>
+                          <div className="mt-1 text-sm font-bold text-foreground">Exception Approved - Closed</div>
+                        </div>
+                      </div>
+                    </SectionCard>
+                  </div>
+                ) : c.disputeAccepted ? (
+                  <div className="space-y-6 border-l-2 border-emerald-500 pl-4">
+                    <h4 className="text-sm font-bold text-emerald-600">Disputed Actions Flow (Completed)</h4>
+                    <SectionCard title="Dispute Raised Card">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-muted-foreground uppercase">Dispute Comments / Justification</label>
+                        <div className="w-full rounded-xl border border-border bg-secondary/30 p-4 text-sm font-medium leading-relaxed text-foreground">
+                          {state.disputeComments || c.supervisorComment || "Valid context provided."}
+                        </div>
+                      </div>
+                    </SectionCard>
+                    <SectionCard title="QA/Compliance Review">
                       <div>
-                        <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Manager Review</div>
-                        <div className="mt-1 text-sm font-semibold text-success flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4" /> {c.managerComment || "Approved"}</div>
-                      </div>
-                      <div>
-                        <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">QA/Compliance Review</div>
-                        <div className="mt-1 text-sm font-semibold text-success flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4" /> {c.qaComment || "Approved"}</div>
-                      </div>
-                      <div className="md:col-span-2 border-t border-border pt-4">
-                        <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Final Outcome</div>
-                        <div className="mt-1 text-sm font-bold text-foreground">Exception Approved - Closed</div>
-                      </div>
-                    </>
-                  ) : c.disputeAccepted ? (
-                    <>
-                      <div className="md:col-span-2">
-                        <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Justification</div>
-                        <div className="mt-1 text-sm font-medium text-foreground">{state.disputeComments || c.supervisorComment || "Valid context provided."}</div>
-                      </div>
-                      <div className="md:col-span-2">
-                        <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">QA/Compliance Review</div>
+                        <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Review Outcome</div>
                         <div className="mt-1 text-sm font-semibold text-success flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4" /> {c.qaComment || "Dispute accepted, breach overturned."}</div>
                       </div>
-                      <div className="md:col-span-2 border-t border-border pt-4">
-                        <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Final Outcome</div>
-                        <div className="mt-1 text-sm font-bold text-foreground">Dispute Accepted - Closed</div>
+                    </SectionCard>
+                    <SectionCard title="CAP Actions Successfully Completed">
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="md:col-span-2">
+                          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Justification</div>
+                          <div className="mt-1 text-sm font-medium text-foreground">{state.disputeComments || c.supervisorComment || "Valid context provided."}</div>
+                        </div>
+                        <div className="md:col-span-2">
+                          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">QA/Compliance Review</div>
+                          <div className="mt-1 text-sm font-semibold text-success flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4" /> {c.qaComment || "Dispute accepted, breach overturned."}</div>
+                        </div>
+                        <div className="md:col-span-2 border-t border-border pt-4">
+                          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Final Outcome</div>
+                          <div className="mt-1 text-sm font-bold text-foreground">Dispute Accepted - Closed</div>
+                        </div>
                       </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="md:col-span-2">
-                        <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Discussion Notes</div>
-                        <div className="mt-1 text-sm font-medium text-foreground">{state.discussionComments || c.discussionComments || "Discussion completed offline."}</div>
+                    </SectionCard>
+                  </div>
+                ) : (
+                  <div className="space-y-6 border-l-2 border-emerald-500 pl-4">
+                    <h4 className="text-sm font-bold text-emerald-600">Accepted Actions Flow (Completed)</h4>
+                    <SectionCard title="Discussion Card">
+                      <div className="space-y-4">
+                        <div className="space-y-1.5">
+                          <label className="text-xs font-bold text-muted-foreground uppercase">Discussion Notes / Comment Box</label>
+                          <div className="w-full rounded-xl border border-emerald-500/20 bg-emerald-50/50 dark:bg-emerald-950/20 p-4 text-sm font-medium leading-relaxed text-emerald-950 dark:text-emerald-100">
+                            {state.discussionComments || c.discussionComments || "Discussion completed offline."}
+                          </div>
+                        </div>
+                        <div className="grid gap-3 sm:grid-cols-2 items-end">
+                          <label className="block space-y-1.5">
+                            <span className="text-xs font-bold text-muted-foreground uppercase flex items-center gap-1.5">
+                              <Calendar className="h-4 w-4" /> Discussion Closed Date
+                            </span>
+                            <div className="w-full rounded-xl border border-border bg-secondary/50 p-2.5 text-sm font-medium text-foreground">
+                              {state.discussionDate || c.discussionDate || "2026-05-04"}
+                            </div>
+                          </label>
+                        </div>
                       </div>
-                      <div>
-                        <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Acknowledgment Email</div>
-                        <div className="mt-1 text-sm font-mono text-muted-foreground">{state.uploadedAckFile || c.acknowledgmentEmail || "ack_email.eml"}</div>
+                    </SectionCard>
+                    <SectionCard title="Attach Guide Acknowledge Email">
+                      <div className="border-2 border-dashed border-emerald-500/30 rounded-xl p-6 text-center bg-emerald-50/30 dark:bg-emerald-950/10">
+                        <div className="text-sm font-semibold text-emerald-700 dark:text-emerald-300 flex items-center justify-center gap-1.5">
+                          <CheckCircle2 className="h-4 w-4" /> {state.uploadedAckFile || c.acknowledgmentEmail || "ack_email.eml"}
+                        </div>
+                        <div className="text-xs text-muted-foreground mt-2">
+                          Successfully attached on {state.discussionClosedAt || c.acknowledgedAt || new Date().toLocaleDateString()}
+                        </div>
                       </div>
-                      <div>
-                        <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Completed On</div>
-                        <div className="mt-1 text-sm font-medium text-foreground">{state.discussionClosedAt || c.acknowledgedAt || new Date().toLocaleDateString()}</div>
+                    </SectionCard>
+                    <SectionCard title="CAP Actions Successfully Completed">
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="md:col-span-2">
+                          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Discussion Notes</div>
+                          <div className="mt-1 text-sm font-medium text-foreground">{state.discussionComments || c.discussionComments || "Discussion completed offline."}</div>
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Acknowledgment Email</div>
+                          <div className="mt-1 text-sm font-mono text-muted-foreground">{state.uploadedAckFile || c.acknowledgmentEmail || "ack_email.eml"}</div>
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Completed On</div>
+                          <div className="mt-1 text-sm font-medium text-foreground">{state.discussionClosedAt || c.acknowledgedAt || new Date().toLocaleDateString()}</div>
+                        </div>
+                        <div className="md:col-span-2 border-t border-border pt-4">
+                          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Final Outcome</div>
+                          <div className="mt-1 text-sm font-bold text-foreground">CAP Accepted & Acknowledged - Closed</div>
+                        </div>
                       </div>
-                    </>
-                  )}
-                </div>
-              </SectionCard>
+                    </SectionCard>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 
           <div className="space-y-6">
             <SectionCard title="Activity & history">
               <ol className="relative space-y-4 border-l-2 border-border pl-5">
-                {state.isDiscussionClosed && (
+                {state.isDiscussionClosed && !c.history.some((h) => h.event.toLowerCase().includes("discussion closed")) && (
                   <li className="relative">
                     <span className="absolute -left-[23px] top-1.5 h-2.5 w-2.5 rounded-full bg-emerald-500" />
                     <div className="flex flex-col">
@@ -729,6 +848,32 @@ export default function CAPDetail() {
                       </div>
                       <div className="text-xs text-muted-foreground">
                         {state.discussionClosedAt} · <span className="font-medium text-foreground">Supervisor Priya Shah</span>
+                      </div>
+                    </div>
+                  </li>
+                )}
+                {state.isDisputeSubmitted && !c.history.some((h) => h.event.toLowerCase().includes("dispute raised")) && (
+                  <li className="relative">
+                    <span className="absolute -left-[23px] top-1.5 h-2.5 w-2.5 rounded-full bg-destructive" />
+                    <div className="flex flex-col">
+                      <div className="text-sm font-semibold text-foreground">
+                        Dispute Raised by Supervisor
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {c.raisedAt} · <span className="font-medium text-foreground">Supervisor {c.employee.supervisor}</span>
+                      </div>
+                    </div>
+                  </li>
+                )}
+                {state.isExceptionSubmitted && !c.history.some((h) => h.event.toLowerCase().includes("exception raised")) && (
+                  <li className="relative">
+                    <span className="absolute -left-[23px] top-1.5 h-2.5 w-2.5 rounded-full bg-amber-500" />
+                    <div className="flex flex-col">
+                      <div className="text-sm font-semibold text-foreground">
+                        Exception Raised by Supervisor
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {c.raisedAt} · <span className="font-medium text-foreground">Supervisor {c.employee.supervisor}</span>
                       </div>
                     </div>
                   </li>

@@ -188,12 +188,7 @@ export default function PIPDetail() {
 
                     {r.status === "scheduled" && (
                       <div className="mt-3 flex flex-wrap gap-2">
-                        <Button size="sm">
-                          <Check className="mr-1 h-3.5 w-3.5" /> Mark target met
-                        </Button>
-                        <Button size="sm" variant="outline">
-                          <X className="mr-1 h-3.5 w-3.5" /> Mark not met
-                        </Button>
+                        
                       </div>
                     )}
                   </div>

@@ -435,7 +435,22 @@ export const capCases = [
     validUntil: "2026-07-30",
     disputeAttempts: 0,
     exceptionRequested: false,
-    history: [{ date: "2026-05-01", event: "CAP logged", actor: "System" }],
+    discussionComments: "Discussed the breach regarding bypassing manager approval codes. Agent acknowledged the mistake and reviewed the standard operating procedure. Expectations set for 100% compliance moving forward.",
+    discussionDate: "2026-05-03",
+    discussionClosedAt: "5/3/2026",
+    acknowledgmentEmail: "ack_CAP-2026-01_AaravMehta.eml",
+    acknowledgedAt: "5/4/2026",
+    history: [
+      { date: "2026-05-01", event: "CAP logged (pending)", actor: "Compliance Team" },
+      { date: "2026-05-01", event: "Email sent to supervisor; CC managers + you", actor: "System" },
+      { date: "2026-05-02", event: "Supervisor accepted", actor: "Priya Shah (Supervisor)" },
+      { date: "2026-05-03", event: "Discussion scheduled", actor: "Priya Shah (Supervisor)" },
+      { date: "2026-05-03", event: "Discussion closed with Guide", actor: "Priya Shah (Supervisor)" },
+      { date: "2026-05-03", event: "CAP letter generated & issued", actor: "System" },
+      { date: "2026-05-04", event: "Agent acknowledged letter", actor: "Aarav Mehta (Agent)" },
+      { date: "2026-05-04", event: "CAP status moved to active", actor: "System" },
+      { date: "2026-05-05", event: "Case closed", actor: "System" },
+    ],
   },
   {
     id: "CAP-2026-03",
@@ -545,9 +560,9 @@ export const capCases = [
     disputeAttempts: 1,
     exceptionRequested: false,
     history: [
-      { date: "2026-05-20", event: "Dispute Rejected by QA", actor: "QA Team" },
-      { date: "2026-05-19", event: "Dispute Raised by Supervisor", actor: "Priya Shah" },
       { date: "2026-05-18", event: "CAP logged", actor: "QA Team" },
+      { date: "2026-05-19", event: "Dispute Raised by Supervisor", actor: "Priya Shah" },
+      { date: "2026-05-20", event: "Dispute Rejected by QA", actor: "QA Team" },
     ],
   },
   {
@@ -566,9 +581,9 @@ export const capCases = [
     disputeAttempts: 0,
     exceptionRequested: true,
     history: [
-      { date: "2026-05-17", event: "Exception Rejected by Manager", actor: "Rohan Iyer" },
-      { date: "2026-05-16", event: "Exception Raised by Supervisor", actor: "Priya Shah" },
       { date: "2026-05-15", event: "CAP logged", actor: "Compliance Team" },
+      { date: "2026-05-16", event: "Exception Raised by Supervisor", actor: "Priya Shah" },
+      { date: "2026-05-17", event: "Exception Rejected by Manager", actor: "Rohan Iyer" },
     ],
   },
   {
@@ -588,9 +603,9 @@ export const capCases = [
     disputeAttempts: 0,
     exceptionRequested: true,
     history: [
-      { date: "2026-05-12", event: "Exception Approved & Closed", actor: "QA/Compliance Team" },
-      { date: "2026-05-11", event: "Exception Raised by Supervisor", actor: "Marcia Lin" },
       { date: "2026-05-10", event: "CAP logged", actor: "Compliance Team" },
+      { date: "2026-05-11", event: "Exception Raised by Supervisor", actor: "Marcia Lin" },
+      { date: "2026-05-12", event: "Exception Approved & Closed", actor: "QA/Compliance Team" },
     ],
   }
 ];

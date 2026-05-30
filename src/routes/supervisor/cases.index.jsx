@@ -177,7 +177,7 @@ export default function CAPList() {
                 } else if (c.status === "exception-pending") {
                   pendingAction = "Awaiting Manager Approval";
                 } else if (c.status === "closed") {
-                  pendingAction = "Active";
+                  pendingAction = "No Pending actions";
                 } else if (c.status === "hr-escalation") {
                   pendingAction = "Escalated to HR";
                 }
@@ -231,7 +231,9 @@ export default function CAPList() {
                               ? "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-900/30"
                               : pendingAction === "Awaiting Manager Approval"
                                 ? "bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-950/40 dark:text-purple-300 dark:border-purple-900/30"
-                                : "bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-900/30"
+                                : pendingAction === "No Pending actions"
+                                  ? "bg-secondary text-muted-foreground border-border dark:bg-secondary/40 dark:text-muted-foreground"
+                                  : "bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-900/30"
                         }`}
                       >
                         {pendingAction}
