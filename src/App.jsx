@@ -23,25 +23,25 @@ import QACAPDetail from "./routes/qa/cases.$caseId";
 import QANew from "./routes/qa/new";
 import ManagerHome from "./routes/manager/index";
 import ManagerDepartments from "./routes/manager/departments";
+import ManagerPIPApprovals from "./routes/manager/pip.approvals";
+import ManagerCAPExceptions from "./routes/manager/cap.exceptions";
+import ManagerPIPCases from "./routes/manager/pip.cases.index";
+import ManagerPIPDetail from "./routes/manager/pip.cases.$caseId";
+import ManagerCAPCases from "./routes/manager/cap.cases.index";
+import ManagerCAPDetail from "./routes/manager/cap.cases.$caseId";
 import AdminHome from "./routes/admin/index";
 import AdminTriggers from "./routes/admin/triggers";
 import AdminTemplates from "./routes/admin/templates";
 import AdminEmailTemplates from "./routes/admin/email-templates";
 import AdminRoles from "./routes/admin/roles";
 import AdminDepartments from "./routes/admin/departments";
+import AdminPIPCases from "./routes/admin/pip.cases.index";
+import AdminPIPDetail from "./routes/admin/pip.cases.$caseId";
+import AdminCAPCases from "./routes/admin/cap.cases.index";
+import AdminCAPDetail from "./routes/admin/cap.cases.$caseId";
 import AuditDashboard from "./routes/audit";
-import PIPDashboard from "./routes/pip/index";
-import AllPIPCases from "./routes/pip/cases.index";
-import PIPDetail from "./routes/pip/cases.$caseId";
-import CAPDashboard from "./routes/cap/index";
-import AllCAPCases from "./routes/cap/cases.index";
-import CAPDetail from "./routes/cap/cases.$caseId";
 import SupervisorAllCAPCases from "./routes/supervisor/cases.index";
 import SupervisorCAPDetail from "./routes/supervisor/cases.$caseId";
-import CAPNew from "./routes/cap/new";
-import CAPExceptions from "./routes/cap/exceptions";
-import PIPApprovals from "./routes/pip/approvals";
-import PIPCandidatesGlobal from "./routes/pip/candidates";
 
 export default function App() {
   return (
@@ -84,6 +84,12 @@ export default function App() {
           <Route path="manager">
             <Route index element={<ManagerHome />} />
             <Route path="departments" element={<ManagerDepartments />} />
+          <Route path="pip/approvals" element={<ManagerPIPApprovals />} />
+          <Route path="cap/exceptions" element={<ManagerCAPExceptions />} />
+          <Route path="pip/cases" element={<ManagerPIPCases />} />
+          <Route path="pip/cases/:caseId" element={<ManagerPIPDetail />} />
+          <Route path="cap/cases" element={<ManagerCAPCases />} />
+          <Route path="cap/cases/:caseId" element={<ManagerCAPDetail />} />
           </Route>
 
           <Route path="admin">
@@ -93,25 +99,13 @@ export default function App() {
             <Route path="email-templates" element={<AdminEmailTemplates />} />
             <Route path="roles" element={<AdminRoles />} />
             <Route path="departments" element={<AdminDepartments />} />
+          <Route path="pip/cases" element={<AdminPIPCases />} />
+          <Route path="pip/cases/:caseId" element={<AdminPIPDetail />} />
+          <Route path="cap/cases" element={<AdminCAPCases />} />
+          <Route path="cap/cases/:caseId" element={<AdminCAPDetail />} />
           </Route>
 
           <Route path="audit" element={<AuditDashboard />} />
-
-          <Route path="pip">
-            <Route index element={<PIPDashboard />} />
-            <Route path="candidates" element={<PIPCandidatesGlobal />} />
-            <Route path="cases" element={<AllPIPCases />} />
-            <Route path="cases/:caseId" element={<PIPDetail />} />
-            <Route path="approvals" element={<PIPApprovals />} />
-          </Route>
-
-          <Route path="cap">
-            <Route index element={<CAPDashboard />} />
-            <Route path="cases" element={<AllCAPCases />} />
-            <Route path="cases/:caseId" element={<CAPDetail />} />
-            <Route path="new" element={<CAPNew />} />
-            <Route path="exceptions" element={<CAPExceptions />} />
-          </Route>
         </Route>
       </Routes>
     </Router>

@@ -93,15 +93,15 @@ const personaNav = {
       {
         section: "Approvals",
         items: [
-          { label: "PIP extension queue", to: "/pip/approvals", icon: Inbox },
-          { label: "CAP exception queue", to: "/cap/exceptions", icon: ShieldAlert },
+          { label: "PIP extension queue", to: "/manager/pip/approvals", icon: Inbox },
+          { label: "CAP exception queue", to: "/manager/cap/exceptions", icon: ShieldAlert },
         ],
       },
       {
         section: "Oversight",
         items: [
-          { label: "Team PIP cases", to: "/pip/cases", icon: TrendingUp },
-          { label: "Team CAP cases", to: "/cap/cases", icon: FileSearch },
+          { label: "Team PIP cases", to: "/manager/pip/cases", icon: TrendingUp },
+          { label: "Team CAP cases", to: "/manager/cap/cases", icon: FileSearch },
           { label: "Departments", to: "/manager/departments", icon: Briefcase },
         ],
       },
@@ -124,8 +124,8 @@ const personaNav = {
         section: "Audit & oversight",
         items: [
           { label: "Audit dashboard", to: "/audit", icon: FileSearch, exact: true },
-          { label: "PIP register", to: "/pip/cases", icon: TrendingUp },
-          { label: "CAP register", to: "/cap/cases", icon: FileSearch },
+          { label: "PIP register", to: "/admin/pip/cases", icon: TrendingUp },
+          { label: "CAP register", to: "/admin/cap/cases", icon: FileSearch },
         ],
       },
     ],
