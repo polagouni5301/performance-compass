@@ -241,7 +241,7 @@ export default function CAPList() {
                     </td>
                     <td className="py-3 px-1 text-right">
                       <Button size="sm" variant="secondary" className="border shadow-sm" asChild>
-                        <Link to={`/cap/cases/${c.id}`}>Open</Link>
+                        <Link to={`/supervisor/cap/cases/${c.id}`}>Open</Link>
                       </Button>
                     </td>
                   </tr>

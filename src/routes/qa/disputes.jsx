@@ -211,7 +211,7 @@ export default function Disputes() {
                             )}
                             asChild
                           >
-                            <Link to={`/cap/cases/${c.id}`}>View full case details</Link>
+                        <Link to={`/qa/cases/${c.id}`}>View full case details</Link>
                           </Button>
 
                           {activeTab === "disputes" && (

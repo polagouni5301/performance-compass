@@ -35,7 +35,7 @@ export default function QAHome() {
         className="mt-8"
         actions={
           <Button size="sm" variant="ghost" asChild>
-            <Link to="/cap/cases">
+            <Link to="/qa/cases">
               View all <ArrowRight className="ml-1 h-3 w-3" />
             </Link>
           </Button>
@@ -45,7 +45,7 @@ export default function QAHome() {
           {allCases.slice(0, 5).map((c) => (
             <li key={c.id} className="flex items-center justify-between py-3 first:pt-0 last:pb-0">
               <div>
-                <Link to={`/cap/cases/${c.id}`} className="font-medium hover:underline">
+                <Link to={`/qa/cases/${c.id}`} className="font-medium hover:underline">
                   {c.employee.name}
                 </Link>
                 <div className="text-xs text-muted-foreground">

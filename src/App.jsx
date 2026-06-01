@@ -8,6 +8,8 @@ import PIPCandidates from "./routes/supervisor/pip.candidates";
 import PIPInitiate from "./routes/supervisor/pip.initiate";
 import PIPReview from "./routes/supervisor/pip.review";
 import CandidateDataView from "./routes/supervisor/pip.candidate-data";
+import SupervisorPIPCases from "./routes/supervisor/pip.cases.index";
+import SupervisorPIPDetail from "./routes/supervisor/pip.cases.$caseId";
 import AgentHome from "./routes/agent/index";
 import AgentPIP from "./routes/agent/pip.index";
 import AgentPIPAcknowledge from "./routes/agent/pip.acknowledge";
@@ -16,6 +18,9 @@ import AgentCAPAcknowledge from "./routes/agent/cap.acknowledge";
 import QAHome from "./routes/qa/index";
 import QARecommendation from "./routes/qa/recommendation";
 import QADisputes from "./routes/qa/disputes";
+import QACAPCases from "./routes/qa/cases.index";
+import QACAPDetail from "./routes/qa/cases.$caseId";
+import QANew from "./routes/qa/new";
 import ManagerHome from "./routes/manager/index";
 import ManagerDepartments from "./routes/manager/departments";
 import AdminHome from "./routes/admin/index";
@@ -29,8 +34,10 @@ import PIPDashboard from "./routes/pip/index";
 import AllPIPCases from "./routes/pip/cases.index";
 import PIPDetail from "./routes/pip/cases.$caseId";
 import CAPDashboard from "./routes/cap/index";
-import AllCAPCases from "./routes/supervisor/cases.index";
-import CAPDetail from "./routes/supervisor/cases.$caseId";
+import AllCAPCases from "./routes/cap/cases.index";
+import CAPDetail from "./routes/cap/cases.$caseId";
+import SupervisorAllCAPCases from "./routes/supervisor/cases.index";
+import SupervisorCAPDetail from "./routes/supervisor/cases.$caseId";
 import CAPNew from "./routes/cap/new";
 import CAPExceptions from "./routes/cap/exceptions";
 import PIPApprovals from "./routes/pip/approvals";
@@ -51,6 +58,10 @@ export default function App() {
             <Route path="pip/candidate-data/:ohrId" element={<CandidateDataView />} />
             <Route path="pip/initiate" element={<PIPInitiate />} />
             <Route path="pip/review" element={<PIPReview />} />
+            <Route path="pip/cases" element={<SupervisorPIPCases />} />
+            <Route path="pip/cases/:caseId" element={<SupervisorPIPDetail />} />
+            <Route path="cap/cases" element={<SupervisorAllCAPCases />} />
+            <Route path="cap/cases/:caseId" element={<SupervisorCAPDetail />} />
           </Route>
 
           <Route path="agent">
@@ -65,6 +76,9 @@ export default function App() {
             <Route index element={<QAHome />} />
             <Route path="recommendation" element={<QARecommendation />} />
             <Route path="disputes" element={<QADisputes />} />
+          <Route path="cases" element={<QACAPCases />} />
+          <Route path="cases/:caseId" element={<QACAPDetail />} />
+          <Route path="new" element={<QANew />} />
           </Route>
 
           <Route path="manager">

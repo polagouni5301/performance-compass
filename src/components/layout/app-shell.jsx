@@ -41,13 +41,13 @@ const personaNav = {
         items: [
           { label: "Performance Action Items", to: "/supervisor/pip/candidates", icon: Users },
           { label: "Initiate PIP", to: "/supervisor/pip/initiate", icon: ClipboardList },
-          { label: "Active cases", to: "/pip/cases", icon: TrendingUp },
+          { label: "Active cases", to: "/supervisor/pip/cases", icon: TrendingUp },
         ],
       },
       {
         section: "CAP — Compliance",
         items: [
-          { label: "All CAP cases", to: "/cap/cases", icon: FileSearch },
+          { label: "All CAP cases", to: "/supervisor/cap/cases", icon: FileSearch },
         ],
       },
     ],
@@ -76,13 +76,13 @@ const personaNav = {
     sections: [
       {
         section: "Breach intake",
-        items: [{ label: "Log new breach", to: "/cap/new", icon: ClipboardList }],
+        items: [{ label: "Log new breach", to: "/qa/new", icon: ClipboardList }],
       },
       {
         section: "Tracker",
         items: [
           { label: "Disputes & Exceptions", to: "/qa/disputes", icon: Inbox },
-          { label: "All Cases", to: "/cap/cases", icon: FileSearch },
+          { label: "All Cases", to: "/qa/cases", icon: FileSearch },
         ],
       },
     ],

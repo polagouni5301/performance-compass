@@ -59,7 +59,7 @@ export default function CAPDetail() {
   if (!c) return <div className="rounded-2xl border p-10 text-center">Case not found.</div>;
 
   const disputeRemaining = 2 - c.disputeAttempts;
-  const backTo = persona === "agent" ? "/agent/cap" : "/cap/cases";
+  const backTo = persona === "agent" ? "/agent/cap" : "/supervisor/cap/cases";
   const backLabel = persona === "agent" ? "My CAP / Warnings" : "All CAP cases";
 
   let pendingActionText = "Pending Action Required";

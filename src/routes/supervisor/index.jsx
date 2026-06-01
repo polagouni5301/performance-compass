@@ -38,7 +38,7 @@ export default function SupervisorHome() {
           title="Upcoming PIP reviews"
           actions={
             <Button size="sm" variant="ghost" asChild>
-              <Link to="/pip/cases">
+              <Link to="/supervisor/pip/cases">
                 View all cases <ArrowRight className="ml-1 h-3 w-3" />
               </Link>
             </Button>
@@ -76,7 +76,7 @@ export default function SupervisorHome() {
           description="Breaches awaiting your accept / dispute"
           actions={
             <Button size="sm" variant="ghost" asChild>
-              <Link to="/cap/cases">
+              <Link to="/supervisor/cap/cases">
                 Open <ArrowRight className="ml-1 h-3 w-3" />
               </Link>
             </Button>
