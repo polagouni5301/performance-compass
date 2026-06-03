@@ -91,7 +91,7 @@ export default function ReviewCycle() {
     }
 
     alert("Review submitted successfully! Re-directing back to All Cases.");
-    navigate("/pip/cases");
+      navigate("/supervisor/pip/cases");
   };
 
   // Build review data for the closure timeline
@@ -506,6 +506,11 @@ export default function ReviewCycle() {
                               <Clock className="h-3 w-3" />
                               Awaiting response
                             </div>
+                              </div>
+                              <div className="mt-5 flex gap-2">
+                                <Button size="sm" asChild>
+                                  <Link to="/supervisor/pip/cases">Return to all PIP cases</Link>
+                                </Button>
                           </div>
                         </div>
                       </div>
@@ -596,7 +601,10 @@ export default function ReviewCycle() {
                           alert(
                             "📧 Email sent to manager! PIP status moved to Awaiting Manager Approval.",
                           );
-                          handleSubmitReview("pending-approval");
+                              activeCase.status = "pending-approval";
+                              currentReview.status = overallOutcome;
+                              currentReview.feedback = feedback;
+                              setIsApprovedStatus(true);
                         }}
                       >
                         <ShieldAlert className="mr-2 h-4 w-4" />
@@ -611,7 +619,10 @@ export default function ReviewCycle() {
                           alert(
                             "📧 Extension request submitted! Email sent to manager for 30-day extension approval.",
                           );
-                          handleSubmitReview("pending-approval");
+                              activeCase.status = "pending-approval";
+                              currentReview.status = overallOutcome;
+                              currentReview.feedback = feedback;
+                              setIsApprovedStatus(true);
                         }}
                       >
                         <Clock className="mr-2 h-4 w-4" />

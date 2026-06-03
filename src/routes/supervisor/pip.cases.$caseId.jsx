@@ -195,31 +195,6 @@ export default function PIPDetail() {
                 </li>
               ))}
             </ol>
-
-            {c.status === "active" && completed === 4 && exitMet && (
-              <div className="mt-4 rounded-xl border border-success/30 bg-success/10 p-4">
-                <div className="font-semibold text-success">
-                  Exit criteria met — 3 of 4 reviews achieved
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Supervisor can close PIP and trigger success email to agent.
-                </p>
-                <Button size="sm" className="mt-3">
-                  Close PIP — Success
-                </Button>
-              </div>
-            )}
-            {c.status === "active" && completed === 4 && !exitMet && (
-              <div className="mt-4 rounded-xl border border-warning/30 bg-warning/10 p-4">
-                <div className="font-semibold">Exit criteria not met</div>
-                <p className="text-xs text-muted-foreground">
-                  Request 30-day extension with 2 additional reviews. Manager approval required.
-                </p>
-                <Button size="sm" className="mt-3" asChild>
-                  <Link to="/pip/approvals">Request extension</Link>
-                </Button>
-              </div>
-            )}
           </SectionCard>
         </div>
 
