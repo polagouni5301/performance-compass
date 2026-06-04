@@ -28,7 +28,7 @@ const pipMap = {
   candidate: { label: "Candidate", variant: "warning" },
   active: { label: "Active", variant: "primary" },
   extended: { label: "Extended", variant: "info" },
-  "closed-success": { label: "Closed — Success", variant: "success" },
+  "closed-success": { label: "Closed — Successfully", variant: "success" },
   "closed-failed": { label: "Closed — Failed", variant: "danger" },
   "pending-approval": { label: "Pending Approval", variant: "warning" },
 };

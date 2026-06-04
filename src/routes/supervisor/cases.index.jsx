@@ -169,13 +169,17 @@ export default function CAPList() {
               {list.map((c) => {
                 let pendingAction = "Active";
                 if (c.status === "logged") {
-                  pendingAction = "cap initiate-Initiated";
+                  pendingAction = "Waiting for Supervisor acceptance";
                 } else if (c.status === "accepted") {
                   pendingAction = "Awaiting guide acknowledgment";
                 } else if (c.status === "disputed") {
-                  pendingAction = "Awaiting response from QA/Compliance";
+                  pendingAction = `Awaiting response from ${c.raisedByTeam || "QA/Compliance"}`;
                 } else if (c.status === "exception-pending") {
-                  pendingAction = "Awaiting Manager Approval";
+                  if (c.managerApproved) {
+                    pendingAction = `Awaiting response from ${c.raisedByTeam || "QA/Compliance"}`;
+                  } else {
+                    pendingAction = "Awaiting Manager Approval";
+                  }
                 } else if (c.status === "closed") {
                   pendingAction = "No Pending actions";
                 } else if (c.status === "hr-escalation") {
@@ -225,12 +229,14 @@ export default function CAPList() {
                     <td className="py-3 px-1">
                       <span
                         className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium border ${
-                          pendingAction === "cap initiate-Initiated"
+                          pendingAction === "Waiting for Supervisor acceptance"
                             ? "bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-900/30"
                             : pendingAction === "Awaiting guide acknowledgment"
                               ? "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-900/30"
                               : pendingAction === "Awaiting Manager Approval"
                                 ? "bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-950/40 dark:text-purple-300 dark:border-purple-900/30"
+                                : pendingAction.startsWith("Awaiting response from")
+                                  ? "bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-950/40 dark:text-orange-300 dark:border-orange-900/30"
                                 : pendingAction === "No Pending actions"
                                   ? "bg-secondary text-muted-foreground border-border dark:bg-secondary/40 dark:text-muted-foreground"
                                   : "bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-900/30"

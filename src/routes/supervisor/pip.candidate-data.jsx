@@ -6,17 +6,17 @@ import { pipCandidates } from "@/lib/mock-data";
 import { ArrowLeft } from "lucide-react";
 
 const last6MonthsAES = [
+  { month: "June 2026", rating: "NI", tone: "danger" },
+  { month: "May 2026", rating: "Met", tone: "success" },
   { month: "April 2026", rating: "NI", tone: "danger" },
-  { month: "March 2026", rating: "Met", tone: "success" },
-  { month: "February 2026", rating: "NI", tone: "danger" },
-  { month: "January 2026", rating: "Exceeded", tone: "primary" },
-  { month: "December 2025", rating: "Met", tone: "success" },
-  { month: "November 2025", rating: "Met", tone: "success" },
+  { month: "March 2026", rating: "Exceeded", tone: "primary" },
+  { month: "February 2026", rating: "Met", tone: "success" },
+  { month: "January 2026", rating: "Met", tone: "success" },
 ];
 
 const last6MonthsPerf = [
   {
-    month: "April 2026",
+    month: "June 2026",
     aht: "8:45",
     ahtTone: "text-destructive",
     nrpc: "12%",
@@ -25,7 +25,7 @@ const last6MonthsPerf = [
     convTone: "text-emerald-600 dark:text-emerald-500",
   },
   {
-    month: "March 2026",
+    month: "May 2026",
     aht: "7:30",
     ahtTone: "text-emerald-600 dark:text-emerald-500",
     nrpc: "15%",
@@ -34,7 +34,7 @@ const last6MonthsPerf = [
     convTone: "text-emerald-600 dark:text-emerald-500",
   },
   {
-    month: "February 2026",
+    month: "April 2026",
     aht: "9:10",
     ahtTone: "text-destructive",
     nrpc: "10%",
@@ -43,7 +43,7 @@ const last6MonthsPerf = [
     convTone: "text-emerald-600 dark:text-emerald-500",
   },
   {
-    month: "January 2026",
+    month: "March 2026",
     aht: "6:45",
     ahtTone: "text-emerald-600 dark:text-emerald-500",
     nrpc: "18%",
@@ -52,7 +52,7 @@ const last6MonthsPerf = [
     convTone: "text-emerald-600 dark:text-emerald-500",
   },
   {
-    month: "December 2025",
+    month: "February 2026",
     aht: "7:00",
     ahtTone: "text-emerald-600 dark:text-emerald-500",
     nrpc: "16%",
@@ -61,7 +61,7 @@ const last6MonthsPerf = [
     convTone: "text-yellow-600 dark:text-yellow-500",
   },
   {
-    month: "November 2025",
+    month: "January 2026",
     aht: "6:50",
     ahtTone: "text-emerald-600 dark:text-emerald-500",
     nrpc: "17%",
@@ -69,6 +69,17 @@ const last6MonthsPerf = [
     conv: "20%",
     convTone: "text-emerald-600 dark:text-emerald-500",
   },
+];
+
+const warningWeeks = [
+  { label: "Week 1", dates: "Apr 28-May 4" },
+  { label: "Week 2", dates: "May 5-11" },
+  { label: "Week 3", dates: "May 12-18" },
+  { label: "Week 4", dates: "May 19-25" },
+  { label: "Week 5", dates: "May 26-Jun 1" },
+  { label: "Week 6", dates: "Jun 2-8" },
+  { label: "Week 7", dates: "Jun 9-15" },
+  { label: "Week 8", dates: "Jun 16-22" },
 ];
 
 export default function CandidateDataView() {
@@ -101,29 +112,25 @@ export default function CandidateDataView() {
       <div className="space-y-8">
         {/* Section 1: AES Rating Table */}
         <SectionCard title="AES Rating (Last 6 Months)">
-          <div className="rounded-xl border border-border shadow-sm overflow-hidden bg-card">
-            <table className="w-full text-sm text-left">
+          <div className="rounded-xl border border-border shadow-sm overflow-hidden bg-card overflow-x-auto">
+            <table className="w-full text-sm text-left min-w-max">
               <thead className="bg-secondary/50 border-b border-border">
                 <tr className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
-                  <th className="px-6 py-4">Guide Name</th>
-                  <th className="px-6 py-4">OHR</th>
-                  <th className="px-6 py-4">Month</th>
-                  <th className="px-6 py-4">Rating</th>
+                  <th className="px-6 py-4">Months</th>
+                  {last6MonthsAES.map((row, i) => (
+                    <th key={i} className="px-6 py-4 text-center">{row.month}</th>
+                  ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {last6MonthsAES.map((row, i) => (
-                  <tr key={i} className="hover:bg-secondary/20 transition-colors">
-                    <td className="px-6 py-3.5 font-medium">{emp.name}</td>
-                    <td className="px-6 py-3.5 font-mono text-xs text-muted-foreground">
-                      {emp.ohrId}
-                    </td>
-                    <td className="px-6 py-3.5 font-medium">{row.month}</td>
-                    <td className="px-6 py-3.5">
+                <tr className="hover:bg-secondary/20 transition-colors">
+                  <td className="px-6 py-3.5 font-medium">Rating</td>
+                  {last6MonthsAES.map((row, i) => (
+                    <td key={i} className="px-6 py-3.5 text-center">
                       <StatusBadge variant={row.tone}>{row.rating}</StatusBadge>
                     </td>
-                  </tr>
-                ))}
+                  ))}
+                </tr>
               </tbody>
             </table>
           </div>
@@ -131,37 +138,41 @@ export default function CandidateDataView() {
 
         {/* Section 2: Auto Scheduler Performance Tracker */}
         <SectionCard title="Auto Scheduler Performance (Last 6 Months)">
-          <div className="rounded-xl border border-border shadow-sm overflow-hidden bg-card">
-            <table className="w-full text-sm text-left">
+          <div className="rounded-xl border border-border shadow-sm overflow-hidden bg-card overflow-x-auto">
+            <table className="w-full text-sm text-left min-w-max">
               <thead className="bg-secondary/50 border-b border-border">
                 <tr className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
-                  <th className="px-6 py-4">Guide Name</th>
-                  <th className="px-6 py-4">OHR</th>
-                  <th className="px-6 py-4">Month</th>
-                  <th className="px-6 py-4 text-center">AHT</th>
-                  <th className="px-6 py-4 text-center">NRPC</th>
-                  <th className="px-6 py-4 text-center">New Conv %</th>
+                  <th className="px-6 py-4">Metrics</th>
+                  {last6MonthsPerf.map((row, i) => (
+                    <th key={i} className="px-6 py-4 text-center">{row.month}</th>
+                  ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {last6MonthsPerf.map((row, i) => (
-                  <tr key={i} className="hover:bg-secondary/20 transition-colors">
-                    <td className="px-6 py-3.5 font-medium">{emp.name}</td>
-                    <td className="px-6 py-3.5 font-mono text-xs text-muted-foreground">
-                      {emp.ohrId}
-                    </td>
-                    <td className="px-6 py-3.5 font-medium">{row.month}</td>
-                    <td className={`px-6 py-3.5 text-center font-bold ${row.ahtTone}`}>
+                <tr className="hover:bg-secondary/20 transition-colors">
+                  <td className="px-6 py-3.5 font-medium">AHT</td>
+                  {last6MonthsPerf.map((row, i) => (
+                    <td key={i} className={`px-6 py-3.5 text-center font-bold ${row.ahtTone}`}>
                       {row.aht}
                     </td>
-                    <td className={`px-6 py-3.5 text-center font-bold ${row.nrpcTone}`}>
+                  ))}
+                </tr>
+                <tr className="hover:bg-secondary/20 transition-colors">
+                  <td className="px-6 py-3.5 font-medium">NRPC</td>
+                  {last6MonthsPerf.map((row, i) => (
+                    <td key={i} className={`px-6 py-3.5 text-center font-bold ${row.nrpcTone}`}>
                       {row.nrpc}
                     </td>
-                    <td className={`px-6 py-3.5 text-center font-bold ${row.convTone}`}>
+                  ))}
+                </tr>
+                <tr className="hover:bg-secondary/20 transition-colors">
+                  <td className="px-6 py-3.5 font-medium">New Conv %</td>
+                  {last6MonthsPerf.map((row, i) => (
+                    <td key={i} className={`px-6 py-3.5 text-center font-bold ${row.convTone}`}>
                       {row.conv}
                     </td>
-                  </tr>
-                ))}
+                  ))}
+                </tr>
               </tbody>
             </table>
           </div>
@@ -175,9 +186,10 @@ export default function CandidateDataView() {
                 <tr className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold whitespace-nowrap">
                   <th className="px-6 py-4">Guide Name</th>
                   <th className="px-6 py-4">OHR</th>
-                  {[...Array(8)].map((_, i) => (
+                  {warningWeeks.map((w, i) => (
                     <th key={i} className="px-4 py-4 text-center">
-                      Week {i + 1}
+                      <div>{w.label}</div>
+                      <div className="text-[9px] opacity-70 normal-case tracking-normal mt-0.5">{w.dates}</div>
                     </th>
                   ))}
                 </tr>
@@ -188,7 +200,7 @@ export default function CandidateDataView() {
                   <td className="px-6 py-3.5 font-mono text-xs text-muted-foreground whitespace-nowrap">
                     {emp.ohrId}
                   </td>
-                  {[...Array(8)].map((_, i) => {
+                  {warningWeeks.map((_, i) => {
                     const isIssued = i >= 5; // e.g., week 6, 7, 8
                     return (
                       <td key={i} className="px-4 py-3.5 text-center">

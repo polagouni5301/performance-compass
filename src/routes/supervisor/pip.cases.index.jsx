@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { PIPStatusBadge } from "@/components/shared/status-badges";
 import { pipCases } from "@/lib/mock-data";
 import { useState } from "react";
-import { FileText, Upload, X as CloseIcon } from "lucide-react";
+import { FileText, Upload, X as CloseIcon, Calendar } from "lucide-react";
 
 const filters = [
   "all",
+  "initiated",
   "active",
   "extended",
   "pending-approval",
@@ -18,6 +19,14 @@ const filters = [
 export default function PIPList() {
   const [filter, setFilter] = useState("all");
   const [q, setQ] = useState("");
+
+  const today = new Date();
+  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+  const [startDate, setStartDate] = useState(firstDayOfMonth.toISOString().slice(0, 10));
+  const [endDate, setEndDate] = useState(lastDayOfMonth.toISOString().slice(0, 10));
+
   const [casesData, setCasesData] = useState(() => {
     // Let's make sure the first case is missing acknowledgement email to test the button
     const data = [...pipCases];
@@ -36,7 +45,23 @@ export default function PIPList() {
   const [fileName, setFileName] = useState("");
 
   const list = casesData.filter((c) => {
-    if (filter !== "all" && c.status !== filter) return false;
+    if (filter !== "all") {
+      if (filter === "initiated") {
+        if (c.acknowledgmentEmail) return false;
+      } else if (filter === "active") {
+        if (!c.acknowledgmentEmail || c.status !== "active") return false;
+      } else {
+        if (c.status !== filter) return false;
+      }
+    }
+
+    if (startDate && c.startDate) {
+      if (c.startDate < startDate) return false;
+    }
+    if (endDate && c.startDate) {
+      if (c.startDate > endDate) return false;
+    }
+
     if (
       q &&
       !`${c.employee.name} ${c.employee.ohrId} ${c.id}`.toLowerCase().includes(q.toLowerCase())
@@ -75,7 +100,34 @@ export default function PIPList() {
 
   return (
     <div>
-      <PageHeader eyebrow="PIP Module" title="All PIP cases" />
+      <PageHeader
+        eyebrow="PIP Module"
+        title="All PIP cases"
+        actions={
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 rounded-lg border border-input bg-background px-3 h-9">
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+              <div className="flex items-center gap-1">
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="bg-transparent text-xs outline-none focus:ring-0 text-foreground dark:bg-zinc-900"
+                  title="Start Date"
+                />
+                <span className="text-muted-foreground text-xs">to</span>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="bg-transparent text-xs outline-none focus:ring-0 text-foreground dark:bg-zinc-900"
+                  title="End Date"
+                />
+              </div>
+            </div>
+          </div>
+        }
+      />
 
       <SectionCard
         title={`${list.length} case${list.length !== 1 ? "s" : ""}`}
@@ -187,7 +239,13 @@ export default function PIPList() {
                     <td className="py-3 pr-3 text-muted-foreground">{c.endDate}</td>
                     <td className="py-3 pr-3 text-foreground font-medium">{reviewPeriodText}</td>
                     <td className="py-3 pr-3">
-                      <PIPStatusBadge status={c.status} />
+                      {!c.acknowledgmentEmail ? (
+                        <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-medium border bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-900/30">
+                          Initiated
+                        </span>
+                      ) : (
+                        <PIPStatusBadge status={c.status} />
+                      )}
                     </td>
                     <td className="py-3 pr-3">{pendingActionEl}</td>
                     <td className="py-3 pr-3 text-right">

@@ -20,8 +20,7 @@ export default function CandidateReview() {
           <div className="text-sm">
             <div className="font-semibold">Trigger logic</div>
             <p className="text-muted-foreground">
-              (3 consecutive warnings in 3 weeks) OR (6 warnings in 8 weeks) <strong>AND</strong> (1
-              NI in last month OR 2 NI in last 6 months).
+             (3 consecutive warnings in 3 weeks) OR (6 warnings in 8 weeks AND 1 NI in last month) OR (2 NI in last 6 months)
             </p>
           </div>
         </div>

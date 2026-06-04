@@ -17,6 +17,7 @@ import {
   Calendar,
   CheckCircle2,
   XCircle,
+  Clock,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -38,8 +39,8 @@ export default function CAPDetail() {
     selectedAction: isInitiallyAccepted ? "accept" : isInitiallyDisputed ? "dispute" : isInitiallyException ? "exception" : null,
     isDiscussionClosed: isInitiallyAccepted,
     discussionComments: isInitiallyAccepted ? (c.discussionComments || "Discussed the breach details and corrective actions with the guide. Guide understands the expectations and compliance requirements.") : "",
-    discussionDate: isInitiallyAccepted ? (c.discussionDate || "2026-05-16") : "",
-    discussionClosedAt: isInitiallyAccepted ? (c.discussionClosedAt || "5/16/2026") : null,
+    discussionDate: isInitiallyAccepted ? (c.discussionDate || "2026-06-04") : "",
+    discussionClosedAt: isInitiallyAccepted ? (c.discussionClosedAt || "6/4/2026") : null,
     uploadedAckFile: "",
     isFlowCompleted: false,
 
@@ -66,9 +67,9 @@ export default function CAPDetail() {
   if (c.status === "closed") {
     pendingActionText = "No Pending actions (Completed)";
   } else if (c.status === "disputed") {
-    pendingActionText = "Awaiting response from QA/Compliance";
+    pendingActionText = `Awaiting response from ${c.raisedByTeam || "QA/Compliance"}`;
   } else if (c.status === "exception-pending") {
-    pendingActionText = "Awaiting Manager Approval";
+    pendingActionText = c.managerApproved ? `Awaiting response from ${c.raisedByTeam || "QA/Compliance"}` : "Awaiting Manager Approval";
   } else if (state.selectedAction === "accept" || c.status === "accepted") {
     if (!state.isDiscussionClosed) {
       pendingActionText = "Discussion Pending";
@@ -80,7 +81,7 @@ export default function CAPDetail() {
   } else if (state.selectedAction === "exception") {
     pendingActionText = "Awaiting Exception Submission";
   } else if (c.status === "logged") {
-    pendingActionText = "cap initiate-Initiated";
+    pendingActionText = "Waiting for Supervisor acceptance";
   }
 
   return (
@@ -159,7 +160,7 @@ export default function CAPDetail() {
                   month: "long",
                   year: "numeric",
                 })
-              : "April 2026"
+              : "June 2026"
           }
           hint="Audit reference month"
         />
@@ -185,7 +186,8 @@ export default function CAPDetail() {
                         month: "long",
                         year: "numeric",
                       })
-                    : "April 2026"}
+                : "June 2026"}
+                : "June 2026"}
                 </div>
               </div>
               <div>
@@ -222,27 +224,70 @@ export default function CAPDetail() {
                 {c.breachDescription || "No detailed description provided for this breach."}
               </p>
             </div>
+          </SectionCard>
 
-              {/* New Comment Field & Action Buttons */}
-              {!state.selectedAction && c.status === "logged" && (
-                <div className="mt-6 border-t border-border pt-4 space-y-4">
-                  {c.disputeRejected && (
-                    <div className="mb-4 rounded-xl bg-destructive/10 border border-destructive/20 p-4">
-                      <div className="flex items-center gap-2 text-sm font-bold text-destructive mb-1">
-                        <XCircle className="h-4 w-4" /> Previous Dispute Rejected
-                      </div>
-                      <div className="text-xs text-destructive/90"><strong>QA/Compliance Notes:</strong> {c.qaComment}</div>
+            {/* PREVIOUS REJECTED FLOWS */}
+            {c.disputeRejected && c.status === "logged" && !state.selectedAction && (
+              <div className="space-y-6 border-l-2 border-destructive pl-4 mt-6">
+                <h4 className="text-sm font-bold text-destructive">Previous Dispute Rejected</h4>
+                <SectionCard title="Dispute Raised Details">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-muted-foreground uppercase">Dispute Comments / Justification</label>
+                    <div className="w-full rounded-xl border border-border bg-secondary/30 p-4 text-sm font-medium leading-relaxed text-foreground">
+                      {c.supervisorComment || "Valid context provided."}
                     </div>
-                  )}
-                  {c.exceptionRejected && (
-                    <div className="mb-4 rounded-xl bg-destructive/10 border border-destructive/20 p-4">
-                      <div className="flex items-center gap-2 text-sm font-bold text-destructive mb-1">
-                        <XCircle className="h-4 w-4" /> Previous Exception Request Rejected
-                      </div>
-                      <div className="text-xs text-destructive/90"><strong>Manager Notes:</strong> {c.managerComment}</div>
-                    </div>
-                  )}
+                  </div>
+                  <div className="space-y-1.5 mt-4">
+                    <label className="text-xs font-bold text-muted-foreground uppercase">Evidence Documents</label>
+                    <ul className="text-sm font-medium text-foreground bg-secondary/30 p-3 rounded-xl border border-border">
+                      {(c.documents && c.documents.length > 0 ? c.documents : ["evidence.pdf"]).map((doc, idx) => (
+                        <li key={idx}>📎 {doc}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </SectionCard>
+                <SectionCard title="QA/Compliance Review">
+                  <div>
+                    <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Review Outcome</div>
+                    <div className="mt-1 text-sm font-semibold text-destructive flex items-center gap-1.5"><XCircle className="h-4 w-4" /> {c.qaComment || "Dispute rejected."}</div>
+                  </div>
+                </SectionCard>
+              </div>
+            )}
 
+            {c.exceptionRejected && c.status === "logged" && !state.selectedAction && (
+              <div className="space-y-6 border-l-2 border-destructive pl-4 mt-6">
+                <h4 className="text-sm font-bold text-destructive">Previous Exception Rejected</h4>
+                <SectionCard title="Exception Requested Details">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-muted-foreground uppercase">Exception Comment / Justification</label>
+                    <div className="w-full rounded-xl border border-border bg-secondary/30 p-4 text-sm font-medium leading-relaxed text-foreground">
+                      {c.supervisorComment || "Valid context provided."}
+                    </div>
+                  </div>
+                  <div className="space-y-1.5 mt-4">
+                    <label className="text-xs font-bold text-muted-foreground uppercase">Evidence Documents</label>
+                    <ul className="text-sm font-medium text-foreground bg-secondary/30 p-3 rounded-xl border border-border">
+                      {(c.documents && c.documents.length > 0 ? c.documents : ["evidence.pdf"]).map((doc, idx) => (
+                        <li key={idx}>📎 {doc}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </SectionCard>
+                <SectionCard title="Manager Review">
+                  <div>
+                    <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Review Outcome</div>
+                    <div className="mt-1 text-sm font-semibold text-destructive flex items-center gap-1.5"><XCircle className="h-4 w-4" /> {c.managerComment || "Exception rejected."}</div>
+                  </div>
+                </SectionCard>
+              </div>
+            )}
+
+            {/* NEW ACTION REQUIRED CARD */}
+            {!state.selectedAction && c.status === "logged" && (
+              <div className="mt-6">
+                <SectionCard title="Pending Action Required">
+                  <div className="space-y-4">
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                       Supervisor Feedback Comment / Review Notes
@@ -281,8 +326,9 @@ export default function CAPDetail() {
                     )}
                   </div>
                 </div>
-              )}
-          </SectionCard>
+                </SectionCard>
+              </div>
+            )}
 
             {/* FLOW 1: ACCEPTED ACTIONS FLOW */}
             {(state.selectedAction === "accept" || (!state.selectedAction && c.status === "accepted")) && c.status !== "closed" && (
@@ -316,7 +362,7 @@ export default function CAPDetail() {
 
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold text-muted-foreground uppercase">
-                        Discussion Notes / Comment Box
+                        Enter the breach details and comments to be printed on cap/warning letter
                       </label>
                     {state.isDiscussionClosed ? (
                       <div className="w-full rounded-xl border border-emerald-500/20 bg-emerald-50/50 dark:bg-emerald-950/20 p-4 text-sm text-emerald-950 dark:text-emerald-100 font-medium leading-relaxed">
@@ -342,7 +388,7 @@ export default function CAPDetail() {
                         </span>
                       {state.isDiscussionClosed ? (
                         <div className="w-full rounded-xl border border-border bg-secondary/50 p-2.5 text-sm font-medium text-foreground">
-                          {state.discussionDate || (state.discussionClosedAt ? new Date(state.discussionClosedAt).toISOString().slice(0, 10) : "2026-05-16")}
+                      {state.discussionDate || (state.discussionClosedAt ? new Date(state.discussionClosedAt).toISOString().slice(0, 10) : "2026-06-04")}
                         </div>
                       ) : (
                         <input
@@ -562,8 +608,12 @@ export default function CAPDetail() {
                 {(state.isDisputeSubmitted || c.status === "disputed") && (
                   <SectionCard title="Dispute Status">
                     <div className="bg-warning/10 border border-warning/20 p-4 rounded-xl">
-                      <div className="text-warning font-bold text-sm mb-2">Awaiting QA/Compliance Review</div>
-                      <p className="text-xs text-muted-foreground">Your dispute has been submitted and is pending review by the QA/Compliance team. You will be notified once a decision is made.</p>
+                      <div className="text-warning font-bold text-sm mb-2">Awaiting {c.raisedByTeam || "QA/Compliance"} Review</div>
+                      <p className="text-xs text-muted-foreground mb-3">Your dispute has been submitted and is pending review by the {c.raisedByTeam || "QA/Compliance"} team. You will be notified once a decision is made.</p>
+                      <div className="rounded-lg bg-background/50 p-3 border border-warning/20 text-xs text-foreground">
+                        <span className="font-bold block mb-1">Your Dispute Comments:</span>
+                        {state.disputeComments || c.supervisorComment}
+                      </div>
                     </div>
                   </SectionCard>
                 )}
@@ -678,10 +728,33 @@ export default function CAPDetail() {
 
                 {(state.isExceptionSubmitted || c.status === "exception-pending") && (
                   <SectionCard title="Exception Status">
-                    <div className="bg-info/10 border border-info/20 p-4 rounded-xl">
-                      <div className="text-info font-bold text-sm mb-2">Awaiting Manager Approval</div>
-                      <p className="text-xs text-muted-foreground">Your exception request has been submitted and is pending review by the Manager. You will be notified once a decision is made.</p>
+                    {c.managerApproved ? (
+                      <div className="bg-warning/10 border border-warning/20 p-4 rounded-xl">
+                        <div className="text-warning font-bold text-sm mb-2">Awaiting {c.raisedByTeam || "QA/Compliance"} Review</div>
+                        <p className="text-xs text-muted-foreground mb-3">The Manager has approved your exception request. It is now pending final review by the {c.raisedByTeam || "QA/Compliance"} team.</p>
+                        <div className="rounded-lg bg-background/50 p-3 border border-warning/20 text-xs text-foreground mb-3">
+                          <span className="font-bold block mb-1">Manager Review:</span>
+                          <span className="flex items-center gap-1.5 text-success font-semibold"><CheckCircle2 className="h-4 w-4" /> {c.managerComment || "Approved"}</span>
+                        </div>
+                    <div className="rounded-lg bg-background/50 p-3 border border-warning/20 text-xs text-foreground mb-3">
+                      <span className="font-bold block mb-1">{c.raisedByTeam || "QA/Compliance"} Review:</span>
+                      <span className="flex items-center gap-1.5 text-warning font-semibold"><Clock className="h-4 w-4" /> Pending Approval</span>
                     </div>
+                        <div className="rounded-lg bg-background/50 p-3 border border-warning/20 text-xs text-foreground">
+                          <span className="font-bold block mb-1">Your Exception Justification:</span>
+                          {state.exceptionComments || c.supervisorComment}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="bg-info/10 border border-info/20 p-4 rounded-xl">
+                        <div className="text-info font-bold text-sm mb-2">Awaiting Manager Approval</div>
+                        <p className="text-xs text-muted-foreground mb-3">Your exception request has been submitted and is pending review by the Manager. You will be notified once a decision is made.</p>
+                        <div className="rounded-lg bg-background/50 p-3 border border-info/20 text-xs text-foreground">
+                          <span className="font-bold block mb-1">Your Exception Justification:</span>
+                          {state.exceptionComments || c.supervisorComment}
+                        </div>
+                      </div>
+                    )}
                   </SectionCard>
                 )}
               </div>
@@ -709,6 +782,14 @@ export default function CAPDetail() {
                           {state.exceptionComments || c.supervisorComment || "Internet outage verification."}
                         </div>
                       </div>
+                      <div className="space-y-1.5 mt-4">
+                        <label className="text-xs font-bold text-muted-foreground uppercase">Evidence Documents</label>
+                        <ul className="text-sm font-medium text-foreground bg-secondary/30 p-3 rounded-xl border border-border">
+                          {(c.documents && c.documents.length > 0 ? c.documents : ["internet_outage_ticket.pdf"]).map((doc, idx) => (
+                            <li key={idx}>📎 {doc}</li>
+                          ))}
+                        </ul>
+                      </div>
                     </SectionCard>
                     <SectionCard title="Exception Approvals">
                       <div className="grid gap-4 md:grid-cols-2">
@@ -727,6 +808,10 @@ export default function CAPDetail() {
                         <div className="md:col-span-2">
                           <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Justification</div>
                           <div className="mt-1 text-sm font-medium text-foreground">{state.exceptionComments || c.supervisorComment || "Internet outage verification."}</div>
+                        </div>
+                        <div className="md:col-span-2">
+                          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Evidence</div>
+                          <div className="mt-1 text-sm font-medium text-foreground">{(c.documents && c.documents.length > 0 ? c.documents : ["internet_outage_ticket.pdf"]).join(", ")}</div>
                         </div>
                         <div>
                           <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Manager Review</div>
@@ -794,7 +879,7 @@ export default function CAPDetail() {
                               <Calendar className="h-4 w-4" /> Discussion Closed Date
                             </span>
                             <div className="w-full rounded-xl border border-border bg-secondary/50 p-2.5 text-sm font-medium text-foreground">
-                              {state.discussionDate || c.discussionDate || "2026-05-04"}
+                          {state.discussionDate || c.discussionDate || "2026-06-04"}
                             </div>
                           </label>
                         </div>
@@ -844,7 +929,7 @@ export default function CAPDetail() {
                     <span className="absolute -left-[23px] top-1.5 h-2.5 w-2.5 rounded-full bg-emerald-500" />
                     <div className="flex flex-col">
                       <div className="text-sm font-semibold text-foreground">
-                        Discussion Closed with Guide
+                        {c.level === "Warning" ? "Warning Letter Accepted & Closed" : "Discussion Closed with Guide"}
                       </div>
                       <div className="text-xs text-muted-foreground">
                         {state.discussionClosedAt} · <span className="font-medium text-foreground">Supervisor Priya Shah</span>

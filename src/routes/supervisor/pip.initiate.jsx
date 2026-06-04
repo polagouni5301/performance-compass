@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { PageHeader, SectionCard } from "@/components/shared/page-primitives";
 import { Button } from "@/components/ui/button";
-import { FileText, Lock, Plus, Trash2, User } from "lucide-react";
+import { Lock, Plus, Trash2, User } from "lucide-react";
 import { useState } from "react";
 import { employees } from "@/lib/mock-data";
 
@@ -10,12 +10,14 @@ const AVAILABLE_KPIS = ["QA score", "AHT", "New Conv%", "NRPC", "NAOS", "NPS"];
 export default function Initiate() {
   const [selectedOhrId, setSelectedOhrId] = useState("OHR-204871");
   const [targets, setTargets] = useState([
-    { kpiName: "QA score", target: "≥ 92%" },
-    { kpiName: "AHT", target: "≤ 6:30" },
-    { kpiName: "NRPC", target: "≤ 10%" },
+    { kpiName: "QA score", target: "≥ 92%", actual: "88%" },
+    { kpiName: "AHT", target: "≤ 6:30", actual: "7:15" },
+    { kpiName: "NRPC", target: "≤ 10%", actual: "14%" },
   ]);
   const [selectedKpi, setSelectedKpi] = useState("QA score");
+  const [customKpiName, setCustomKpiName] = useState("");
   const [targetValue, setTargetValue] = useState("");
+  const [actualValue, setActualValue] = useState("");
 
   const selectedAgent = employees.find((e) => e.ohrId === selectedOhrId) || employees[0];
 
@@ -24,7 +26,7 @@ export default function Initiate() {
       <PageHeader
         eyebrow="Supervisor · PIP"
         title="PIP initiation & target setup"
-        description="Set duration (locked at 60 days), define KPI-linked targets, and complete setup."
+        description="Set duration (locked at 60 days), define KPI-linked targets, and Initiate the Improvement plan."
       />
 
       <div className="space-y-6">
@@ -82,6 +84,7 @@ export default function Initiate() {
                 <tr className="border-b border-border text-left text-[11px] uppercase tracking-wider text-muted-foreground bg-secondary/50">
                   <th className="py-2.5 px-4">KPI Name</th>
                   <th className="py-2.5 px-4">Target</th>
+                  <th className="py-2.5 px-4">Actual Number</th>
                   <th className="py-2.5 px-4 text-right">Action</th>
                 </tr>
               </thead>
@@ -89,7 +92,7 @@ export default function Initiate() {
                 {targets.length === 0 ? (
                   <tr>
                     <td
-                      colSpan={3}
+                      colSpan={4}
                       className="py-6 text-center text-muted-foreground text-xs italic"
                     >
                       No targets added yet. Use the form below to add targets.
@@ -100,6 +103,7 @@ export default function Initiate() {
                     <tr key={i} className="hover:bg-secondary/40 transition-colors">
                       <td className="py-3 px-4 font-semibold text-foreground">{t.kpiName}</td>
                       <td className="py-3 px-4 text-muted-foreground">{t.target}</td>
+                      <td className="py-3 px-4 text-muted-foreground">{t.actual}</td>
                       <td className="py-3 px-4 text-right">
                         <Button
                           size="sm"
@@ -117,8 +121,8 @@ export default function Initiate() {
             </table>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 items-end">
-            <label className="flex-1 w-full block">
+          <div className="flex flex-col sm:flex-row gap-3 items-end flex-wrap">
+            <label className="flex-1 min-w-[140px] block">
               <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                 KPI Name
               </span>
@@ -132,10 +136,25 @@ export default function Initiate() {
                     {kpi}
                   </option>
                 ))}
+                <option value="Others">Others</option>
               </select>
             </label>
 
-            <label className="flex-1 w-full block">
+            {selectedKpi === "Others" && (
+              <label className="flex-1 min-w-[140px] block">
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Custom KPI
+                </span>
+                <input
+                  value={customKpiName}
+                  onChange={(e) => setCustomKpiName(e.target.value)}
+                  placeholder="Enter KPI name"
+                  className="mt-1.5 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm focus:border-ring focus:outline-none text-foreground dark:bg-zinc-900"
+                />
+              </label>
+            )}
+
+            <label className="flex-1 min-w-[120px] block">
               <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                 Target Value
               </span>
@@ -147,12 +166,35 @@ export default function Initiate() {
               />
             </label>
 
+            <label className="flex-1 min-w-[120px] block">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                Actual Number
+              </span>
+              <input
+                value={actualValue}
+                onChange={(e) => setActualValue(e.target.value)}
+                placeholder="e.g. 88%"
+                className="mt-1.5 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm focus:border-ring focus:outline-none text-foreground dark:bg-zinc-900"
+              />
+            </label>
+
             <Button
               type="button"
               onClick={() => {
-                if (targetValue.trim()) {
-                  setTargets([...targets, { kpiName: selectedKpi, target: targetValue.trim() }]);
+                const kpi = selectedKpi === "Others" ? customKpiName.trim() : selectedKpi;
+                if (kpi && targetValue.trim() && actualValue.trim()) {
+                  setTargets([
+                    ...targets,
+                    { kpiName: kpi, target: targetValue.trim(), actual: actualValue.trim() },
+                  ]);
                   setTargetValue("");
+                  setActualValue("");
+                  setCustomKpiName("");
+                  if (selectedKpi === "Others") {
+                    setSelectedKpi(AVAILABLE_KPIS[0]);
+                  }
+                } else {
+                  alert("Please fill in all KPI fields.");
                 }
               }}
               className="w-full sm:w-auto h-[38px] rounded-xl px-4"
@@ -170,29 +212,9 @@ export default function Initiate() {
           />
         </SectionCard>
 
-        <SectionCard title="On submit">
-          <ul className="space-y-3 text-sm text-muted-foreground mb-6">
-            <li className="flex items-start gap-2.5">
-              <FileText className="mt-0.5 h-4.5 w-4.5 text-primary flex-shrink-0" />
-              <span>
-                PIP Word document generated ({selectedAgent ? selectedAgent.type : "regular"}{" "}
-                template)
-              </span>
-            </li>
-            <li className="flex items-start gap-2.5">
-              <FileText className="mt-0.5 h-4.5 w-4.5 text-primary flex-shrink-0" />
-              <span>4 reviews scheduled at 15-day intervals</span>
-            </li>
-            <li className="flex items-start gap-2.5">
-              <FileText className="mt-0.5 h-4.5 w-4.5 text-primary flex-shrink-0" />
-              <span>Email sent to agent (CC manager); .eml acknowledgement captured</span>
-            </li>
-          </ul>
-
-          <Button size="lg" className="w-full" asChild>
-            <Link to="/supervisor/pip/document">Submit targets & generate document</Link>
-          </Button>
-        </SectionCard>
+        <Button size="lg" className="w-full" asChild>
+          <Link to="/supervisor/pip/document">Submit targets & generate document</Link>
+        </Button>
       </div>
     </div>
   );

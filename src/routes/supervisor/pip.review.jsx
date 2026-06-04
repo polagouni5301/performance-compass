@@ -557,7 +557,7 @@ export default function ReviewCycle() {
                     >
                       <div className="flex items-center justify-center gap-2.5">
                         <CheckCircle2 className="h-5 w-5" />
-                        <span>Close PIP — Success</span>
+                        <span>Closed — Successfully</span>
                         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                       </div>
                       <div className="text-[11px] font-medium opacity-80 mt-1">
@@ -589,6 +589,17 @@ export default function ReviewCycle() {
                           </div>
                         </div>
                       </div>
+                    </div>
+
+                    <div className="space-y-1.5 mt-2 mb-4">
+                      <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">
+                        Submit your comments to the manager
+                      </label>
+                      <textarea
+                        rows={3}
+                        placeholder="Explain why targets were not met and provide your recommendation..."
+                        className="w-full rounded-xl border border-input bg-background p-3 text-sm focus:border-ring focus:outline-none text-foreground dark:bg-zinc-900"
+                      />
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-3">
