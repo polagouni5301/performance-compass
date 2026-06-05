@@ -295,7 +295,6 @@ export const pipCases = [
 ];
 
 export const capCases = [
-  // Existing CAP cases, updated to 2026
   {
     id: "CAP-2025-0481",
     employee: employees[0],
@@ -314,13 +313,8 @@ export const capCases = [
       { date: "2026-06-22", event: "CAP logged (pending)", actor: "Nikhil Anand (QA)" },
       { date: "2026-06-22", event: "Email sent to supervisor; CC managers + you", actor: "System" },
       { date: "2026-06-23", event: "Supervisor accepted", actor: "Priya Shah (Supervisor)" },
-      { date: "2026-06-24", event: "Discussion scheduled with guide", actor: "Priya Shah (Supervisor)" },
-      { date: "2026-06-24", event: "Discussion closed", actor: "Priya Shah (Supervisor)" },
-      { date: "2026-06-24", event: "CAP letter generated & issued", actor: "System" },
-      { date: "2026-06-25", event: "Agent acknowledged letter", actor: "Aarav Mehta (Agent)" },
-      { date: "2026-06-26", event: "CAP status moved to active", actor: "System" },
+      { date: "2026-06-24", event: "Discussion closed with Guide", actor: "Priya Shah (Supervisor)" },
     ],
-    acknowledgedAt: "2026-06-25",
   },
   {
     id: "CAP-2025-0492",
@@ -339,8 +333,7 @@ export const capCases = [
     history: [
       { date: "2026-06-27", event: "CAP logged (pending)", actor: "Sara Iqbal (Compliance)" },
       { date: "2026-06-27", event: "Email sent to supervisor; CC managers + you", actor: "System" },
-      { date: "2026-06-28", event: "Supervisor disputed (1/2)", actor: "David Cole (Supervisor)" },
-      { date: "2026-06-29", event: "Offline discussion logged", actor: "Sara Iqbal (Compliance)" },
+      { date: "2026-06-28", event: "Dispute Raised by Supervisor", actor: "David Cole (Supervisor)" },
     ],
   },
   {
@@ -361,9 +354,8 @@ export const capCases = [
       { date: "2026-06-15", event: "CAP logged (pending)", actor: "Sara Iqbal (Compliance)" },
       { date: "2026-06-15", event: "Email sent to supervisor; CC managers + you", actor: "System" },
       { date: "2026-06-16", event: "Supervisor accepted", actor: "Marcia Lin (Supervisor)" },
-      { date: "2026-06-17", event: "Discussion scheduled", actor: "Marcia Lin (Supervisor)" },
-      { date: "2026-06-18", event: "Discussion closed", actor: "Marcia Lin (Supervisor)" },
-      { date: "2026-06-18", event: "Escalated to HR", actor: "System" },
+      { date: "2026-06-17", event: "Discussion closed with Guide", actor: "Marcia Lin (Supervisor)" },
+      { date: "2026-06-18", event: "Escalated to HR (CAP 3)", actor: "System" },
     ],
     acknowledgedAt: "2026-06-17",
   },
@@ -385,8 +377,7 @@ export const capCases = [
     history: [
       { date: "2026-06-01", event: "CAP logged (pending)", actor: "Nikhil Anand (QA)" },
       { date: "2026-06-01", event: "Email sent to supervisor; CC managers + you", actor: "System" },
-      { date: "2026-06-02", event: "Supervisor raised exception", actor: "Marcia Lin (Supervisor)" },
-      { date: "2026-06-02", event: "Supporting docs uploaded (2)", actor: "Marcia Lin (Supervisor)" },
+      { date: "2026-06-02", event: "Exception Raised by Supervisor", actor: "Marcia Lin (Supervisor)" },
     ],
   },
   {
@@ -407,19 +398,16 @@ export const capCases = [
       { date: "2026-06-08", event: "CAP logged (pending)", actor: "Sara Iqbal (Compliance)" },
       { date: "2026-06-08", event: "Email sent to supervisor; CC managers + you", actor: "System" },
       { date: "2026-06-10", event: "Supervisor accepted", actor: "David Cole (Supervisor)" },
-      { date: "2026-06-11", event: "Discussion scheduled", actor: "David Cole (Supervisor)" },
-      { date: "2026-06-14", event: "Discussion closed", actor: "David Cole (Supervisor)" },
+      { date: "2026-06-14", event: "Discussion closed with Guide", actor: "David Cole (Supervisor)" },
       { date: "2026-06-14", event: "CAP letter generated & issued", actor: "System" },
       { date: "2026-06-16", event: "Agent acknowledged letter", actor: "Marcus Bennett (Agent)" },
-      { date: "2026-06-16", event: "CAP status moved to active", actor: "System" },
       { date: "2026-06-18", event: "Case closed", actor: "System" },
     ],
     acknowledgedAt: "2026-06-16",
   },
-  // Dummy Warning Letters (from cases.index.jsx and cap/index.jsx)
   {
     id: "WL-2026-010",
-    employee: employees[0], // Aarav Mehta
+    employee: employees[0],
     breachType: "LOW-Legal/Procedural - Product Cancelation Disclosure",
     breachDescription: "Agent failed to read the full product cancelation disclaimer before processing the request.",
     raisedByTeam: "Compliance",
@@ -434,15 +422,16 @@ export const capCases = [
       { date: "2026-06-10", event: "Warning letter logged (pending)", actor: "Compliance Team" },
       { date: "2026-06-10", event: "Email sent to supervisor; CC managers + you", actor: "System" },
       { date: "2026-06-12", event: "Supervisor accepted", actor: "Priya Shah (Supervisor)" },
-      { date: "2026-06-14", event: "Discussion scheduled", actor: "Priya Shah (Supervisor)" },
-      { date: "2026-06-15", event: "Discussion closed", actor: "Priya Shah (Supervisor)" },
-      { date: "2026-06-15", event: "Warning letter generated & status closed", actor: "System" },
+      { date: "2026-06-15", event: "Discussion closed with Guide", actor: "Priya Shah (Supervisor)" },
+      { date: "2026-06-15", event: "Warning letter generated & issued", actor: "System" },
       { date: "2026-06-16", event: "Agent acknowledged", actor: "Aarav Mehta (Agent)" },
+      { date: "2026-06-16", event: "Case closed", actor: "System" },
     ],
+    acknowledgedAt: "2026-06-16",
   },
   {
     id: "WL-2026-012",
-    employee: employees[7], // Marcus Wright
+    employee: employees[7],
     breachType: "Quality — Call Disclosure",
     breachDescription: "Failed to inform the customer that the call is being recorded upon transfer.",
     raisedByTeam: "Compliance",
@@ -453,11 +442,16 @@ export const capCases = [
     status: "accepted",
     disputeAttempts: 0,
     exceptionRequested: false,
-    history: [{ date: "2026-06-15", event: "Warning Letter issued", actor: "QA Team" }],
+    history: [
+      { date: "2026-06-15", event: "Warning letter logged (pending)", actor: "Compliance Team" },
+      { date: "2026-06-15", event: "Email sent to supervisor; CC managers + you", actor: "System" },
+      { date: "2026-06-16", event: "Supervisor accepted", actor: "David Cole (Supervisor)" },
+      { date: "2026-06-17", event: "Discussion closed with Guide", actor: "David Cole (Supervisor)" },
+    ],
   },
   {
     id: "WL-2026-015",
-    employee: employees[8], // Grace Harper
+    employee: employees[8],
     breachType: "Misc Fee Usage",
     breachDescription: "Incorrectly applied miscellaneous fee during account setup.",
     raisedByTeam: "QA",
@@ -468,12 +462,14 @@ export const capCases = [
     status: "logged",
     disputeAttempts: 0,
     exceptionRequested: false,
-    history: [{ date: "2026-06-20", event: "Warning Letter issued", actor: "Compliance Team" }],
+    history: [
+      { date: "2026-06-20", event: "Warning letter logged (pending)", actor: "Compliance Team" },
+      { date: "2026-06-20", event: "Email sent to supervisor; CC managers + you", actor: "System" },
+    ],
   },
-  // Specific CAPs/WL for OHR-204871 (Aarav Mehta) from new.jsx
   {
     id: "CAP-2026-01",
-    employee: employees[0], // Aarav Mehta
+    employee: employees[0],
     breachType: "HIGH-Legal/Procedural - Standard MGR codes not used",
     breachDescription: "Agent bypassed standard manager approval codes for a high-value transaction.",
     level: "CAP 1",
@@ -492,7 +488,6 @@ export const capCases = [
       { date: "2026-06-01", event: "CAP logged (pending)", actor: "Compliance Team" },
       { date: "2026-06-01", event: "Email sent to supervisor; CC managers + you", actor: "System" },
       { date: "2026-06-02", event: "Supervisor accepted", actor: "Priya Shah (Supervisor)" },
-      { date: "2026-06-03", event: "Discussion scheduled", actor: "Priya Shah (Supervisor)" },
       { date: "2026-06-03", event: "Discussion closed with Guide", actor: "Priya Shah (Supervisor)" },
       { date: "2026-06-03", event: "CAP letter generated & issued", actor: "System" },
       { date: "2026-06-04", event: "Agent acknowledged letter", actor: "Aarav Mehta (Agent)" },
@@ -502,7 +497,7 @@ export const capCases = [
   },
   {
     id: "CAP-2026-03",
-    employee: employees[0], // Aarav Mehta
+    employee: employees[0],
     breachType: "Compliance — Call Disconnections",
     breachDescription: "Disconnected the call before customer query was fully resolved.",
     level: "CAP 2",
@@ -512,11 +507,16 @@ export const capCases = [
     validUntil: "2026-09-13",
     disputeAttempts: 0,
     exceptionRequested: false,
-    history: [{ date: "2026-06-15", event: "CAP logged", actor: "System" }],
+    history: [
+      { date: "2026-06-15", event: "CAP logged (pending)", actor: "System" },
+      { date: "2026-06-15", event: "Email sent to supervisor; CC managers + you", actor: "System" },
+      { date: "2026-06-16", event: "Supervisor accepted", actor: "Priya Shah (Supervisor)" },
+      { date: "2026-06-17", event: "Discussion closed with Guide", actor: "Priya Shah (Supervisor)" },
+    ],
   },
   {
     id: "CAP-2026-11",
-    employee: employees[0], // Aarav Mehta
+    employee: employees[0],
     breachType: "Compliance — RONA",
     breachDescription: "Agent went into RONA status for 15 minutes during peak call volume.",
     level: "CAP 1",
@@ -526,12 +526,20 @@ export const capCases = [
     validUntil: "2026-09-20",
     disputeAttempts: 0,
     exceptionRequested: false,
-    history: [{ date: "2026-06-22", event: "CAP logged", actor: "System" }],
+    history: [
+      { date: "2026-06-22", event: "CAP logged (pending)", actor: "System" },
+      { date: "2026-06-22", event: "Email sent to supervisor; CC managers + you", actor: "System" },
+      { date: "2026-06-23", event: "Supervisor accepted", actor: "Priya Shah (Supervisor)" },
+      { date: "2026-06-24", event: "Discussion closed with Guide", actor: "Priya Shah (Supervisor)" },
+      { date: "2026-06-25", event: "Agent acknowledged letter", actor: "Aarav Mehta (Agent)" },
+      { date: "2026-06-26", event: "Case closed", actor: "System" },
+    ],
+    acknowledgedAt: "2026-06-25",
   },
   {
     id: "WL-2026-088",
-    employee: employees[0], // Aarav Mehta
-    breachType: "HIGH-Legal/Procedural - Refund not applicable however processed", // This is a QA breach type
+    employee: employees[0],
+    breachType: "HIGH-Legal/Procedural - Refund not applicable however processed",
     breachDescription: "Processed a refund for a non-refundable digital service.",
     level: "Warning",
     status: "accepted",
@@ -540,12 +548,16 @@ export const capCases = [
     validUntil: "2026-09-03",
     disputeAttempts: 0,
     exceptionRequested: false,
-    history: [{ date: "2026-06-05", event: "Warning Letter issued", actor: "System" }],
+    history: [
+      { date: "2026-06-05", event: "Warning letter logged (pending)", actor: "System" },
+      { date: "2026-06-05", event: "Email sent to supervisor; CC managers + you", actor: "System" },
+      { date: "2026-06-06", event: "Supervisor accepted", actor: "Priya Shah (Supervisor)" },
+      { date: "2026-06-07", event: "Discussion closed with Guide", actor: "Priya Shah (Supervisor)" },
+    ],
   },
-  // Dummy cases from disputes.jsx
   {
     id: "CAP-2026-005",
-    employee: employees[0], // Sarah Connor (Aarav Mehta)
+    employee: employees[0],
     breachType: "Compliance — Zero Cart",
     raisedBy: "John Smith",
     raisedByTeam: "QA",
@@ -557,11 +569,15 @@ export const capCases = [
     disputeAttempts: 1,
     documents: ["workload_report.pdf", "system_health_check.png"],
     supervisorComment: "Agent was managing double the usual volume during this hour. CRM performance was also degraded.",
-    history: [{ date: "2026-06-01", event: "CAP logged", actor: "John Smith" }],
+    history: [
+      { date: "2026-06-01", event: "CAP logged (pending)", actor: "John Smith (QA)" },
+      { date: "2026-06-01", event: "Email sent to supervisor; CC managers + you", actor: "System" },
+      { date: "2026-06-02", event: "Dispute Raised by Supervisor", actor: "Priya Shah (Supervisor)" },
+    ],
   },
   {
     id: "CAP-2026-009",
-    employee: employees[3], // Kyle Reese (Liana Cortez)
+    employee: employees[3],
     breachType: "Compliance — Long Holds",
     raisedBy: "John Smith",
     raisedByTeam: "Compliance",
@@ -573,11 +589,15 @@ export const capCases = [
     exceptionApprover: "QA Manager",
     documents: ["internet_outage_ticket.pdf"],
     supervisorComment: "Regional outage reported. Documented by IT department and SDL was informed.",
-    history: [{ date: "2026-06-01", event: "CAP logged", actor: "John Smith" }],
+    history: [
+      { date: "2026-06-10", event: "CAP logged (pending)", actor: "John Smith (Compliance)" },
+      { date: "2026-06-10", event: "Email sent to supervisor; CC managers + you", actor: "System" },
+      { date: "2026-06-11", event: "Exception Raised by Supervisor", actor: "David Cole (Supervisor)" },
+    ],
   },
   {
     id: "CAP-2026-021",
-    employee: employees[9], // Dani Ramos
+    employee: employees[9],
     breachType: "Compliance — Call Disconnections",
     raisedBy: "Sarah Miller",
     raisedByTeam: "QA",
@@ -589,17 +609,20 @@ export const capCases = [
     disputeAttempts: 1,
     documents: ["crm_error_screenshots.zip"],
     supervisorComment: "CRM force-closed due to API errors at the customer end.",
-    history: [{ date: "2026-06-01", event: "CAP logged", actor: "Sarah Miller" }],
+    history: [
+      { date: "2026-06-12", event: "CAP logged (pending)", actor: "Sarah Miller (QA)" },
+      { date: "2026-06-12", event: "Email sent to supervisor; CC managers + you", actor: "System" },
+      { date: "2026-06-13", event: "Dispute Raised by Supervisor", actor: "Marcia Lin (Supervisor)" },
+    ],
   },
-  // New Simulation Cases for Rejection/Approval Flows
   {
     id: "CAP-2026-101",
-    employee: employees[1], // Sneha
+    employee: employees[1],
     breachType: "Quality — Call Disclosure",
     breachDescription: "Agent failed to provide the mandatory call recording disclosure at the start of the interaction.",
     raisedByTeam: "QA",
     level: "CAP 1",
-    status: "logged", // Reverted to logged
+    status: "accepted",
     disputeRejected: true,
     qaComment: "Dispute rejected. Agent clearly failed to disclose recording on the call. Please proceed with CAP.",
     raisedAt: "2026-06-18",
@@ -610,19 +633,22 @@ export const capCases = [
     supervisorComment: "Agent mentioned the disclosure later in the call during the verification phase.",
     documents: ["call_transcript_snippet.pdf"],
     history: [
-      { date: "2026-06-18", event: "CAP logged", actor: "QA Team" },
-      { date: "2026-06-19", event: "Dispute Raised by Supervisor", actor: "Priya Shah" },
+      { date: "2026-06-18", event: "CAP logged (pending)", actor: "QA Team" },
+      { date: "2026-06-18", event: "Email sent to supervisor; CC managers + you", actor: "System" },
+      { date: "2026-06-19", event: "Dispute Raised by Supervisor", actor: "Priya Shah (Supervisor)" },
       { date: "2026-06-20", event: "Dispute Rejected by QA", actor: "QA Team" },
+      { date: "2026-06-21", event: "Supervisor accepted (Post-Rejection)", actor: "Priya Shah (Supervisor)" },
+      { date: "2026-06-22", event: "Discussion closed with Guide", actor: "Priya Shah (Supervisor)" },
     ],
   },
   {
     id: "CAP-2026-102",
-    employee: employees[4], // Devansh
+    employee: employees[4],
     breachType: "Compliance — RONA",
     breachDescription: "Agent placed in RONA state multiple times leading to missed routing.",
     raisedByTeam: "Compliance",
     level: "CAP 2",
-    status: "logged", // Reverted to logged
+    status: "logged",
     exceptionRejected: true,
     managerComment: "Exception denied. System issues were resolved before this shift. Proceed with standard CAP.",
     raisedAt: "2026-06-15",
@@ -633,14 +659,15 @@ export const capCases = [
     supervisorComment: "There was a known routing glitch assigning calls while agent was on bio break.",
     documents: ["routing_logs_may15.csv"],
     history: [
-      { date: "2026-06-15", event: "CAP logged", actor: "Compliance Team" },
-      { date: "2026-06-16", event: "Exception Raised by Supervisor", actor: "Priya Shah" },
-      { date: "2026-06-17", event: "Exception Rejected by Manager", actor: "Rohan Iyer" },
+      { date: "2026-06-15", event: "CAP logged (pending)", actor: "Compliance Team" },
+      { date: "2026-06-15", event: "Email sent to supervisor; CC managers + you", actor: "System" },
+      { date: "2026-06-16", event: "Exception Raised by Supervisor", actor: "Priya Shah (Supervisor)" },
+      { date: "2026-06-17", event: "Exception Rejected by Manager", actor: "Rohan Iyer (Manager)" },
     ],
   },
   {
     id: "CAP-2026-103",
-    employee: employees[5], // Olivia
+    employee: employees[5],
     breachType: "Compliance — Long Holds",
     breachDescription: "Customer placed on hold for over 8 minutes without check-ins.",
     raisedByTeam: "Compliance",
@@ -657,14 +684,17 @@ export const capCases = [
     supervisorComment: "Verified widespread internet outage during this period.",
     documents: ["internet_outage_ticket.pdf", "isp_status_report.png"],
     history: [
-      { date: "2026-06-10", event: "CAP logged", actor: "Compliance Team" },
-      { date: "2026-06-11", event: "Exception Raised by Supervisor", actor: "Marcia Lin" },
-      { date: "2026-06-12", event: "Exception Approved & Closed", actor: "QA/Compliance Team" },
+      { date: "2026-06-10", event: "CAP logged (pending)", actor: "Compliance Team" },
+      { date: "2026-06-10", event: "Email sent to supervisor; CC managers + you", actor: "System" },
+      { date: "2026-06-11", event: "Exception Raised by Supervisor", actor: "Marcia Lin (Supervisor)" },
+      { date: "2026-06-12", event: "Exception Approved by Manager", actor: "Helena Park (Manager)" },
+      { date: "2026-06-12", event: "Exception Approved by QA/Compliance", actor: "QA/Compliance Team" },
+      { date: "2026-06-12", event: "Case Closed (Exception Approved)", actor: "System" },
     ],
   },
   {
     id: "CAP-2026-104",
-    employee: employees[7], // Marcus Wright
+    employee: employees[7],
     breachType: "HIGH-Legal/Procedural - Refund not applicable however processed",
     breachDescription: "Refund processed despite system showing non-refundable status.",
     raisedByTeam: "QA",
@@ -680,9 +710,10 @@ export const capCases = [
     supervisorComment: "Agent showed me the recording of the CRM freezing and showing eligible status.",
     documents: ["crm_freeze_recording.mp4"],
     history: [
-      { date: "2026-06-14", event: "CAP logged", actor: "QA Team" },
-      { date: "2026-06-15", event: "Exception Raised by Supervisor", actor: "David Cole" },
-      { date: "2026-06-16", event: "Exception Approved by Manager, Pending QA Review", actor: "Helena Park" },
+      { date: "2026-06-14", event: "CAP logged (pending)", actor: "QA Team" },
+      { date: "2026-06-14", event: "Email sent to supervisor; CC managers + you", actor: "System" },
+      { date: "2026-06-15", event: "Exception Raised by Supervisor", actor: "David Cole (Supervisor)" },
+      { date: "2026-06-16", event: "Exception Approved by Manager", actor: "Helena Park (Manager)" },
     ],
   }
 ];

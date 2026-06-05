@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { PIPStatusBadge } from "@/components/shared/status-badges";
 import { pipCases } from "@/lib/mock-data";
 import { useState } from "react";
-import { FileText, Upload, X as CloseIcon, Calendar } from "lucide-react";
+import { FileText, Upload, X as CloseIcon, Calendar, Download } from "lucide-react";
 
 const filters = [
   "all",
@@ -125,6 +125,10 @@ export default function PIPList() {
                 />
               </div>
             </div>
+            <Button className="h-9 text-xs font-semibold">
+              <Download className="mr-2 h-3.5 w-3.5" />
+              Download Report
+            </Button>
           </div>
         }
       />

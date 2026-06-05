@@ -7,11 +7,11 @@ import { ArrowLeft } from "lucide-react";
 
 const last6MonthsAES = [
   { month: "June 2026", rating: "NI", tone: "danger" },
-  { month: "May 2026", rating: "Met", tone: "success" },
-  { month: "April 2026", rating: "NI", tone: "danger" },
-  { month: "March 2026", rating: "Exceeded", tone: "primary" },
-  { month: "February 2026", rating: "Met", tone: "success" },
-  { month: "January 2026", rating: "Met", tone: "success" },
+  { month: "May 2026", rating: "ME1", tone: "success" },
+  { month: "April 2026", rating: "NA", tone: "danger" },
+  { month: "March 2026", rating: "EE", tone: "primary" },
+  { month: "February 2026", rating: "ME2", tone: "success" },
+  { month: "January 2026", rating: "ME1", tone: "success" },
 ];
 
 const last6MonthsPerf = [
